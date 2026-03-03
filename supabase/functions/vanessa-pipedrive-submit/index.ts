@@ -28,6 +28,8 @@ interface PipedriveSubmitRequest {
   estate_value?: string;
   preferred_contact?: string;
   best_time?: string;
+  // Partner identification
+  partner_name?: string;
   // Tracking
   source_url?: string;
 }
@@ -434,9 +436,10 @@ serve(async (req) => {
       // Build note content
       let noteContent = "";
       if (submission_type === "living_trust_landing") {
+        const partnerName = requestData.partner_name || "Unknown Partner";
         noteContent = [
           "=== Living Trust Landing Page Submission ===",
-          `Source: The Brandon Drew Group`,
+          `Source: ${partnerName}`,
           "",
           `Marital Status: ${requestData.marital_status || "N/A"}`,
           `Owns Property: ${requestData.owns_property || "N/A"}`,
@@ -458,8 +461,9 @@ serve(async (req) => {
       }
 
       // Determine lead title
+      const partnerLabel = requestData.partner_name || "Unknown Partner";
       const leadTitle = submission_type === "living_trust_landing"
-        ? `Living Trust Inquiry - ${name} (Brandon Drew Group)`
+        ? `Living Trust Inquiry - ${name} (${partnerLabel})`
         : `Contact Inquiry - ${name}`;
 
       // Create lead
@@ -473,15 +477,16 @@ serve(async (req) => {
 
       // Send email notification to Vanessa
       try {
+        const emailPartner = requestData.partner_name || "Unknown Partner";
         const emailSubject = submission_type === "living_trust_landing"
-          ? `New Living Trust Inquiry - ${name} (Brandon Drew Group)`
+          ? `New Living Trust Inquiry - ${name} (${emailPartner})`
           : `New Contact Inquiry - ${name}`;
 
         const emailHtml = submission_type === "living_trust_landing"
           ? `
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
               <h2 style="color: #1a365d;">New Living Trust Inquiry</h2>
-              <p style="color: #666;">A new prospect has submitted the Living Trust inquiry form from The Brandon Drew Group landing page.</p>
+              <p style="color: #666;">A new prospect has submitted the Living Trust inquiry form from the ${emailPartner} landing page.</p>
               
               <div style="background: #f7fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
                 <h3 style="color: #2d3748; margin-top: 0;">Contact Information</h3>

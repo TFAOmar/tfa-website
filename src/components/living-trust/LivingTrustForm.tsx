@@ -175,7 +175,8 @@ export default function LivingTrustForm() {
             preferred_contact: data.preferredContact,
             best_time: data.bestTimeToReach,
             notes: data.notes,
-            tags: ["Living Trust", "The Brandon Group"],
+            tags: ["Living Trust", "The Brandon Drew Group"],
+            partner_name: "The Brandon Drew Group",
             source_url: window.location.href,
           },
         });

@@ -171,6 +171,7 @@ export default function ThinkTaxLivingTrustForm() {
             best_time: data.bestTimeToReach,
             notes: data.notes,
             tags: ["Living Trust", "Mortgage Protection", "Think Tax Solutions"],
+            partner_name: "Think Tax Solutions",
             source_url: window.location.href,
           },
         });
