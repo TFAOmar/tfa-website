@@ -486,7 +486,7 @@ serve(async (req) => {
           ? `
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
               <h2 style="color: #1a365d;">New Living Trust Inquiry</h2>
-              <p style="color: #666;">A new prospect has submitted the Living Trust inquiry form from The Brandon Drew Group landing page.</p>
+              <p style="color: #666;">A new prospect has submitted the Living Trust inquiry form from the ${emailPartner} landing page.</p>
               
               <div style="background: #f7fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
                 <h3 style="color: #2d3748; margin-top: 0;">Contact Information</h3>
