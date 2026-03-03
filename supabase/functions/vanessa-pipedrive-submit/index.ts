@@ -436,9 +436,10 @@ serve(async (req) => {
       // Build note content
       let noteContent = "";
       if (submission_type === "living_trust_landing") {
+        const partnerName = requestData.partner_name || "Unknown Partner";
         noteContent = [
           "=== Living Trust Landing Page Submission ===",
-          `Source: The Brandon Drew Group`,
+          `Source: ${partnerName}`,
           "",
           `Marital Status: ${requestData.marital_status || "N/A"}`,
           `Owns Property: ${requestData.owns_property || "N/A"}`,
