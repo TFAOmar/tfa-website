@@ -477,8 +477,9 @@ serve(async (req) => {
 
       // Send email notification to Vanessa
       try {
+        const emailPartner = requestData.partner_name || "Unknown Partner";
         const emailSubject = submission_type === "living_trust_landing"
-          ? `New Living Trust Inquiry - ${name} (Brandon Drew Group)`
+          ? `New Living Trust Inquiry - ${name} (${emailPartner})`
           : `New Contact Inquiry - ${name}`;
 
         const emailHtml = submission_type === "living_trust_landing"
