@@ -28,6 +28,8 @@ interface PipedriveSubmitRequest {
   estate_value?: string;
   preferred_contact?: string;
   best_time?: string;
+  // Partner identification
+  partner_name?: string;
   // Tracking
   source_url?: string;
 }
