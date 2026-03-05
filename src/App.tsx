@@ -34,6 +34,7 @@ import RequiredSavingsCalculator from "./pages/RequiredSavingsCalculator";
 import KaiZenCalculatorPage from "./pages/KaiZenCalculatorPage";
 import GuaranteedIncomeCalculator from "./pages/GuaranteedIncomeCalculator";
 import Tools from "./pages/Tools";
+import BrandGuidelines from "./pages/BrandGuidelines";
 import FinalExpenseQuote from "./pages/FinalExpenseQuote";
 import BusinessInsurance from "./pages/BusinessInsurance";
 import BookConsultation from "./pages/BookConsultation";
