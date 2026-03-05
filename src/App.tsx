@@ -34,6 +34,7 @@ import RequiredSavingsCalculator from "./pages/RequiredSavingsCalculator";
 import KaiZenCalculatorPage from "./pages/KaiZenCalculatorPage";
 import GuaranteedIncomeCalculator from "./pages/GuaranteedIncomeCalculator";
 import Tools from "./pages/Tools";
+import BrandGuidelines from "./pages/BrandGuidelines";
 import FinalExpenseQuote from "./pages/FinalExpenseQuote";
 import BusinessInsurance from "./pages/BusinessInsurance";
 import BookConsultation from "./pages/BookConsultation";
@@ -229,6 +230,7 @@ const AppLayout = () => {
           <Route path="/submit-event" element={<SubmitEvent />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-of-service" element={<TermsOfService />} />
+          <Route path="/brand-guidelines" element={<BrandGuidelines />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
