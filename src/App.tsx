@@ -45,6 +45,7 @@ import FranchiseRecruitment from "./pages/FranchiseRecruitment";
 import AdvisorVanessaSanchez from "./pages/AdvisorVanessaSanchez";
 import VanessaLivingTrust from "./pages/VanessaLivingTrust";
 import VanessaThinkTaxSolutions from "./pages/VanessaThinkTaxSolutions";
+import VanessaCardenasAndCompany from "./pages/VanessaCardenasAndCompany";
 import KaiZen from "./pages/KaiZen";
 import AdvisorMariahLorenzen from "./pages/AdvisorMariahLorenzen";
 import AdvisorTamaraLee from "./pages/AdvisorTamaraLee";
