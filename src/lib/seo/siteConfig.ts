@@ -8,6 +8,22 @@ export const siteConfig = {
   logo: "https://tfawealthplanning.com/tfa-logo.png",
   telephone: "(888) 350-5396",
   email: "info@tfainsuranceadvisors.com",
+  addresses: [
+    {
+      street: "13890 Peyton Dr",
+      city: "Chino Hills",
+      state: "CA",
+      zip: "91709",
+      country: "US",
+    },
+    {
+      street: "200 W Imperial Hwy",
+      city: "Brea",
+      state: "CA",
+      zip: "92821",
+      country: "US",
+    },
+  ],
   address: {
     street: "13890 Peyton Dr",
     city: "Chino Hills",
