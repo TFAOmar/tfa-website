@@ -1,30 +1,44 @@
 
 
-# Add Discount Code Support for Monthly Plan
+# Add Brea Office Location & Second Home Office
 
 ## Overview
-Allow users to enter a discount/promo code when subscribing to the Monthly ($89.99/mo) plan on the Estate Guru pricing page. The code will be validated by Stripe during checkout.
-
-## Approach
-Use Stripe's built-in `allow_promotion_codes: true` on the checkout session. This lets Stripe handle all coupon/promo code validation natively on the checkout page -- no custom input field needed on your site, and it works with any promotion code you create in Stripe's dashboard.
-
-This is the simplest, most reliable approach: you create promotion codes in Stripe, and customers can enter them at checkout.
+Add the new Brea, CA office at 200 W Imperial Hwy to the locations directory and designate it as a second home office alongside Chino Hills. Update location counts across the site to reflect 21 offices.
 
 ## Changes
 
-### 1. Edge Function: `supabase/functions/create-estate-guru-checkout/index.ts`
-- Accept an optional `couponCode` parameter from the request body
-- For the **monthly** plan (non-promo): set `allow_promotion_codes: true` on the checkout session so users can enter any valid Stripe promotion code at checkout
-- Keep the existing hardcoded TFA200 coupon logic for the annual promo plan unchanged
-- Note: `allow_promotion_codes` and `discounts` are mutually exclusive in Stripe, so we only use `allow_promotion_codes` when no hardcoded discount is applied
+### 1. `src/data/locations.ts` — Add Brea location
+Add new entry with id 21:
+```ts
+{ id: 21, name: "Brea (Home Office)", city: "Brea", state: "CA", address: "200 W Imperial Hwy, Brea, CA 92821", phone: "(888) 350-5396", hours: "Mon-Fri: 9am-5pm", coordinates: [-117.9006, 33.9167], region: "Southern California" }
+```
+Also rename id 1 Chino Hills/Claremont or add a "(Home Office)" designation — need clarification on whether Chino Hills (13890 Peyton Dr) should be marked as a home office in the locations list too, or if only the ContactInfo headquarters reference covers that.
 
-### 2. Frontend: `src/components/estate-guru/EstateGuruPricing.tsx`
-- No UI changes needed -- Stripe's checkout page will show the promo code input field automatically when `allow_promotion_codes` is enabled
+### 2. Update location counts site-wide
+The site currently has mixed references (some say 19, some say 29). With 21 actual locations, update all to **21**:
 
-## How to Create Promo Codes
-After this change, you can create promotion codes in the Stripe Dashboard under **Products > Coupons > Promotion Codes**. Any valid promotion code will be accepted at monthly checkout.
+| File | What to update |
+|------|---------------|
+| `src/lib/seo/siteConfig.ts` | `numberOfLocations: 21` |
+| `src/components/locations/LocationsHero.tsx` | "21 offices across..." |
+| `src/pages/Locations.tsx` | SEO description, comment |
+| `src/pages/Contact.tsx` | SEO description "21 office locations" |
+| `src/pages/Index.tsx` | SEO description "21 locations" |
+| `src/lib/seo/schemas.ts` | Contact page description |
+| `src/components/Hero.tsx` | "21 locations" |
+| `src/components/Locations.tsx` | "21 locations" |
+| `src/components/locations/LocationsMap.tsx` | "21 locations" |
+| `src/components/advisors/AdvisorsHero.tsx` | "21 locations" |
+| `src/components/contact/ContactInfo.tsx` | "View all 21 office locations →", update stats card from 29 to 21 |
 
-## Files Changed
-| File | Action |
-|------|--------|
-| `supabase/functions/create-estate-guru-checkout/index.ts` | Add `allow_promotion_codes: true` for monthly plan checkout sessions |
+### 3. `src/components/contact/ContactInfo.tsx` — Add Brea as second HQ
+Update the Headquarters section to show both home offices:
+- Chino Hills: 13890 Peyton Dr, Chino Hills, CA 91709
+- Brea: 200 W Imperial Hwy, Brea, CA 92821
+
+### 4. `src/lib/seo/siteConfig.ts` — Add Brea address
+Add a second address entry or note for schema generation.
+
+## Note on count inconsistency
+The site currently shows "29" in several places (Hero, Locations map, Advisors hero, ContactInfo) but "19" in others (Locations page, Contact SEO). The actual data file has 20 entries. With Brea added, the true count is **21**. All references will be unified to 21.
+
