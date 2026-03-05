@@ -46,4 +46,7 @@ export const locations: Location[] = [
   
   // Central California
   { id: 20, name: "Fresno", city: "Fresno", state: "CA", address: "7621 N Del Mar Ave, Unit 102, Fresno, CA 93711", phone: "(888) 350-5396", hours: "Mon-Fri: 9am-5pm", coordinates: [-119.7871, 36.8252], region: "Central California" },
+  
+  // Home Offices
+  { id: 21, name: "Brea (Home Office)", city: "Brea", state: "CA", address: "200 W Imperial Hwy, Brea, CA 92821", phone: "(888) 350-5396", hours: "Mon-Fri: 9am-5pm", coordinates: [-117.9006, 33.9167], region: "Southern California" },
 ];

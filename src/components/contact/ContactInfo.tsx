@@ -90,7 +90,7 @@ const ContactInfo = () => {
           <p className="text-sm text-muted-foreground">Licensed Advisors</p>
         </div>
         <div className="glass p-6 rounded-xl text-center">
-          <p className="text-3xl font-bold text-accent mb-1">29</p>
+          <p className="text-3xl font-bold text-accent mb-1">21</p>
           <p className="text-sm text-muted-foreground">Office Locations</p>
         </div>
         <div className="glass p-6 rounded-xl text-center">

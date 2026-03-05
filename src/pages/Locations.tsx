@@ -28,7 +28,7 @@ const Locations = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  // Generate LocalBusiness schemas for all 19 locations
+  // Generate LocalBusiness schemas for all 21 locations
   const localBusinessSchemas = locations.map((location) => {
     const addressParts = parseAddress(location.address);
     return generateLocalBusinessSchema(
