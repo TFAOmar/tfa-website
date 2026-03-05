@@ -48,7 +48,7 @@ const Locations = () => {
     <>
       <SEOHead
         title="Office Locations"
-        description="Find a The Financial Architects office near you. 19 locations across California, Arizona, and Oregon including Los Angeles, San Diego, Orange County, and Phoenix."
+        description="Find a The Financial Architects office near you. 21 locations across California, Arizona, and Oregon including Los Angeles, San Diego, Orange County, and Phoenix."
         canonical={`${siteConfig.url}/locations`}
         keywords="financial advisor near me, financial planner California, financial advisor Arizona, retirement planner Los Angeles, wealth management Orange County, financial advisor San Diego"
       />
