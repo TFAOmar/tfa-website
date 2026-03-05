@@ -71,11 +71,13 @@ const ContactInfo = () => {
             <MapPin className="h-6 w-6 text-accent" />
           </div>
           <div>
-            <h4 className="font-semibold text-foreground mb-1">Headquarters</h4>
+            <h4 className="font-semibold text-foreground mb-1">Home Offices</h4>
             <p className="text-foreground">13890 Peyton Dr</p>
             <p className="text-foreground mb-2">Chino Hills, CA 91709</p>
+            <p className="text-foreground">200 W Imperial Hwy</p>
+            <p className="text-foreground mb-2">Brea, CA 92821</p>
             <Link to="/locations" className="text-accent hover:underline text-sm font-medium">
-              View all 29 office locations →
+              View all 21 office locations →
             </Link>
           </div>
         </div>
@@ -88,7 +90,7 @@ const ContactInfo = () => {
           <p className="text-sm text-muted-foreground">Licensed Advisors</p>
         </div>
         <div className="glass p-6 rounded-xl text-center">
-          <p className="text-3xl font-bold text-accent mb-1">29</p>
+          <p className="text-3xl font-bold text-accent mb-1">21</p>
           <p className="text-sm text-muted-foreground">Office Locations</p>
         </div>
         <div className="glass p-6 rounded-xl text-center">

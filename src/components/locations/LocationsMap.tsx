@@ -153,7 +153,7 @@ const LocationsMap = () => {
             Find Your Nearest Office
           </h2>
           <p className="text-xl text-muted-foreground">
-            29 locations across the United States, ready to serve you
+            21 locations across the United States, ready to serve you
           </p>
         </div>
 

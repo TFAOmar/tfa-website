@@ -16,7 +16,7 @@ const Contact = () => {
     <>
       <SEOHead
         title="Contact Us"
-        description="Get in touch with The Financial Architects. Call (888) 350-5396, email us, or visit one of our 19 office locations across California, Arizona, and Oregon."
+        description="Get in touch with The Financial Architects. Call (888) 350-5396, email us, or visit one of our 21 office locations across California, Arizona, and Oregon."
         canonical={`${siteConfig.url}/contact`}
         keywords="contact financial advisor, financial planner phone number, wealth management contact, TFA contact, financial planning appointment"
       />

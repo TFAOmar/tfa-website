@@ -239,7 +239,7 @@ export const generateContactPageSchema = (url: string) => ({
   "@id": `${url}/#contactpage`,
   url,
   name: "Contact Us | The Financial Architects",
-  description: "Get in touch with our financial planning team. Contact us by phone, email, or visit one of our 19 office locations.",
+  description: "Get in touch with our financial planning team. Contact us by phone, email, or visit one of our 21 office locations.",
   mainEntity: { "@id": `${siteConfig.url}/#organization` },
 });
 
