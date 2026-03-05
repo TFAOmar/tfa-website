@@ -162,10 +162,10 @@ export async function generateBrandGuidelinesPdf() {
 
   y = 42;
   const buttons = [
-    { name: "Primary CTA (.btn-primary-cta)", bg: [228, 181, 72] as const, text: [0, 0, 0] as const, desc: "Gold background, black text. On hover: navy bg (#1A2744), white text, gold glow." },
-    { name: "Default (variant=\"default\")", bg: NAVY, text: WHITE, desc: "Navy background, white text. Standard actions and navigation." },
-    { name: "Outline (variant=\"outline\")", bg: WHITE, text: DARK, desc: "White bg with border. Secondary actions." },
-    { name: "Secondary (variant=\"secondary\")", bg: [230, 234, 240] as const, text: DARK, desc: "Light gray bg. Tertiary actions." },
+    { name: "Primary CTA (.btn-primary-cta)", bg: [228, 181, 72] as [number, number, number], text: [0, 0, 0] as [number, number, number], desc: "Gold background, black text. On hover: navy bg (#1A2744), white text, gold glow." },
+    { name: "Default (variant=\"default\")", bg: [...NAVY] as [number, number, number], text: [...WHITE] as [number, number, number], desc: "Navy background, white text. Standard actions and navigation." },
+    { name: "Outline (variant=\"outline\")", bg: [...WHITE] as [number, number, number], text: [...DARK] as [number, number, number], desc: "White bg with border. Secondary actions." },
+    { name: "Secondary (variant=\"secondary\")", bg: [230, 234, 240] as [number, number, number], text: [...DARK] as [number, number, number], desc: "Light gray bg. Tertiary actions." },
   ];
 
   buttons.forEach((b) => {
