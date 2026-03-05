@@ -1,30 +1,66 @@
 
 
-# Add Discount Code Support for Monthly Plan
+# Brand Book & Brand Guidelines
 
 ## Overview
-Allow users to enter a discount/promo code when subscribing to the Monthly ($89.99/mo) plan on the Estate Guru pricing page. The code will be validated by Stripe during checkout.
+Create a comprehensive brand guidelines page at `/brand-guidelines` and a downloadable PDF version. The page will serve as the single source of truth for TFA's visual identity, voice, and usage rules for both internal teams and external partners.
 
-## Approach
-Use Stripe's built-in `allow_promotion_codes: true` on the checkout session. This lets Stripe handle all coupon/promo code validation natively on the checkout page -- no custom input field needed on your site, and it works with any promotion code you create in Stripe's dashboard.
+## Page Sections
 
-This is the simplest, most reliable approach: you create promotion codes in Stripe, and customers can enter them at checkout.
+### 1. Hero Section
+Navy gradient hero with "Brand Guidelines" title and subtitle: "The official guide to representing The Financial Architects."
 
-## Changes
+### 2. Logo Usage
+- Display the TFA logo (`src/assets/tfa-logo.png`) in multiple contexts: light background, dark background, minimum size
+- Usage rules: clear space, do's and don'ts
+- Downloadable logo button (links to the asset)
 
-### 1. Edge Function: `supabase/functions/create-estate-guru-checkout/index.ts`
-- Accept an optional `couponCode` parameter from the request body
-- For the **monthly** plan (non-promo): set `allow_promotion_codes: true` on the checkout session so users can enter any valid Stripe promotion code at checkout
-- Keep the existing hardcoded TFA200 coupon logic for the annual promo plan unchanged
-- Note: `allow_promotion_codes` and `discounts` are mutually exclusive in Stripe, so we only use `allow_promotion_codes` when no hardcoded discount is applied
+### 3. Color Palette
+Interactive color swatches with hex codes, HSL values, and copy-to-clipboard:
+- **Primary Navy**: #1E3A5F (HSL 215 45% 25%) — headers, backgrounds, authority
+- **Primary Gold**: #C9A84C (HSL 35 55% 60%) — accents, CTAs, highlights
+- **Navy Light**: #3D5A80 (HSL 215 35% 35%) — secondary text, hover states
+- **Gold Light**: #D4BC7A (HSL 35 65% 75%) — subtle accents
+- **Background**: #FAFAFA (HSL 0 0% 98%)
+- **Dark mode equivalents** shown in a toggle
 
-### 2. Frontend: `src/components/estate-guru/EstateGuruPricing.tsx`
-- No UI changes needed -- Stripe's checkout page will show the promo code input field automatically when `allow_promotion_codes` is enabled
+### 4. Typography
+- Primary font: Inter (sans-serif)
+- Display scale examples: H1 through body text with sizes, weights, and line heights
+- Usage guidance for headings vs body
 
-## How to Create Promo Codes
-After this change, you can create promotion codes in the Stripe Dashboard under **Products > Coupons > Promotion Codes**. Any valid promotion code will be accepted at monthly checkout.
+### 5. Button & Component Styles
+- Primary CTA: Gold with dark hover (`btn-primary-cta` class) — show live examples
+- Glass/Neuro effects: `glass`, `neuro-button` utility classes
+- Border radius: 0.75rem default
 
-## Files Changed
+### 6. Brand Voice & Messaging
+- Tone: Clear, empowering, family-focused, anti-jargon
+- Key phrases and taglines: "Financial Guidance Built for Families", "Change what you're doing to change what you're getting"
+- Do/Don't examples for copy
+
+### 7. Photography & Imagery
+- Style: warm, professional, family-oriented
+- Guidelines for hero images, advisor headshots
+
+### 8. Co-Branding Rules
+- White background requirement for partner logos
+- Logo placement and sizing rules for co-branded pages
+
+### 9. Download PDF Button
+Generate a branded PDF using jsPDF (pattern already exists in `calculatorPdfGenerator.ts`) containing all guidelines in a polished, shareable format.
+
+## Files to Create/Modify
+
 | File | Action |
 |------|--------|
-| `supabase/functions/create-estate-guru-checkout/index.ts` | Add `allow_promotion_codes: true` for monthly plan checkout sessions |
+| `src/pages/BrandGuidelines.tsx` | New page with all brand guideline sections |
+| `src/lib/brandGuidelinesPdf.ts` | PDF generator for downloadable brand book |
+| `src/App.tsx` | Add route `/brand-guidelines` |
+
+## Technical Notes
+- Reuses existing design tokens from `index.css` and `tailwind.config.ts` — no new dependencies
+- PDF generation follows the existing `calculatorPdfGenerator.ts` pattern using jsPDF
+- Color swatches will show actual rendered colors using inline styles from CSS variables
+- Page will include the standard Header/Footer layout
+
