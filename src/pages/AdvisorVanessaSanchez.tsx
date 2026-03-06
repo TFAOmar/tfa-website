@@ -7,6 +7,9 @@ import { Phone, Mail, MapPin, Calendar, Shield, Target, Users, Award, ChevronRig
 import vanessaSanchezImg from "@/assets/advisors/vanessa-sanchez.jpg";
 import VanessaScheduleModal from "@/components/advisors/VanessaScheduleModal";
 import ContactModal from "@/components/advisors/ContactModal";
+import brandonDrewLogo from "@/assets/partners/the-brandon-group.png";
+import thinkTaxLogo from "@/assets/partners/think-tax-solutions.png";
+import cardenasLogo from "@/assets/partners/cardenas-and-company.jpg";
 import { SEOHead, JsonLd } from "@/components/seo";
 import { generatePersonSchema, generateBreadcrumbSchema, generateWebPageSchema } from "@/lib/seo/schemas";
 import { siteConfig } from "@/lib/seo/siteConfig";
