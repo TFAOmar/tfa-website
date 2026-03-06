@@ -1,30 +1,25 @@
 
 
-# Add Discount Code Support for Monthly Plan
+# Showcase Vanessa's Partnerships on Her Profile
 
 ## Overview
-Allow users to enter a discount/promo code when subscribing to the Monthly ($89.99/mo) plan on the Estate Guru pricing page. The code will be validated by Stripe during checkout.
+Add a new "Trusted Partnerships" section to Vanessa's profile page (`src/pages/AdvisorVanessaSanchez.tsx`) between the Services and Process sections. It will display her three referral partners with their logos and links to their co-branded landing pages.
 
-## Approach
-Use Stripe's built-in `allow_promotion_codes: true` on the checkout session. This lets Stripe handle all coupon/promo code validation natively on the checkout page -- no custom input field needed on your site, and it works with any promotion code you create in Stripe's dashboard.
+## Partnerships to Display
 
-This is the simplest, most reliable approach: you create promotion codes in Stripe, and customers can enter them at checkout.
+| Partner | Logo | Link |
+|---------|------|------|
+| THE BRANDON DREW GROUP | `src/assets/partners/the-brandon-group.png` | `/advisors/vanessa-sanchez/living-trust` |
+| Think Tax Solutions | `src/assets/partners/think-tax-solutions.png` | `/advisors/vanessa-sanchez/think-tax-solutions` |
+| Cardenas & Company Real Estate Group | `src/assets/partners/cardenas-and-company.jpg` | `/advisors/vanessa-sanchez/cardenas-and-company` |
 
 ## Changes
 
-### 1. Edge Function: `supabase/functions/create-estate-guru-checkout/index.ts`
-- Accept an optional `couponCode` parameter from the request body
-- For the **monthly** plan (non-promo): set `allow_promotion_codes: true` on the checkout session so users can enter any valid Stripe promotion code at checkout
-- Keep the existing hardcoded TFA200 coupon logic for the annual promo plan unchanged
-- Note: `allow_promotion_codes` and `discounts` are mutually exclusive in Stripe, so we only use `allow_promotion_codes` when no hardcoded discount is applied
+### `src/pages/AdvisorVanessaSanchez.tsx`
+- Import the three partner logos and `Handshake` icon from lucide-react
+- Add a new "Trusted Partnerships" section after the Services grid
+- Each partner rendered as a Card with: logo (white background), partner name, brief description of the partnership focus (e.g. "Living Trust Services", "Living Trust & Mortgage Protection", "Living Trust for Real Estate Clients"), and a Link button to the co-branded page
+- Style: consistent with existing sections — centered heading with gold divider, 3-column grid on desktop
 
-### 2. Frontend: `src/components/estate-guru/EstateGuruPricing.tsx`
-- No UI changes needed -- Stripe's checkout page will show the promo code input field automatically when `allow_promotion_codes` is enabled
+No other files need changes.
 
-## How to Create Promo Codes
-After this change, you can create promotion codes in the Stripe Dashboard under **Products > Coupons > Promotion Codes**. Any valid promotion code will be accepted at monthly checkout.
-
-## Files Changed
-| File | Action |
-|------|--------|
-| `supabase/functions/create-estate-guru-checkout/index.ts` | Add `allow_promotion_codes: true` for monthly plan checkout sessions |
