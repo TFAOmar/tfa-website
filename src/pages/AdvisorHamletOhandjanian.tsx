@@ -107,7 +107,7 @@ const AdvisorHamletOhandjanian = () => {
       <JsonLd data={[
         generateWebPageSchema(
           "Hamlet Ohandjanian - Managing Partner | The Financial Architects",
-          "Work with Hamlet Ohandjanian, Managing Partner at TFA in Granada Hills, CA. 28 years of leadership experience.",
+          "Work with Hamlet Ohandjanian, Managing Partner at TFA in Chatsworth, CA. 28 years of leadership experience.",
           `${siteConfig.url}/advisors/hamlet-ohandjanian`
         ),
         generatePersonSchema(
