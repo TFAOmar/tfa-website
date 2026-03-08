@@ -113,7 +113,7 @@ const AdvisorHamletOhandjanian = () => {
         generatePersonSchema(
           "Hamlet Ohandjanian",
           "Managing Partner",
-          "Hamlet Ohandjanian is a Managing Partner at The Financial Architects in Granada Hills, CA, with 28 years of leadership experience committed to integrity and transparent financial planning.",
+          "Hamlet Ohandjanian is a Managing Partner at The Financial Architects in Chatsworth, CA, with 28 years of leadership experience committed to integrity and transparent financial planning.",
           hamletImage,
           `${siteConfig.url}/advisors/hamlet-ohandjanian`,
           specialties
