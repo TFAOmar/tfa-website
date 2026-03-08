@@ -149,7 +149,7 @@ const AdvisorHamletOhandjanian = () => {
               <div className="flex flex-wrap gap-4 pt-4">
                 <div className="flex items-center gap-2 text-white/80">
                   <MapPin className="h-5 w-5 text-accent" />
-                  <span>Granada Hills, California</span>
+                  <span>Chatsworth, California</span>
                 </div>
                 <div className="flex items-center gap-2 text-white/80">
                   <Award className="h-5 w-5 text-accent" />
