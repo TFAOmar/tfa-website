@@ -16,6 +16,7 @@ interface ContactModalProps {
   advisorEmail?: string;
   advisorImage?: string;
   advisorSlug?: string;
+  skipPipedrive?: boolean;
 }
 
 const ContactModal = ({ 
