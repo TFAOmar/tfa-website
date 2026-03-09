@@ -1,30 +1,25 @@
 
 
-# Add Discount Code Support for Monthly Plan
+## Plan: Skip Pipedrive CRM for Kevin Walters' Landing Page
 
-## Overview
-Allow users to enter a discount/promo code when subscribing to the Monthly ($89.99/mo) plan on the Estate Guru pricing page. The code will be validated by Stripe during checkout.
+### What Changes
 
-## Approach
-Use Stripe's built-in `allow_promotion_codes: true` on the checkout session. This lets Stripe handle all coupon/promo code validation natively on the checkout page -- no custom input field needed on your site, and it works with any promotion code you create in Stripe's dashboard.
+Kevin's "Book a Consultation" and "Contact Me" forms will send email notifications only (to `walterssrkevinb@gmail.com` + `leads@tfainsuranceadvisors.com`) without creating any Pipedrive leads.
 
-This is the simplest, most reliable approach: you create promotion codes in Stripe, and customers can enter them at checkout.
+### How
 
-## Changes
+**1. Add `skipPipedrive` prop to `ScheduleModal` and `ContactModal`**
 
-### 1. Edge Function: `supabase/functions/create-estate-guru-checkout/index.ts`
-- Accept an optional `couponCode` parameter from the request body
-- For the **monthly** plan (non-promo): set `allow_promotion_codes: true` on the checkout session so users can enter any valid Stripe promotion code at checkout
-- Keep the existing hardcoded TFA200 coupon logic for the annual promo plan unchanged
-- Note: `allow_promotion_codes` and `discounts` are mutually exclusive in Stripe, so we only use `allow_promotion_codes` when no hardcoded discount is applied
+Both modals get a new optional `skipPipedrive?: boolean` prop. When `true`, the `handleSubmit` function calls `supabase.functions.invoke("send-form-notification", ...)` directly instead of `submitForm()` (which routes to `pipedrive-submit`). The `send-form-notification` edge function already supports `book-consultation` and `contact-inquiry` form types, sends team + advisor email notifications, and stores submissions in `form_submissions`.
 
-### 2. Frontend: `src/components/estate-guru/EstateGuruPricing.tsx`
-- No UI changes needed -- Stripe's checkout page will show the promo code input field automatically when `allow_promotion_codes` is enabled
+**2. Pass `skipPipedrive={true}` on Kevin's landing page**
 
-## How to Create Promo Codes
-After this change, you can create promotion codes in the Stripe Dashboard under **Products > Coupons > Promotion Codes**. Any valid promotion code will be accepted at monthly checkout.
+In `src/pages/AdvisorKevinWalters.tsx`, add `skipPipedrive` to both modal instances. No other advisor pages are affected.
 
-## Files Changed
-| File | Action |
+### Files Changed
+| File | Change |
 |------|--------|
-| `supabase/functions/create-estate-guru-checkout/index.ts` | Add `allow_promotion_codes: true` for monthly plan checkout sessions |
+| `src/components/advisors/ScheduleModal.tsx` | Add `skipPipedrive` prop; when true, invoke `send-form-notification` instead of `submitForm` |
+| `src/components/advisors/ContactModal.tsx` | Same — add `skipPipedrive` prop with alternate submission path |
+| `src/pages/AdvisorKevinWalters.tsx` | Add `skipPipedrive={true}` to both `ScheduleModal` and `ContactModal` |
+
