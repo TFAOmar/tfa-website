@@ -28,6 +28,7 @@ const ScheduleModal = ({
   advisorImage,
   schedulingLink,
   advisorSlug,
+  skipPipedrive,
 }: ScheduleModalProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
