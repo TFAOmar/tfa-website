@@ -140,7 +140,7 @@ const handler = async (req: Request): Promise<Response> => {
         to: [
           "heather@estateguru.com",
           "nancy@estateguru.com",
-          "leads@tfainsuranceadvisors.com"
+          "livingtrusts@tfainsuranceadvisors.com"
         ],
         subject: `New Estate Guru Registration: ${fullName}`,
         html: emailHtml,
