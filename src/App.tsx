@@ -104,6 +104,7 @@ import EventSponsorship from "./pages/EventSponsorship";
 import PrequalificationQuestionnaire from "./pages/PrequalificationQuestionnaire";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
+import Brea from "./pages/Brea";
 
 const queryClient = new QueryClient();
 
