@@ -104,11 +104,12 @@ import EventSponsorship from "./pages/EventSponsorship";
 import PrequalificationQuestionnaire from "./pages/PrequalificationQuestionnaire";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
+import Brea from "./pages/Brea";
 
 const queryClient = new QueryClient();
 
 // Standalone pages that have their own header/footer
-const standalonePages = ['/advisors/vanessa-sanchez/living-trust', '/advisors/vanessa-sanchez/think-tax-solutions', '/advisors/vanessa-sanchez/cardenas-and-company', '/advisors/braihyra-medellin/living-trust', '/advisors/erica-valenzuela/living-trust', '/services/kai-zen', '/advisors/mariah-lorenzen/kai-zen', '/advisors/tamara-lee/medicare', '/advisors/recinos', '/advisors/ruth-pacheco/tax-strategy', '/health-insurance/american-way-health', '/admin', '/admin/applications', '/admin/form-submissions', '/life-insurance-application', '/living-trust-questionnaire', '/estate-guru', '/estate-guru/success', '/estate-guru/canceled', '/advisors/manuel-soto/coaching'];
+const standalonePages = ['/advisors/vanessa-sanchez/living-trust', '/advisors/vanessa-sanchez/think-tax-solutions', '/advisors/vanessa-sanchez/cardenas-and-company', '/advisors/braihyra-medellin/living-trust', '/advisors/erica-valenzuela/living-trust', '/services/kai-zen', '/advisors/mariah-lorenzen/kai-zen', '/advisors/tamara-lee/medicare', '/advisors/recinos', '/advisors/ruth-pacheco/tax-strategy', '/health-insurance/american-way-health', '/admin', '/admin/applications', '/admin/form-submissions', '/life-insurance-application', '/living-trust-questionnaire', '/estate-guru', '/estate-guru/success', '/estate-guru/canceled', '/advisors/manuel-soto/coaching', '/brea'];
 
 const AppLayout = () => {
   const location = useLocation();
@@ -235,6 +236,7 @@ const AppLayout = () => {
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-of-service" element={<TermsOfService />} />
           <Route path="/brand-guidelines" element={<BrandGuidelines />} />
+          <Route path="/brea" element={<Brea />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
