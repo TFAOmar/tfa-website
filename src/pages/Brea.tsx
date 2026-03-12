@@ -203,15 +203,7 @@ const Brea = () => {
             In-person at our Brea office or over the phone — your choice.
           </p>
 
-          {/* REPLACE: Swap the Calendly URL below with your actual Calendly link */}
-          <div className="bg-card rounded-xl border border-border overflow-hidden shadow-sm">
-            <iframe
-              src="https://calendly.com/thefinancialarchitects/30min"
-              className="w-full h-[600px] md:h-[650px] border-0"
-              title="Schedule an appointment"
-              loading="lazy"
-            />
-          </div>
+          <BreaContactForm />
 
           {/* Fallback CTA */}
           <div className="mt-8 text-muted-foreground text-sm">
