@@ -182,6 +182,16 @@ const Brea = () => {
         </div>
       </section>
 
+      {/* ===== REVIEWS ===== */}
+      <section className="py-16 md:py-20 bg-card">
+        <div className="max-w-4xl mx-auto px-5">
+          <h2 className="text-2xl md:text-3xl font-bold text-foreground text-center mb-10">
+            What Our Clients Say
+          </h2>
+          <div ref={widgetContainerRef} />
+        </div>
+      </section>
+
       {/* ===== BOOKING SECTION ===== */}
       <section id="book" className="bg-secondary py-16 md:py-20">
         <div className="max-w-3xl mx-auto px-5 text-center">
