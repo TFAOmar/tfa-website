@@ -93,8 +93,8 @@ const BreaContactForm = () => {
         phone: data.phone,
         preferred_language: data.preferred_language || undefined,
         notes,
-        tags: ["Brea Office", "Consultation Request"],
-        interest_category: "Consultation",
+        tags: ["Brea Office", "Consultation Request", ...data.interestCategories],
+        interest_category: data.interestCategories.join(", "),
       });
 
       if (result.ok) {
