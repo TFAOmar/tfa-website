@@ -249,7 +249,48 @@ const BreaContactForm = () => {
             />
           </div>
 
-          <FormField
+          {/* Service Interests */}
+          <Controller
+            control={form.control}
+            name="interestCategories"
+            render={({ field, fieldState }) => (
+              <div className="space-y-2">
+                <FormLabel className={fieldState.error ? "text-destructive" : ""}>
+                  Services You're Interested In *
+                </FormLabel>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {SERVICE_OPTIONS.map((service) => {
+                    const isSelected = field.value.includes(service);
+                    return (
+                      <label
+                        key={service}
+                        className={`flex items-center gap-3 rounded-lg border px-3 py-2.5 cursor-pointer transition-colors ${
+                          isSelected
+                            ? "border-accent bg-accent/10"
+                            : "border-border hover:border-muted-foreground/30"
+                        }`}
+                      >
+                        <Checkbox
+                          checked={isSelected}
+                          onCheckedChange={(checked) => {
+                            const next = checked
+                              ? [...field.value, service]
+                              : field.value.filter((s: string) => s !== service);
+                            field.onChange(next);
+                          }}
+                        />
+                        <span className="text-sm text-foreground">{service}</span>
+                      </label>
+                    );
+                  })}
+                </div>
+                {fieldState.error && (
+                  <p className="text-sm font-medium text-destructive">{fieldState.error.message}</p>
+                )}
+              </div>
+            )}
+          />
+
             control={form.control}
             name="preferred_language"
             render={({ field }) => (
