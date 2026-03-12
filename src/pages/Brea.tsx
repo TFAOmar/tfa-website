@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Phone, MapPin, Clock, ShieldCheck, Globe, Trophy, ClipboardList, PenTool, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SEOHead from "@/components/seo/SEOHead";
@@ -15,11 +15,22 @@ const scrollToBook = () => {
 
 const Brea = () => {
   const [showSticky, setShowSticky] = useState(false);
+  const widgetContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const onScroll = () => setShowSticky(window.scrollY > 300);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    if (widgetContainerRef.current && !widgetContainerRef.current.querySelector('script')) {
+      const script = document.createElement("script");
+      script.src = "https://cdn.trustindex.io/loader.js?58410d862849832fdb76669e5ee";
+      script.defer = true;
+      script.async = true;
+      widgetContainerRef.current.appendChild(script);
+    }
   }, []);
 
   return (
@@ -168,6 +179,16 @@ const Brea = () => {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ===== REVIEWS ===== */}
+      <section className="py-16 md:py-20 bg-card">
+        <div className="max-w-4xl mx-auto px-5">
+          <h2 className="text-2xl md:text-3xl font-bold text-foreground text-center mb-10">
+            What Our Clients Say
+          </h2>
+          <div ref={widgetContainerRef} />
         </div>
       </section>
 
