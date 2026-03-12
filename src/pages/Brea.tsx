@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Phone, MapPin, Clock, ShieldCheck, Globe, Trophy, ClipboardList, PenTool, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SEOHead from "@/components/seo/SEOHead";
