@@ -3,10 +3,10 @@ import { Phone, MapPin, Clock, ShieldCheck, Globe, Trophy, ClipboardList, PenToo
 import { Button } from "@/components/ui/button";
 import SEOHead from "@/components/seo/SEOHead";
 
-{/* REPLACE: Update phone number if different for Brea office */}
+// REPLACE: Update phone number if different for Brea office
 const PHONE_NUMBER = "+18883505396";
 const PHONE_DISPLAY = "(888) 350-5396";
-{/* REPLACE: Update address for Brea office */}
+// REPLACE: Update address for Brea office
 const ADDRESS = "200 W Imperial Hwy, Brea, CA 92821";
 
 const scrollToBook = () => {
