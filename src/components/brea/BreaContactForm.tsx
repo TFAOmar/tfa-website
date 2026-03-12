@@ -63,6 +63,7 @@ const BreaContactForm = () => {
       phone: "",
       meeting_preference: "",
       best_time: "",
+      interestCategories: [],
       preferred_language: "",
       message: "",
       honeypot: "",
