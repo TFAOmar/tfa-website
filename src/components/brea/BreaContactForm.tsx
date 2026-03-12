@@ -26,6 +26,15 @@ import {
 import { toast } from "@/hooks/use-toast";
 import { submitForm } from "@/lib/formSubmit";
 
+const SERVICE_OPTIONS = [
+  "Retirement Planning",
+  "Life Insurance",
+  "Investment Management",
+  "Tax Strategy",
+  "Estate Planning",
+  "Business Insurance",
+];
+
 const formSchema = z.object({
   first_name: z.string().trim().min(1, "First name is required").max(50),
   last_name: z.string().trim().min(1, "Last name is required").max(50),
@@ -33,6 +42,7 @@ const formSchema = z.object({
   phone: z.string().min(10, "Please enter a valid phone number").max(10),
   meeting_preference: z.string().min(1, "Please select a meeting preference"),
   best_time: z.string().min(1, "Please select a preferred time"),
+  interestCategories: z.array(z.string()).min(1, "Please select at least one service"),
   preferred_language: z.string().optional(),
   message: z.string().max(1000).optional(),
   honeypot: z.string().max(0).optional(),
