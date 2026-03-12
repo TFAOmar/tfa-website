@@ -236,6 +236,7 @@ const AppLayout = () => {
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-of-service" element={<TermsOfService />} />
           <Route path="/brand-guidelines" element={<BrandGuidelines />} />
+          <Route path="/brea" element={<Brea />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
