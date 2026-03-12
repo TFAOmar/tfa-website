@@ -76,6 +76,7 @@ const BreaContactForm = () => {
     setIsSubmitting(true);
     try {
       const notes = [
+        `Services Interested In: ${data.interestCategories.join(", ")}`,
         `Meeting Preference: ${data.meeting_preference}`,
         `Best Time: ${data.best_time}`,
         data.preferred_language && `Language: ${data.preferred_language}`,
