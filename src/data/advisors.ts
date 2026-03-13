@@ -570,6 +570,23 @@ export const advisors: Advisor[] = [
     phone: "(937) 387-7426",
     yearsOfExperience: 30,
     landingPage: "/advisors/kevin-walters"
+  },
+  {
+    id: "ruben-davis",
+    name: "Ruben Davis",
+    title: "Franchise Owner",
+    type: "Advisor",
+    state: "California",
+    city: "Los Angeles",
+    region: "West",
+    bio: "Los Angeles native, UCLA graduate, and U.S. Air Force Reservist with 17+ years in real estate and mortgage financing. Now helping clients grow and protect their wealth through retirement planning, mortgage protection, life insurance with living benefits, and annuities.",
+    specialties: ["Retirement Planning", "Life Insurance", "Annuities", "Income Protection"],
+    licenses: ["Life & Health (Lic# 0F77548)"],
+    image: rubenDavisImg,
+    email: "leads@tfainsuranceadvisors.com",
+    phone: "(818) 381-6770",
+    yearsOfExperience: 17,
+    landingPage: "/advisors/ruben-davis"
   }
 ];
 
