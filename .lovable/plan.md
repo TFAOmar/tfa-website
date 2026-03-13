@@ -1,42 +1,30 @@
 
 
-## Plan: Create Ruben Davis Advisor Profile Page
+# Add Discount Code Support for Monthly Plan
 
-Add a dedicated landing page for Ruben Davis at `/advisors/ruben-davis`, following the established advisor page pattern (Hero → About → Services → Process → CTA).
+## Overview
+Allow users to enter a discount/promo code when subscribing to the Monthly ($89.99/mo) plan on the Estate Guru pricing page. The code will be validated by Stripe during checkout.
 
-### Profile Details
+## Approach
+Use Stripe's built-in `allow_promotion_codes: true` on the checkout session. This lets Stripe handle all coupon/promo code validation natively on the checkout page -- no custom input field needed on your site, and it works with any promotion code you create in Stripe's dashboard.
 
-- **Name:** Ruben Davis, Franchise Owner
-- **Title:** Franchise Owner — Income Protection & Retirement Planning
-- **Location:** Los Angeles, CA
-- **License:** Lic# 0F77548
-- **Phone:** (818) 381-6770
-- **Experience:** 17+ years (real estate/mortgage) + wealth planning
-- **Tagline:** "Veteran. Strategist. Wealth Builder."
-- **Bio:** UCLA graduate, U.S. Air Force Reservist, built one of SoCal's fastest-growing brokerages. Now partners with TFA for retirement planning, mortgage protection, life insurance with living benefits, annuities.
-- **Specialties:** Retirement Planning, Mortgage Protection, Life Insurance with Living Benefits, Annuities, Income Protection, Wealth Building
-- **Services (6 cards):** Retirement Planning, Mortgage Protection, Life Insurance with Living Benefits, Annuities & Growth, Income Protection, Wealth Building Strategy
+This is the simplest, most reliable approach: you create promotion codes in Stripe, and customers can enter them at checkout.
 
-### Files to Create/Edit
+## Changes
 
-1. **Copy uploaded image** → `src/assets/advisors/ruben-davis.jpg`
+### 1. Edge Function: `supabase/functions/create-estate-guru-checkout/index.ts`
+- Accept an optional `couponCode` parameter from the request body
+- For the **monthly** plan (non-promo): set `allow_promotion_codes: true` on the checkout session so users can enter any valid Stripe promotion code at checkout
+- Keep the existing hardcoded TFA200 coupon logic for the annual promo plan unchanged
+- Note: `allow_promotion_codes` and `discounts` are mutually exclusive in Stripe, so we only use `allow_promotion_codes` when no hardcoded discount is applied
 
-2. **Create `src/pages/AdvisorRubenDavis.tsx`** — Full landing page following the Neil Clark pattern:
-   - Hero with badge "Franchise Owner", name, tagline quote, bio summary, location badge + "U.S. Air Force Reservist" badge + license badge
-   - Experience badge showing "17+" years
-   - Buttons: Book a Consultation, Contact Me
-   - About section with full bio text provided
-   - 6 service cards tailored to his specialties
-   - 4-step process section
-   - CTA section with phone (818) 381-6770
-   - ScheduleModal + ContactModal (email TBD — will use placeholder)
+### 2. Frontend: `src/components/estate-guru/EstateGuruPricing.tsx`
+- No UI changes needed -- Stripe's checkout page will show the promo code input field automatically when `allow_promotion_codes` is enabled
 
-3. **Edit `src/data/advisors.ts`** — Add Ruben Davis to the advisors array for directory listing
+## How to Create Promo Codes
+After this change, you can create promotion codes in the Stripe Dashboard under **Products > Coupons > Promotion Codes**. Any valid promotion code will be accepted at monthly checkout.
 
-4. **Edit `src/App.tsx`** — Add route `/advisors/ruben-davis` → `AdvisorRubenDavis`
-
-### Lead Routing
-
-- ScheduleModal and ContactModal will route to leads@tfainsuranceadvisors.com (no personal email provided — can be updated later)
-- SEO metadata and JSON-LD structured data included
-
+## Files Changed
+| File | Action |
+|------|--------|
+| `supabase/functions/create-estate-guru-checkout/index.ts` | Add `allow_promotion_codes: true` for monthly plan checkout sessions |
