@@ -896,6 +896,28 @@ const sendEmails = async (
     }
   }
 
+  // 4. Send to Escobar Realty partner for their living trust leads
+  if (formData.form_name === "Living Trust Inquiry - Escobar Realty Group") {
+    try {
+      const partnerResult = await resend.emails.send({
+        from: "TFA Insurance Advisors <notifications@tfainsuranceadvisors.com>",
+        to: ["heiner@escorealtygroup.com"],
+        subject: `New Living Trust Lead - ${formData.first_name} ${formData.last_name}`,
+        html: teamHtml,
+      });
+      if (partnerResult.error) {
+        console.error("[Email Error - Escobar Partner]", partnerResult.error);
+        errors.push(`Escobar partner email: ${partnerResult.error.message}`);
+      } else {
+        partnerSent = true;
+        console.log("[Email Sent - Escobar Partner] heiner@escorealtygroup.com");
+      }
+    } catch (e) {
+      console.error("[Email Exception - Escobar Partner]", e);
+      errors.push(`Escobar partner email exception: ${e instanceof Error ? e.message : "Unknown error"}`);
+    }
+  }
+
   return { teamSent, advisorSent, partnerSent, errors };
 };
 
