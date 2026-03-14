@@ -3,8 +3,6 @@ import { Button } from "@/components/ui/button";
 import EscobarLivingTrustForm from "@/components/living-trust/EscobarLivingTrustForm";
 import tfaLogo from "@/assets/tfa-logo.png";
 import escobarLogo from "@/assets/partners/escobar-realty-group.png";
-import kwLogo from "@/assets/partners/keller-williams.png";
-import fusionLogo from "@/assets/partners/fusion-growth-partners.png";
 import { SEOHead, JsonLd } from "@/components/seo";
 import { generateWebPageSchema, generateBreadcrumbSchema } from "@/lib/seo/schemas";
 import { siteConfig } from "@/lib/seo/siteConfig";
@@ -102,10 +100,6 @@ export default function EscobarRealtyLivingTrust() {
               <img src={escobarLogo} alt="Escobar Realty Group" className="h-14 md:h-16 lg:h-20 object-contain" />
               <div className="h-10 md:h-12 w-px bg-gray-200" />
               <img src={tfaLogo} alt="The Financial Architects" className="h-10 md:h-12 lg:h-14 object-contain" />
-            </div>
-            <div className="flex items-center justify-center gap-4 md:gap-8 mt-3 md:mt-4">
-              <img src={kwLogo} alt="Keller Williams" className="h-6 md:h-8 object-contain opacity-60" />
-              <img src={fusionLogo} alt="Fusion Growth Partners" className="h-6 md:h-8 object-contain opacity-60" />
             </div>
             <p className="text-center text-gray-500 text-xs md:text-sm mt-2 md:mt-3 tracking-wide">
               A Trusted Partnership for Your Family's Future
@@ -306,10 +300,6 @@ export default function EscobarRealtyLivingTrust() {
               <img src={escobarLogo} alt="Escobar Realty Group" className="h-12 md:h-14 object-contain" />
               <span className="text-gray-400">×</span>
               <img src={tfaLogo} alt="The Financial Architects" className="h-7 md:h-8 object-contain" />
-            </div>
-            <div className="flex items-center justify-center gap-4 mb-3">
-              <img src={kwLogo} alt="Keller Williams" className="h-5 md:h-6 object-contain opacity-50" />
-              <img src={fusionLogo} alt="Fusion Growth Partners" className="h-5 md:h-6 object-contain opacity-50" />
             </div>
             <p className="text-gray-500 text-xs md:text-sm">
               © {new Date().getFullYear()} The Financial Architects. All rights reserved.
