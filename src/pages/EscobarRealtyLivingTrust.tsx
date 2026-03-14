@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import EscobarLivingTrustForm from "@/components/living-trust/EscobarLivingTrustForm";
 import tfaLogo from "@/assets/tfa-logo.png";
 import escobarLogo from "@/assets/partners/escobar-realty-group.png";
+import partnersPhoto from "@/assets/partners/escobar-heiner-natalia.png";
 import { SEOHead, JsonLd } from "@/components/seo";
 import { generateWebPageSchema, generateBreadcrumbSchema } from "@/lib/seo/schemas";
 import { siteConfig } from "@/lib/seo/siteConfig";
