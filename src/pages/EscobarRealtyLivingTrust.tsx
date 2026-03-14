@@ -146,9 +146,7 @@ export default function EscobarRealtyLivingTrust() {
             <div className="bg-gradient-to-br from-white/[0.06] to-white/[0.02] backdrop-blur-xl rounded-2xl border border-[#C9A84C]/15 p-6 md:p-10 lg:p-12">
               <div className="flex flex-col md:flex-row items-center gap-6 md:gap-10">
                 <div className="flex-shrink-0">
-                  <div className="w-24 h-24 md:w-28 md:h-28 rounded-xl bg-white border border-white/20 flex items-center justify-center">
-                    <img src={escobarLogo} alt="Escobar Realty Group" className="w-20 h-20 md:w-24 md:h-24 object-contain" />
-                  </div>
+                  <img src={partnersPhoto} alt="Heiner & Natalia Escobar" className="w-28 h-28 md:w-32 md:h-32 rounded-xl object-cover border border-white/20" />
                 </div>
                 <div className="text-center md:text-left">
                   <h2 className="text-xl md:text-2xl font-bold text-white mb-1">
