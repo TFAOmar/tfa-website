@@ -103,10 +103,6 @@ export default function EscobarRealtyLivingTrust() {
               <div className="h-10 md:h-12 w-px bg-gray-200" />
               <img src={tfaLogo} alt="The Financial Architects" className="h-10 md:h-12 lg:h-14 object-contain" />
             </div>
-            <div className="flex items-center justify-center gap-4 md:gap-8 mt-3 md:mt-4">
-              <img src={kwLogo} alt="Keller Williams" className="h-6 md:h-8 object-contain opacity-60" />
-              <img src={fusionLogo} alt="Fusion Growth Partners" className="h-6 md:h-8 object-contain opacity-60" />
-            </div>
             <p className="text-center text-gray-500 text-xs md:text-sm mt-2 md:mt-3 tracking-wide">
               A Trusted Partnership for Your Family's Future
             </p>
