@@ -1,30 +1,32 @@
 
 
-# Add Discount Code Support for Monthly Plan
+## Investigation Results: Ruben Davis Life Insurance Application Emails
 
-## Overview
-Allow users to enter a discount/promo code when subscribing to the Monthly ($89.99/mo) plan on the Estate Guru pricing page. The code will be validated by Stripe during checkout.
+### What I found
 
-## Approach
-Use Stripe's built-in `allow_promotion_codes: true` on the checkout session. This lets Stripe handle all coupon/promo code validation natively on the checkout page -- no custom input field needed on your site, and it works with any promotion code you create in Stripe's dashboard.
+I located Ruben's test submission from March 13 (applicant: "TESTING davis", email: rubenjdavis@hotmail.com). The application was successfully submitted and stored in the database with status `submitted` and the correct advisor email `ruben@tfainsuranceadvisors.com`.
 
-This is the simplest, most reliable approach: you create promotion codes in Stripe, and customers can enter them at checkout.
+**I just re-triggered the notification edge function for that same application**, and all 3 emails sent successfully:
+- **Admin email** → leads@tfainsuranceadvisors.com ✅
+- **Advisor email** → ruben@tfainsuranceadvisors.com ✅  
+- **Applicant email** → rubenjdavis@hotmail.com ✅
 
-## Changes
+The edge function is working correctly. The emails are being sent via Resend from `noreply@tfainsuranceadvisors.com`.
 
-### 1. Edge Function: `supabase/functions/create-estate-guru-checkout/index.ts`
-- Accept an optional `couponCode` parameter from the request body
-- For the **monthly** plan (non-promo): set `allow_promotion_codes: true` on the checkout session so users can enter any valid Stripe promotion code at checkout
-- Keep the existing hardcoded TFA200 coupon logic for the annual promo plan unchanged
-- Note: `allow_promotion_codes` and `discounts` are mutually exclusive in Stripe, so we only use `allow_promotion_codes` when no hardcoded discount is applied
+### Most likely cause of the original issue
 
-### 2. Frontend: `src/components/estate-guru/EstateGuruPricing.tsx`
-- No UI changes needed -- Stripe's checkout page will show the promo code input field automatically when `allow_promotion_codes` is enabled
+1. **Emails landed in spam/junk** — Hotmail/Outlook is particularly aggressive with filtering automated emails. Ruben should check his spam folders at both `ruben@tfainsuranceadvisors.com` and `rubenjdavis@hotmail.com`.
 
-## How to Create Promo Codes
-After this change, you can create promotion codes in the Stripe Dashboard under **Products > Coupons > Promotion Codes**. Any valid promotion code will be accepted at monthly checkout.
+2. **The re-triggered emails should be arriving now** — I just sent them moments ago, so Ruben can verify delivery right now.
 
-## Files Changed
-| File | Action |
-|------|--------|
-| `supabase/functions/create-estate-guru-checkout/index.ts` | Add `allow_promotion_codes: true` for monthly plan checkout sessions |
+### No code changes needed
+
+The system is working as designed. This is a deliverability/spam filter issue, not a code bug.
+
+### Recommendation
+
+If emails consistently go to spam, we can improve deliverability by:
+- Adding the applicant's name to the email subject line for personalization
+- Ensuring SPF/DKIM/DMARC records are properly configured for `tfainsuranceadvisors.com` in Resend
+- Asking Ruben to whitelist `noreply@tfainsuranceadvisors.com` in his email client
+
