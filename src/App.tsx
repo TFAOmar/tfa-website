@@ -103,6 +103,7 @@ import GeneralSponsorshipSuccess from "./pages/GeneralSponsorshipSuccess";
 import OnboardingChecklist from "./pages/OnboardingChecklist";
 import SubmitEvent from "./pages/SubmitEvent";
 import EventSponsorship from "./pages/EventSponsorship";
+import AdminSponsorshipEvents from "./pages/AdminSponsorshipEvents";
 import PrequalificationQuestionnaire from "./pages/PrequalificationQuestionnaire";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
