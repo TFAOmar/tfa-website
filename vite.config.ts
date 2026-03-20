@@ -14,6 +14,7 @@ export default defineConfig(({ mode }) => ({
     alias: {
       "@": path.resolve(__dirname, "./src"),
       recharts: path.resolve(__dirname, "./node_modules/recharts/lib/index.js"),
+      "get-nonce": path.resolve(__dirname, "./node_modules/get-nonce/dist/es5/index.js"),
     },
   },
 }));
