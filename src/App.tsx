@@ -103,6 +103,7 @@ import GeneralSponsorshipSuccess from "./pages/GeneralSponsorshipSuccess";
 import OnboardingChecklist from "./pages/OnboardingChecklist";
 import SubmitEvent from "./pages/SubmitEvent";
 import EventSponsorship from "./pages/EventSponsorship";
+import AdminSponsorshipEvents from "./pages/AdminSponsorshipEvents";
 import PrequalificationQuestionnaire from "./pages/PrequalificationQuestionnaire";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
@@ -112,7 +113,7 @@ import EscobarRealtyLivingTrust from "./pages/EscobarRealtyLivingTrust";
 const queryClient = new QueryClient();
 
 // Standalone pages that have their own header/footer
-const standalonePages = ['/advisors/vanessa-sanchez/living-trust', '/advisors/vanessa-sanchez/think-tax-solutions', '/advisors/vanessa-sanchez/cardenas-and-company', '/advisors/braihyra-medellin/living-trust', '/advisors/erica-valenzuela/living-trust', '/services/kai-zen', '/advisors/mariah-lorenzen/kai-zen', '/advisors/tamara-lee/medicare', '/advisors/recinos', '/advisors/ruth-pacheco/tax-strategy', '/health-insurance/american-way-health', '/admin', '/admin/applications', '/admin/form-submissions', '/life-insurance-application', '/living-trust-questionnaire', '/estate-guru', '/estate-guru/success', '/estate-guru/canceled', '/advisors/manuel-soto/coaching', '/advisors/manuel-soto/escobar-realty', '/brea'];
+const standalonePages = ['/advisors/vanessa-sanchez/living-trust', '/advisors/vanessa-sanchez/think-tax-solutions', '/advisors/vanessa-sanchez/cardenas-and-company', '/advisors/braihyra-medellin/living-trust', '/advisors/erica-valenzuela/living-trust', '/services/kai-zen', '/advisors/mariah-lorenzen/kai-zen', '/advisors/tamara-lee/medicare', '/advisors/recinos', '/advisors/ruth-pacheco/tax-strategy', '/health-insurance/american-way-health', '/admin', '/admin/applications', '/admin/form-submissions', '/admin/sponsorship', '/life-insurance-application', '/living-trust-questionnaire', '/estate-guru', '/estate-guru/success', '/estate-guru/canceled', '/advisors/manuel-soto/coaching', '/advisors/manuel-soto/escobar-realty', '/brea'];
 
 const AppLayout = () => {
   const location = useLocation();
@@ -163,6 +164,11 @@ const AppLayout = () => {
           <Route path="/admin/form-submissions" element={
             <ProtectedRoute requireAdmin>
               <AdminFormSubmissions />
+            </ProtectedRoute>
+          } />
+          <Route path="/admin/sponsorship" element={
+            <ProtectedRoute requireAdmin>
+              <AdminSponsorshipEvents />
             </ProtectedRoute>
           } />
           <Route path="/tools" element={<Tools />} />
