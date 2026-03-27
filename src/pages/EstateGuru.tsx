@@ -7,7 +7,7 @@ import EstateGuruBenefits from "@/components/estate-guru/EstateGuruBenefits";
 import EstateGuruFeatures from "@/components/estate-guru/EstateGuruFeatures";
 import EstateGuruTestimonials from "@/components/estate-guru/EstateGuruTestimonials";
 import EstateGuruFAQ from "@/components/estate-guru/EstateGuruFAQ";
-import EstateGuruRegistrationForm from "@/components/estate-guru/EstateGuruRegistrationForm";
+
 import EstateGuruFooter from "@/components/estate-guru/EstateGuruFooter";
 import EstateGuruPricing from "@/components/estate-guru/EstateGuruPricing";
 
