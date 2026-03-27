@@ -1,37 +1,29 @@
 
 
-## Plan: Update Sponsorship Event Dates and Details
+## Plan: Enhance Admin Sponsorship Page Editability
 
-Update the 4 active sponsorship events with correct 2026 dates and enhanced descriptions.
+The admin page at `/admin/sponsorship` already supports editing events (name, slug, timing, date, status, attendees, icon, gradient, order, active) and basic tier fields (price, Stripe ID, popular, active). But several fields are missing or use poor input types.
 
-### Data Updates (via insert tool)
+### Changes to `src/pages/AdminSponsorshipEvents.tsx`
 
-| Event | Slug | Date | Timing Update |
-|-------|------|------|---------------|
-| Leadership Summit | `leadership-summit` | `2026-04-23` | "April 23, 2026" |
-| Crash Courses | `crash-courses` | `2026-04-14` | "April 14–15, 2026" |
-| Summer Sizzler | `summer-sizzler` | `2026-06-27` | "June 27, 2026" |
-| Christmas Party | `christmas-party` | `2026-12-12` | "December 12, 2026" |
+**1. Event edit dialog improvements:**
+- Change Description from single-line `Input` to `Textarea` for longer text
+- Add an `Atmosphere` field (text input — currently in the DB but not editable)
 
-### SQL Updates
+**2. Tier cards — add missing editable fields:**
+- **Name** — editable text input (currently just a static heading)
+- **Tier ID** — editable text input (currently just a badge)
+- **Price Note** — editable text input (e.g. "per event")
+- **Highlight** — editable text input (e.g. "Best Value")
+- **Features** — editable textarea where each line = one feature, saved as a string array
+- **Display Order** — number input
 
-```sql
-UPDATE sponsorship_events SET event_date = '2026-04-23', timing = 'April 23, 2026',
-  description = 'Exclusive leadership summit to review Q1 performance and lock the Q2 execution plan. Invite-only for TFA Leadership team.'
-WHERE slug = 'leadership-summit';
+This makes every column in both `sponsorship_events` and `sponsorship_tiers` fully editable from the admin panel. No database or schema changes needed.
 
-UPDATE sponsorship_events SET event_date = '2026-04-14', timing = 'April 14–15, 2026',
-  description = '2-day action-based intensive designed to get you producing immediately. Systems, pipeline, calling, presentations, and live coaching.'
-WHERE slug = 'crash-courses';
+### Technical Details
 
-UPDATE sponsorship_events SET event_date = '2026-06-27', timing = 'June 27, 2026',
-  description = 'Newport Beach yacht party bringing together TFA agents, partners, and friends for a night of connection, celebration, and summer vibes. 6–10PM + After Party.'
-WHERE slug = 'summer-sizzler';
-
-UPDATE sponsorship_events SET event_date = '2026-12-12', timing = 'December 12, 2026',
-  description = 'Annual celebration to close the year strong. Great people, holiday vibes, music, photos, and a night to connect with the TFA family. Southern California, 6–10PM PT.'
-WHERE slug = 'christmas-party';
-```
-
-No code or schema changes needed — the existing components already read `event_date`, `timing`, and `description` from the DB.
+- Import `Textarea` from `@/components/ui/textarea`
+- For tier features editing: use a `Textarea` with `defaultValue={tier.features.join('\n')}`, on blur split by newlines and save as array
+- All tier fields use the existing `handleTierFieldUpdate` pattern (inline onBlur saves)
+- Reorganize tier cards into a more complete grid layout with all fields visible
 
