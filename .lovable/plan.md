@@ -1,66 +1,49 @@
 
 
-## Plan: Fix Sponsorship Form Submission Error
+## Plan: Dynamic "Next Event" Badge + Fix Events Display
 
-**Problem**: The insert into `sponsorship_leads` succeeds, but the chained `.select('id').single()` fails because the SELECT RLS policy only allows admins. Anonymous users can insert but cannot read back their own row.
+### Issues
 
-**Fix**: Add an RLS policy that allows users to read the row they just inserted, scoped to the current request. The simplest approach: allow selecting rows where the inserter's session matches — but since there's no `user_id` column and submissions are anonymous, we need a different approach.
+1. **Hero badge** — Line 44 in `GeneralSponsorshipHero.tsx` is hardcoded: `"Next Event: Kick Off — January 2026"`. It needs to dynamically show the next upcoming event based on `event_date` from the DB.
 
-**Best approach**: Remove the `.select('id').single()` from the insert call and instead use the returned insert data differently, OR add a public SELECT policy scoped narrowly.
+2. **Events grayed out** — The `useSponsorshipEvents` hook filters `is_active = true`, which correctly hides Kick Off (`is_active: false`). But the remaining 4 events all have `event_date = null`. The cards likely look "grayed out" because the `status` field is `'available'` for all, which uses muted styling (`bg-muted text-muted-foreground`). Also, only events with status `selling-fast` or `few-spots` show a badge — `available` events show no status indicator, making them look inactive.
 
-### Option chosen: Remove `.select().single()` dependency
+### Changes
 
-**File: `src/components/sponsorship/GeneralSponsorshipForm.tsx`** (~line 145-158)
+**1. `src/components/sponsorship/GeneralSponsorshipHero.tsx`**
+- Import `useSponsorshipEvents` hook
+- Compute the next upcoming event: find the first event with `event_date >= today`, sorted by date. If none found, show "Events Coming Soon"
+- Replace hardcoded badge text with dynamic: `"Next Event: {name} — {formatted date}"`
 
-Change:
+**2. `src/components/sponsorship/EventsShowcase.tsx`**
+- Auto-determine visual status from `event_date`: if `event_date` is in the past, treat as `'past'` visually regardless of DB status (gray it out + disable button)
+- For events with `event_date = null` or future dates, respect the DB `status` field
+- Show the event date on each card when available (currently only shows `timing` like "Q1 2026")
+- Give `available` status a more active visual treatment — use a subtle green/primary badge instead of muted gray so cards don't look disabled
+
+**3. Database: Set event dates** (migration)
+- Update the 4 active events with approximate 2026 dates so the "Next Event" logic works:
+  - Crash Courses: `2026-04-15`
+  - Leadership Summit: `2026-06-20`  
+  - Summer Sizzler: `2026-08-15`
+  - Christmas Party: `2026-12-12`
+- These can be adjusted later via the admin panel
+
+### Technical Details
+
+**Next event computation** (in Hero):
 ```typescript
-const { data: insertedData, error } = await supabase.from('sponsorship_leads').insert({
-  ...
-}).select('id').single();
+const { data: events = [] } = useSponsorshipEvents();
+const today = new Date().toISOString().split('T')[0];
+const nextEvent = events
+  .filter(e => e.event_date && e.event_date >= today)
+  .sort((a, b) => a.event_date!.localeCompare(b.event_date!))[0];
 ```
 
-To:
+**Status visual fix** (in EventsShowcase):
 ```typescript
-const { error } = await supabase.from('sponsorship_leads').insert({
-  ...
-});
+// Change 'available' styling from muted to active
+'available': { label: '✅ Available', className: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100' },
 ```
-
-Then for the payment flow (line 178), since we no longer have the lead ID, we skip setting `submittedLeadId` and instead always navigate to the success page. The Stripe checkout can be triggered from the success page or we pass enough info to create checkout without a lead ID.
-
-**Actually, simpler**: Add a narrow RLS SELECT policy so the insert+select works:
-
-### Database Migration
-
-```sql
-CREATE POLICY "Inserters can read own row"
-  ON public.sponsorship_leads
-  FOR SELECT
-  TO public
-  USING (true);
-```
-
-Wait — that exposes all leads publicly (contains PII). Bad idea.
-
-### Final approach: Drop `.select('id').single()`, generate ID client-side
-
-1. **`src/components/sponsorship/GeneralSponsorshipForm.tsx`**: Generate a UUID client-side before inserting, pass it as the `id` field in the insert, and use that directly as `submittedLeadId` — no need to read it back.
-
-```typescript
-const leadId = crypto.randomUUID();
-const { error } = await supabase.from('sponsorship_leads').insert({
-  id: leadId,
-  company_name: data.companyName,
-  // ... rest unchanged
-});
-if (error) throw error;
-
-// Use leadId directly
-if (data.preferredPackage !== 'undecided') {
-  setSubmittedLeadId(leadId);
-  // ...
-}
-```
-
-This is a single-line-level change in one file. No migration needed. No RLS changes. No PII exposure.
+And always show the status badge for `available` events (remove the filter that hides it).
 
