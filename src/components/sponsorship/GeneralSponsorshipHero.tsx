@@ -54,7 +54,7 @@ export const GeneralSponsorshipHero = ({ onInquireNow }: GeneralSponsorshipHeroP
               className="px-4 py-2 text-sm font-semibold bg-accent text-accent-foreground"
             >
               <Clock className="w-4 h-4 mr-1" />
-              Next Event: Kick Off — January 2026
+              {nextEventLabel}
             </Badge>
           </div>
 

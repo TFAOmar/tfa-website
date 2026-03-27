@@ -25,7 +25,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 const statusLabels: Record<string, { label: string; className: string }> = {
   'selling-fast': { label: '🔥 Selling Fast', className: 'bg-destructive text-destructive-foreground' },
   'few-spots': { label: '⚡ Few Spots Left', className: 'bg-amber-500 text-white' },
-  'available': { label: 'Available', className: 'bg-muted text-muted-foreground' },
+  'available': { label: '✅ Available', className: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100' },
   'sold-out': { label: 'Sold Out', className: 'bg-muted text-muted-foreground' },
   'past': { label: 'Past Event', className: 'bg-muted text-muted-foreground' },
 };
