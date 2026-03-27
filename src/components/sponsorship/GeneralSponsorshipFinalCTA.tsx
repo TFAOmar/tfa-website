@@ -1,11 +1,24 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Clock, Zap } from "lucide-react";
+import { useSponsorshipEvents } from "@/hooks/useSponsorshipData";
+import { format, parseISO } from "date-fns";
 
 interface GeneralSponsorshipFinalCTAProps {
   onInquireNow: () => void;
 }
 
 export const GeneralSponsorshipFinalCTA = ({ onInquireNow }: GeneralSponsorshipFinalCTAProps) => {
+  const { data: events = [] } = useSponsorshipEvents();
+  
+  const today = new Date().toISOString().split('T')[0];
+  const nextEvent = events
+    .filter(e => e.event_date && e.event_date >= today)
+    .sort((a, b) => a.event_date!.localeCompare(b.event_date!))[0];
+
+  const nextEventLabel = nextEvent
+    ? `Next Event: ${nextEvent.name} — ${format(parseISO(nextEvent.event_date!), 'MMMM yyyy')}`
+    : 'Events Coming Soon';
+
   return (
     <section className="py-20 relative overflow-hidden">
       {/* Background gradient */}
@@ -23,7 +36,7 @@ export const GeneralSponsorshipFinalCTA = ({ onInquireNow }: GeneralSponsorshipF
             </div>
             <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">
               <Clock className="w-4 h-4" />
-              Next Event: Kick Off — January 2026
+              {nextEventLabel}
             </div>
           </div>
 
