@@ -279,6 +279,9 @@ export const GeneralSponsorshipForm = ({
 
                 <p className="text-sm text-muted-foreground">Select one or more events you'd like to sponsor:</p>
 
+                {events.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">Loading events...</p>
+                ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {events.map((event) => (
                     <label
