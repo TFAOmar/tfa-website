@@ -306,6 +306,7 @@ export const GeneralSponsorshipForm = ({
                     </label>
                   ))}
                 </div>
+                )}
                 {errors.eventsInterested && <p className="text-sm text-destructive">{errors.eventsInterested.message}</p>}
               </div>
 
@@ -313,8 +314,11 @@ export const GeneralSponsorshipForm = ({
 
               <div className="space-y-4">
                 <Label htmlFor="preferredPackage">Preferred Package</Label>
+                {tiers.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">Loading packages...</p>
+                ) : (
                 <Select 
-                  defaultValue={preselectedPackage || 'undecided'}
+                  value={watchedPackage}
                   onValueChange={(value) => setValue('preferredPackage', value)}
                 >
                   <SelectTrigger className="mt-1">
@@ -326,6 +330,7 @@ export const GeneralSponsorshipForm = ({
                     ))}
                   </SelectContent>
                 </Select>
+                )}
               </div>
 
               <div className="mt-6">
