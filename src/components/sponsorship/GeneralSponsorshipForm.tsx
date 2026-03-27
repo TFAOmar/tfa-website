@@ -279,6 +279,9 @@ export const GeneralSponsorshipForm = ({
 
                 <p className="text-sm text-muted-foreground">Select one or more events you'd like to sponsor:</p>
 
+                {events.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">Loading events...</p>
+                ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {events.map((event) => (
                     <label
@@ -303,6 +306,7 @@ export const GeneralSponsorshipForm = ({
                     </label>
                   ))}
                 </div>
+                )}
                 {errors.eventsInterested && <p className="text-sm text-destructive">{errors.eventsInterested.message}</p>}
               </div>
 
@@ -310,8 +314,11 @@ export const GeneralSponsorshipForm = ({
 
               <div className="space-y-4">
                 <Label htmlFor="preferredPackage">Preferred Package</Label>
+                {tiers.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">Loading packages...</p>
+                ) : (
                 <Select 
-                  defaultValue={preselectedPackage || 'undecided'}
+                  value={watchedPackage}
                   onValueChange={(value) => setValue('preferredPackage', value)}
                 >
                   <SelectTrigger className="mt-1">
@@ -323,6 +330,7 @@ export const GeneralSponsorshipForm = ({
                     ))}
                   </SelectContent>
                 </Select>
+                )}
               </div>
 
               <div className="mt-6">
