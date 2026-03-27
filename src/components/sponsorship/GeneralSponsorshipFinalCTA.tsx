@@ -36,7 +36,7 @@ export const GeneralSponsorshipFinalCTA = ({ onInquireNow }: GeneralSponsorshipF
             </div>
             <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">
               <Clock className="w-4 h-4" />
-              Next Event: Kick Off — January 2026
+              {nextEventLabel}
             </div>
           </div>
 
