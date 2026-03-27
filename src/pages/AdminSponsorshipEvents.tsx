@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
@@ -188,11 +189,23 @@ const AdminSponsorshipEvents = () => {
             <div className="grid gap-6">
               {tiers.map((tier) => (
                 <div key={tier.id} className="border border-border rounded-xl p-6 bg-card">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-bold text-foreground">{tier.name}</h3>
-                    <Badge variant="outline">{tier.tier_id}</Badge>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                    <div>
+                      <Label>Name</Label>
+                      <Input
+                        defaultValue={tier.name}
+                        onBlur={(e) => handleTierFieldUpdate(tier, 'name', e.target.value)}
+                        className="mt-1"
+                      />
+                    </div>
+                    <div>
+                      <Label>Tier ID</Label>
+                      <Input
+                        defaultValue={tier.tier_id}
+                        onBlur={(e) => handleTierFieldUpdate(tier, 'tier_id', e.target.value)}
+                        className="mt-1 font-mono text-sm"
+                      />
+                    </div>
                     <div>
                       <Label>Price ($)</Label>
                       <Input
@@ -200,6 +213,35 @@ const AdminSponsorshipEvents = () => {
                         defaultValue={tier.price}
                         onBlur={(e) => handleTierFieldUpdate(tier, 'price', parseInt(e.target.value))}
                         className="mt-1"
+                      />
+                    </div>
+                    <div>
+                      <Label>Display Order</Label>
+                      <Input
+                        type="number"
+                        defaultValue={tier.display_order}
+                        onBlur={(e) => handleTierFieldUpdate(tier, 'display_order', parseInt(e.target.value))}
+                        className="mt-1"
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div>
+                      <Label>Price Note</Label>
+                      <Input
+                        defaultValue={tier.price_note || ''}
+                        onBlur={(e) => handleTierFieldUpdate(tier, 'price_note', e.target.value)}
+                        className="mt-1"
+                        placeholder="e.g. per event"
+                      />
+                    </div>
+                    <div>
+                      <Label>Highlight</Label>
+                      <Input
+                        defaultValue={tier.highlight || ''}
+                        onBlur={(e) => handleTierFieldUpdate(tier, 'highlight', e.target.value)}
+                        className="mt-1"
+                        placeholder="e.g. Best Value"
                       />
                     </div>
                     <div>
@@ -211,21 +253,31 @@ const AdminSponsorshipEvents = () => {
                         placeholder="price_xxx"
                       />
                     </div>
-                    <div className="flex items-end gap-4">
-                      <div className="flex items-center gap-2">
-                        <Label>Popular</Label>
-                        <Switch
-                          checked={tier.is_popular}
-                          onCheckedChange={(checked) => handleTierFieldUpdate(tier, 'is_popular', checked)}
-                        />
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Label>Active</Label>
-                        <Switch
-                          checked={tier.is_active}
-                          onCheckedChange={(checked) => handleTierFieldUpdate(tier, 'is_active', checked)}
-                        />
-                      </div>
+                  </div>
+                  <div className="mb-4">
+                    <Label>Features (one per line)</Label>
+                    <Textarea
+                      defaultValue={tier.features.join('\n')}
+                      onBlur={(e) => handleTierFieldUpdate(tier, 'features', e.target.value.split('\n').filter(Boolean))}
+                      className="mt-1 font-mono text-sm"
+                      rows={4}
+                      placeholder="Feature 1&#10;Feature 2&#10;Feature 3"
+                    />
+                  </div>
+                  <div className="flex items-center gap-6">
+                    <div className="flex items-center gap-2">
+                      <Label>Popular</Label>
+                      <Switch
+                        checked={tier.is_popular}
+                        onCheckedChange={(checked) => handleTierFieldUpdate(tier, 'is_popular', checked)}
+                      />
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Label>Active</Label>
+                      <Switch
+                        checked={tier.is_active}
+                        onCheckedChange={(checked) => handleTierFieldUpdate(tier, 'is_active', checked)}
+                      />
                     </div>
                   </div>
                 </div>
@@ -255,7 +307,11 @@ const AdminSponsorshipEvents = () => {
               </div>
               <div>
                 <Label>Description</Label>
-                <Input value={editingEvent.description || ''} onChange={(e) => setEditingEvent({ ...editingEvent, description: e.target.value })} className="mt-1" />
+                <Textarea value={editingEvent.description || ''} onChange={(e) => setEditingEvent({ ...editingEvent, description: e.target.value })} className="mt-1" rows={3} />
+              </div>
+              <div>
+                <Label>Atmosphere</Label>
+                <Input value={editingEvent.atmosphere || ''} onChange={(e) => setEditingEvent({ ...editingEvent, atmosphere: e.target.value })} className="mt-1" placeholder="e.g. High-energy networking" />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
