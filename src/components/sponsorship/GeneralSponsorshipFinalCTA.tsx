@@ -1,5 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Clock, Zap } from "lucide-react";
+import { useSponsorshipEvents } from "@/hooks/useSponsorshipData";
+import { format, parseISO } from "date-fns";
 
 interface GeneralSponsorshipFinalCTAProps {
   onInquireNow: () => void;
