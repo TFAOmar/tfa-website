@@ -33,6 +33,7 @@ import neilClarkImg from "@/assets/advisors/neil-clark.jpg";
 import kevinWaltersImg from "@/assets/advisors/kevin-walters.jpg";
 import rubenDavisImg from "@/assets/advisors/ruben-davis.jpg";
 import michelleMartinezImg from "@/assets/advisors/michelle-martinez.jpg";
+import josephGuzmanImg from "@/assets/advisors/joseph-guzman.png";
 
 export interface Advisor {
   id: number | string;
