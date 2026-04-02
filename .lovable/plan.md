@@ -1,37 +1,30 @@
 
 
-## Plan: Add Joseph Guzman — Advisor Profile + Landing Page
+## Plan: Fix Safari/iPhone Checkout Blocked Popup
 
-### 1. Copy uploaded image to assets
-Copy `user-uploads://image-24.png` to `src/assets/advisors/joseph-guzman.png`
+### Problem
 
-### 2. Add to advisor directory — `src/data/advisors.ts`
-- Import `josephGuzmanImg` from `@/assets/advisors/joseph-guzman.png`
-- Add entry with id `36`, name "Joseph Guzman", title "Financial Strategist", type "Advisor", city "Chino Hills", state "California", region "West", 8 years experience
-- Specialties: Real Estate, Living Trusts, Mortgage Protection, Life Insurance
-- Email: jguzman@tfainsuranceadvisors.com
-- Landing page: `/advisors/joseph-guzman`
+The checkout button calls `window.open(data.url, "_blank")` inside an async `supabase.functions.invoke()` callback. Safari on iPhone treats this as a popup (not a direct user gesture) and blocks it silently. The user clicks "Get Started" and nothing happens.
 
-### 3. Create landing page — `src/pages/AdvisorJosephGuzman.tsx`
-Follow the established advisor page pattern (same as Fabian Serrano, Michelle Martinez, etc.):
-- Hero with uploaded photo, name, title, Chino Hills location
-- Bio highlighting 8 years in Real Estate, Living Trusts, and Mortgage Protection
-- Services cards: Real Estate Services, Living Trusts, Mortgage Protection, Life Insurance
-- 4-step process (Discovery, Analysis, Strategy, Implementation)
-- Schedule consultation modal + Contact modal
-- SEO metadata and JSON-LD schema
-- CTA section at bottom
+### Fix — `src/components/estate-guru/EstateGuruPricing.tsx`
 
-### 4. Register route — `src/App.tsx`
-- Import `AdvisorJosephGuzman`
-- Add route: `/advisors/joseph-guzman`
+Replace `window.open(data.url, "_blank")` with `window.location.href = data.url` to navigate in the same tab instead of opening a new one. This is never blocked by popup blockers.
+
+The Stripe success/cancel URLs already redirect back to the site, so same-tab navigation is the correct UX for mobile anyway.
+
+### Single line change
+
+```typescript
+// Before
+window.open(data.url, "_blank");
+
+// After
+window.location.href = data.url;
+```
 
 ### Files Changed
 
 | File | Change |
 |------|--------|
-| `src/assets/advisors/joseph-guzman.png` | New — uploaded photo |
-| `src/data/advisors.ts` | Add Joseph Guzman entry (id 36) |
-| `src/pages/AdvisorJosephGuzman.tsx` | New — full advisor landing page |
-| `src/App.tsx` | Import + route for `/advisors/joseph-guzman` |
+| `src/components/estate-guru/EstateGuruPricing.tsx` | Replace `window.open` with `window.location.href` |
 
