@@ -154,23 +154,22 @@ export async function generateSalesContestPdf() {
 
   // Meet Your Hosts section
   doc.setFillColor(...GOLD);
-  doc.rect(30, 158, 150, 0.5, "F");
+  doc.rect(30, 166, 150, 0.5, "F");
 
   doc.setTextColor(...GOLD);
   doc.setFontSize(14);
   doc.setFont("helvetica", "bold");
-  doc.text("Meet Your Hosts", W / 2, 168, { align: "center" });
+  doc.text("Meet Your Hosts", W / 2, 176, { align: "center" });
 
   // Headshot frames
   const photoSize = 28;
-  const photoY = 174;
+  const photoY = 182;
 
   // Manny Soto - left
   const mannyX = 48;
   if (mannyBase64) {
     doc.addImage(mannyBase64, "JPEG", mannyX, photoY, photoSize, photoSize);
   }
-  // Gold border around headshot
   doc.setDrawColor(...GOLD);
   doc.setLineWidth(1);
   doc.rect(mannyX, photoY, photoSize, photoSize, "S");
@@ -212,12 +211,12 @@ export async function generateSalesContestPdf() {
 
   // Prize section
   doc.setFillColor(...GOLD);
-  doc.rect(30, 232, 150, 0.5, "F");
+  doc.rect(30, 240, 150, 0.5, "F");
 
   doc.setTextColor(...GOLD);
   doc.setFontSize(13);
   doc.setFont("helvetica", "bold");
-  doc.text("The Prize", W / 2, 241, { align: "center" });
+  doc.text("The Prize", W / 2, 249, { align: "center" });
 
   doc.setTextColor(...WHITE);
   doc.setFontSize(10);
@@ -226,37 +225,37 @@ export async function generateSalesContestPdf() {
     "An intimate dinner and mastermind session with TFA leadership. Strategy, vision, and next-level growth — reserved for the elite 4.",
     145
   );
-  doc.text(prizeLines, W / 2, 249, { align: "center" });
+  doc.text(prizeLines, W / 2, 257, { align: "center" });
 
   // Contest period box
   doc.setFillColor(...DARK_NAVY);
-  doc.roundedRect(55, 260, 100, 16, 3, 3, "F");
+  doc.roundedRect(55, 266, 100, 16, 3, 3, "F");
   doc.setDrawColor(...GOLD);
   doc.setLineWidth(0.5);
-  doc.roundedRect(55, 260, 100, 16, 3, 3, "S");
+  doc.roundedRect(55, 266, 100, 16, 3, 3, "S");
   doc.setTextColor(...GOLD);
   doc.setFontSize(9);
   doc.setFont("helvetica", "bold");
-  doc.text("CONTEST PERIOD", W / 2, 268, { align: "center" });
+  doc.text("CONTEST PERIOD", W / 2, 274, { align: "center" });
   doc.setTextColor(...WHITE);
   doc.setFontSize(11);
-  doc.text("April 1 – April 30, 2026", W / 2, 274, { align: "center" });
+  doc.text("April 1 - April 30, 2026", W / 2, 280, { align: "center" });
 
   // Bottom tagline
   doc.setTextColor(...GOLD);
   doc.setFontSize(12);
   doc.setFont("helvetica", "italic");
-  doc.text("Only 4 seats at the table. Make them yours.", W / 2, 286, { align: "center" });
+  doc.text("Only 4 seats at the table. Make them yours.", W / 2, 289, { align: "center" });
 
   // Footer
   doc.setTextColor(150, 160, 175);
   doc.setFontSize(7);
   doc.setFont("helvetica", "normal");
-  doc.text("The Financial Architects — Building Legacies Together", W / 2, 292, { align: "center" });
+  doc.text("The Financial Architects — Building Legacies Together", W / 2, 293, { align: "center" });
 
   // Double gold bars at bottom
   doc.setFillColor(...GOLD);
-  doc.rect(35, 294, 140, 0.5, "F");
+  doc.rect(35, 294.5, 140, 0.5, "F");
   doc.rect(25, 296, 160, 1.5, "F");
 
   doc.save("TFA-April-2026-Sales-Contest.pdf");
