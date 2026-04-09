@@ -109,53 +109,48 @@ export async function generateSalesContestPdf() {
 
   // Category boxes
   const boxY = 114;
-  const boxH = 34;
-  const boxW = 72;
+  const boxH = 42;
+  const boxW = 74;
+  const box1X = 24;
+  const box2X = 112;
+  const ribbonH = 6;
 
-  // Box 1 - Living Trust
-  doc.setFillColor(...DARK_NAVY);
-  doc.roundedRect(22, boxY, boxW, boxH, 3, 3, "F");
-  doc.setDrawColor(...GOLD);
-  doc.setLineWidth(0.7);
-  doc.roundedRect(22, boxY, boxW, boxH, 3, 3, "S");
-  // Gold top ribbon
-  doc.setFillColor(...GOLD);
-  doc.rect(22, boxY, boxW, 3, "F");
-  doc.setTextColor(...NAVY);
-  doc.setFontSize(7);
-  doc.setFont("helvetica", "bold");
-  doc.text("CATEGORY 1", 58, boxY + 2.5, { align: "center" });
-  // Trophy + text
-  doc.setTextColor(...GOLD);
-  doc.setFontSize(18);
-  doc.text("\u{1F3C6}", 58, boxY + 15, { align: "center" });
-  doc.setTextColor(...WHITE);
-  doc.setFontSize(11);
-  doc.setFont("helvetica", "bold");
-  doc.text("Top 2 Agents", 58, boxY + 22, { align: "center" });
-  doc.setFontSize(10);
-  doc.text("Living Trust Sales", 58, boxY + 28, { align: "center" });
+  // Helper to draw a category box
+  const drawCategoryBox = (x: number, catLabel: string, line1: string, line2: string, line3?: string) => {
+    // Box background
+    doc.setFillColor(...DARK_NAVY);
+    doc.roundedRect(x, boxY, boxW, boxH, 3, 3, "F");
+    doc.setDrawColor(...GOLD);
+    doc.setLineWidth(0.7);
+    doc.roundedRect(x, boxY, boxW, boxH, 3, 3, "S");
+    // Gold top ribbon
+    doc.setFillColor(...GOLD);
+    doc.rect(x, boxY, boxW, ribbonH, "F");
+    doc.setTextColor(...NAVY);
+    doc.setFontSize(9);
+    doc.setFont("helvetica", "bold");
+    doc.text(catLabel, x + boxW / 2, boxY + 4.5, { align: "center" });
+    // Gold star
+    doc.setTextColor(...GOLD);
+    doc.setFontSize(20);
+    doc.setFont("helvetica", "bold");
+    doc.text("*", x + boxW / 2, boxY + ribbonH + 10, { align: "center" });
+    // Text lines
+    doc.setTextColor(...WHITE);
+    doc.setFontSize(11);
+    doc.setFont("helvetica", "bold");
+    doc.text(line1, x + boxW / 2, boxY + ribbonH + 18, { align: "center" });
+    doc.setFontSize(10);
+    doc.text(line2, x + boxW / 2, boxY + ribbonH + 24, { align: "center" });
+    if (line3) {
+      doc.setFontSize(8);
+      doc.setFont("helvetica", "normal");
+      doc.text(line3, x + boxW / 2, boxY + ribbonH + 30, { align: "center" });
+    }
+  };
 
-  // Box 2 - Life & Annuity
-  doc.setFillColor(...DARK_NAVY);
-  doc.roundedRect(116, boxY, boxW, boxH, 3, 3, "F");
-  doc.setDrawColor(...GOLD);
-  doc.roundedRect(116, boxY, boxW, boxH, 3, 3, "S");
-  doc.setFillColor(...GOLD);
-  doc.rect(116, boxY, boxW, 3, "F");
-  doc.setTextColor(...NAVY);
-  doc.setFontSize(7);
-  doc.setFont("helvetica", "bold");
-  doc.text("CATEGORY 2", 152, boxY + 2.5, { align: "center" });
-  doc.setTextColor(...GOLD);
-  doc.setFontSize(18);
-  doc.text("\u{1F3C6}", 152, boxY + 15, { align: "center" });
-  doc.setTextColor(...WHITE);
-  doc.setFontSize(11);
-  doc.setFont("helvetica", "bold");
-  doc.text("Top 2 Agents", 152, boxY + 22, { align: "center" });
-  doc.setFontSize(10);
-  doc.text("Life & Annuity", 152, boxY + 28, { align: "center" });
+  drawCategoryBox(box1X, "CATEGORY 1", "Top 2 Agents", "Living Trust Sales");
+  drawCategoryBox(box2X, "CATEGORY 2", "Top 2 Agents", "Life & Annuity", "Submitted Business");
 
   // Meet Your Hosts section
   doc.setFillColor(...GOLD);
