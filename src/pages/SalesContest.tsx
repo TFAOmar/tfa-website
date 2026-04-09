@@ -180,7 +180,7 @@ const SalesContest = () => {
         </section>
 
         {/* Prize */}
-        <section className="py-16 md:py-20 bg-gradient-to-b from-[#1E3A5F]/30 to-transparent">
+        <section className="relative z-10 py-16 md:py-20 bg-gradient-to-b from-[#1E3A5F]/30 to-transparent">
           <div className="container mx-auto px-4 text-center">
             <div className="max-w-3xl mx-auto">
               <div className="w-24 h-24 bg-[#C9A84C]/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-[#C9A84C]/30">
