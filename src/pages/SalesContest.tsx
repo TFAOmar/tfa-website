@@ -107,7 +107,7 @@ const SalesContest = () => {
         </section>
 
         {/* Categories */}
-        <section className="py-16 md:py-20">
+        <section className="relative z-10 py-16 md:py-20">
           <div className="container mx-auto px-4">
             <div className="text-center mb-4">
               <Target className="w-10 h-10 text-[#C9A84C] mx-auto mb-4" />
@@ -201,7 +201,7 @@ const SalesContest = () => {
         </section>
 
         {/* Meet Your Hosts */}
-        <section className="py-16 md:py-20">
+        <section className="relative z-10 py-16 md:py-20">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
               <Star className="w-8 h-8 text-[#C9A84C] mx-auto mb-4" />
