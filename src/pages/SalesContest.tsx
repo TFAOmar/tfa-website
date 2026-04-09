@@ -47,6 +47,8 @@ const SalesContest = () => {
     }, 500);
   }, []);
 
+  const countdown = useCountdown();
+
   return (
     <>
       <SEOHead
