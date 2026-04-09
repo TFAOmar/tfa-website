@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Trophy, Download, Calendar, Star, Users, Flame, Crown, Sparkles, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -8,6 +8,29 @@ import { useConfetti } from "@/hooks/useConfetti";
 import tfaLogo from "@/assets/tfa-logo.png";
 import mannySotoImg from "@/assets/leadership/manny-soto.jpg";
 import omarSanchezImg from "@/assets/leadership/omar-sanchez.jpg";
+
+const CONTEST_START = new Date("2026-04-01T00:00:00-07:00").getTime();
+const CONTEST_END = new Date("2026-04-30T23:59:59-07:00").getTime();
+
+function useCountdown() {
+  const [now, setNow] = useState(Date.now());
+  useEffect(() => {
+    const id = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  const isBeforeStart = now < CONTEST_START;
+  const isAfterEnd = now > CONTEST_END;
+  const target = isBeforeStart ? CONTEST_START : CONTEST_END;
+  const diff = Math.max(0, target - now);
+
+  const days = Math.floor(diff / 86400000);
+  const hours = Math.floor((diff % 86400000) / 3600000);
+  const minutes = Math.floor((diff % 3600000) / 60000);
+  const seconds = Math.floor((diff % 60000) / 1000);
+
+  return { days, hours, minutes, seconds, isBeforeStart, isAfterEnd };
+}
 
 const SalesContest = () => {
   const { fireConfetti } = useConfetti();
