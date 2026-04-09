@@ -111,6 +111,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import Brea from "./pages/Brea";
 import EscobarRealtyLivingTrust from "./pages/EscobarRealtyLivingTrust";
+import SalesContest from "./pages/SalesContest";
 
 const queryClient = new QueryClient();
 
