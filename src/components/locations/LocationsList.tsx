@@ -3,9 +3,10 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { MapPin, Phone, Clock, Search } from "lucide-react";
+import { MapPin, Phone, Clock, Search, User } from "lucide-react";
 import { Link } from "react-router-dom";
 import { locations } from "@/data/locations";
+import { advisors } from "@/data/advisors";
 
 const LocationsList = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -103,6 +104,21 @@ const LocationsList = () => {
                     <p className="text-sm text-muted-foreground">{location.hours}</p>
                   </div>
                 </CardContent>
+
+                {location.advisorSlug && (() => {
+                  const advisor = advisors.find(a => a.id === location.advisorSlug);
+                  return advisor ? (
+                    <div className="px-6 pb-2">
+                      <Link 
+                        to={advisor.landingPage || `/advisors/${advisor.id}`}
+                        className="flex items-center gap-2 text-sm text-accent hover:text-accent/80 transition-colors font-medium"
+                      >
+                        <User className="h-4 w-4" />
+                        Meet {advisor.name}
+                      </Link>
+                    </div>
+                  ) : null;
+                })()}
 
                 <CardFooter className="flex gap-2">
                   <Link to="/book-consultation" className="flex-1">
