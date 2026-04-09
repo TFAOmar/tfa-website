@@ -249,16 +249,31 @@ const SalesContest = () => {
           </div>
         </section>
 
-        {/* Contest Period */}
+        {/* Live Countdown */}
         <section className="py-16 md:py-20">
           <div className="container mx-auto px-4 text-center">
-            <div className="inline-flex items-center gap-3 bg-[#1E3A5F]/50 border border-[#C9A84C]/30 rounded-2xl px-8 py-6 shadow-[0_0_30px_rgba(201,168,76,0.1)]">
-              <Calendar className="w-8 h-8 text-[#C9A84C]" />
-              <div className="text-left">
-                <p className="text-[#C9A84C] text-sm font-bold uppercase tracking-wider">Contest Period</p>
-                <p className="text-white text-2xl font-bold">April 1 – April 30, 2026</p>
+            <Calendar className="w-8 h-8 text-[#C9A84C] mx-auto mb-4" />
+            <p className="text-[#C9A84C] text-sm font-bold uppercase tracking-wider mb-2">
+              {countdown.isAfterEnd ? "Contest Ended" : countdown.isBeforeStart ? "Contest Starts In" : "Time Remaining"}
+            </p>
+            <p className="text-white text-lg font-medium mb-8">April 1 – April 30, 2026</p>
+            {!countdown.isAfterEnd ? (
+              <div className="flex justify-center gap-4 md:gap-6">
+                {[
+                  { value: countdown.days, label: "Days" },
+                  { value: countdown.hours, label: "Hours" },
+                  { value: countdown.minutes, label: "Minutes" },
+                  { value: countdown.seconds, label: "Seconds" },
+                ].map((unit) => (
+                  <div key={unit.label} className="bg-[#1E3A5F]/50 border border-[#C9A84C]/30 rounded-xl px-4 py-4 md:px-6 md:py-5 min-w-[80px] shadow-[0_0_20px_rgba(201,168,76,0.1)]">
+                    <p className="text-3xl md:text-5xl font-black text-white tabular-nums">{String(unit.value).padStart(2, "0")}</p>
+                    <p className="text-[#C9A84C] text-xs font-bold uppercase tracking-wider mt-1">{unit.label}</p>
+                  </div>
+                ))}
               </div>
-            </div>
+            ) : (
+              <p className="text-2xl text-white font-bold">The contest has ended. Thank you for competing!</p>
+            )}
           </div>
         </section>
 
