@@ -196,7 +196,7 @@ export const advisors: Advisor[] = [
     title: "Managing Partner",
     type: "Advisor",
     state: "California",
-    city: "Granada Hills",
+    city: "Chatsworth",
     region: "West",
     bio: "After a 28-year career in the hospitality industry as a Director of Operations, where he developed and promoted dozens of industry leaders, Hamlet saw the need for more result-driven financial educators and strategists. A God-loving family man, he is passionate about helping others with integrity and transparency, seeing every individual as an opportunity to help someone and their family with retirement and financial planning strategies.",
     specialties: ["Retirement Planning", "Tax Strategies", "Life Insurance"],
