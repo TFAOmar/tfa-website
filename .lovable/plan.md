@@ -1,20 +1,18 @@
 
 
-## Plan: Add Savannah Recinos Headshot
+## Plan: Remove Price from Estate Guru Notification Emails
 
 ### What
-Copy the uploaded headshot image into the project and update all references to display it.
+Remove the "Amount Paid" row from the checkout notification email sent to Heather and Nancy when someone signs up for Estate Guru.
 
 ### Changes
 
 | File | Change |
 |------|--------|
-| `user-uploads://Svannah_Recinos.jpg` → `src/assets/advisors/savannah-recinos.jpg` | Copy headshot into project |
-| `src/data/advisors.ts` | Add `image` field to Savannah's entry importing the asset |
-| `src/pages/RecinosBusinessInsurance.tsx` | Replace the placeholder `Users` icon with her actual headshot image |
+| `supabase/functions/send-estate-guru-checkout-notification/index.ts` | Remove the "Amount Paid" table row (lines 100-103) and the `amountTotal` variable |
 
-### Technical Details
-- The advisors data file at line ~316-329 has no `image` field for Savannah -- will add it
-- The Recinos business insurance page (line ~197) currently shows a generic `Users` icon placeholder for Savannah -- will replace with the photo
-- Will follow the same pattern used for other advisor images (import from `@/assets/advisors/`)
+### Details
+- The checkout notification email currently includes a row showing "Amount Paid" with the dollar amount
+- Will remove that row from the HTML table while keeping all other info (name, email, plan, payment time, session ID)
+- Will redeploy the edge function after the change
 
