@@ -82,6 +82,7 @@ import AdvisorRubenDavis from "./pages/AdvisorRubenDavis";
 import AdvisorMichelleMartinez from "./pages/AdvisorMichelleMartinez";
 import AdvisorJosephGuzman from "./pages/AdvisorJosephGuzman";
 import AdvisorCaylaDeePorter from "./pages/AdvisorCaylaDeePorter";
+import AdvisorMerrianeMcGuire from "./pages/AdvisorMerrianeMcGuire";
 import RuthPachecoTaxStrategy from "./pages/RuthPachecoTaxStrategy";
 import EstatePlanning from "./pages/EstatePlanning";
 import IncomePlanning from "./pages/IncomePlanning";
