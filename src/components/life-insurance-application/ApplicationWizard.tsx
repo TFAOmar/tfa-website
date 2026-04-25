@@ -1006,7 +1006,11 @@ const ApplicationWizard = ({
     try {
       console.log("Sending life insurance notification emails...");
       
-      const emailPromise = supabase.functions.invoke(
+      // Fire-and-forget: the edge function now uses EdgeRuntime.waitUntil to keep
+      // sending in the background after responding 202. We do NOT await here so the
+      // user gets to the thank-you page instantly and the function isn't killed by
+      // browser navigation. A scheduled retry job catches any missed sends.
+      supabase.functions.invoke(
         "send-life-insurance-notification",
         {
           body: {
@@ -1019,21 +1023,15 @@ const ApplicationWizard = ({
             formData: finalFormData,
           },
         }
-      );
-
-      // Wait up to 15 seconds for email to send (prevents navigation from aborting request)
-      const timeoutPromise = new Promise<{ data: null; error: Error }>((_, reject) =>
-        setTimeout(() => reject(new Error("Email notification timeout after 15s")), 15000)
-      );
-
-      const result = await Promise.race([emailPromise, timeoutPromise]);
-      
-      if (result?.error) {
-        console.error("Failed to send notification emails:", result.error);
-        // Don't block success, application is already saved
-      } else {
-        console.log("Notification emails sent successfully");
-      }
+      ).then((result) => {
+        if (result?.error) {
+          console.error("Notification invoke returned error:", result.error);
+        } else {
+          console.log("Notification accepted for background delivery");
+        }
+      }).catch((err) => {
+        console.error("Notification invoke threw:", err);
+      });
     } catch (emailError) {
       console.error("Email notification issue (application still saved):", emailError);
       // Don't block success - application data is safely in the database
