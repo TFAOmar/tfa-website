@@ -226,6 +226,16 @@ export const generateLifeInsurancePdf = (
   // Identity (correct field names)
   yPos = addField(doc, "Driver's License Number", step1.driversLicenseNumber, yPos, margin, pageWidth);
   yPos = addField(doc, "Driver's License State", step1.driversLicenseState, yPos, margin, pageWidth);
+  if (step1.reasonForInsurance) {
+    yPos = addField(doc, "Reason for Insurance", step1.reasonForInsurance, yPos, margin, pageWidth);
+  }
+  if (step1.reasonForInsuranceOther) {
+    yPos = addField(doc, "Reason (Other)", step1.reasonForInsuranceOther, yPos, margin, pageWidth);
+  }
+  if (step1.citizenshipStatus === "other") {
+    yPos = addField(doc, "Owns US Property", step1.ownsUsProperty, yPos, margin, pageWidth);
+    yPos = addField(doc, "Plans to Remain in US", step1.plansToRemainInUs, yPos, margin, pageWidth);
+  }
   yPos += 5;
 
   // Step 2: Contact & Employment
@@ -241,6 +251,12 @@ export const generateLifeInsurancePdf = (
   yPos = addField(doc, "Industry", step2.industry, yPos, margin, pageWidth);
   yPos = addField(doc, "Years Employed", step2.yearsEmployed, yPos, margin, pageWidth);
   yPos = addField(doc, "Job Duties", step2.jobDuties, yPos, margin, pageWidth);
+  yPos = addField(doc, "Hours Per Week", step2.hoursPerWeek, yPos, margin, pageWidth);
+  yPos = addField(doc, "Actively At Work", step2.activelyAtWork, yPos, margin, pageWidth);
+  yPos = addField(doc, "Able to Perform Duties", step2.ableToPerformDuties, yPos, margin, pageWidth);
+  if (step2.workStatusExplanation) {
+    yPos = addField(doc, "Work Status Explanation", step2.workStatusExplanation, yPos, margin, pageWidth);
+  }
   yPos = addField(doc, "Annual Earned Income", step2.annualEarnedIncome, yPos, margin, pageWidth);
   yPos = addField(doc, "Household Income", step2.householdIncome, yPos, margin, pageWidth);
   yPos = addField(doc, "Net Worth", step2.netWorth, yPos, margin, pageWidth);
@@ -321,9 +337,20 @@ export const generateLifeInsurancePdf = (
   const childrenDetails = (step5.childrenDetails || []) as Array<Record<string, unknown>>;
   if (childrenDetails.length > 0) {
     childrenDetails.forEach((child, idx) => {
-      yPos = checkPageBreak(doc, yPos, margin, pageWidth, 20);
+      yPos = checkPageBreak(doc, yPos, margin, pageWidth, 40);
       yPos = addField(doc, `Child ${idx + 1} Name`, child.name, yPos, margin, pageWidth);
       yPos = addField(doc, `Child ${idx + 1} DOB`, child.dateOfBirth, yPos, margin, pageWidth);
+      if (child.ssn) yPos = addField(doc, `Child ${idx + 1} SSN`, formatSSN(child.ssn as string), yPos, margin, pageWidth);
+      yPos = addField(doc, `Child ${idx + 1} Lives w/ Parent`, child.livesWithParent, yPos, margin, pageWidth);
+      yPos = addField(doc, `Child ${idx + 1} Takes Rx`, child.takesPrescribedMedication, yPos, margin, pageWidth);
+      yPos = addField(doc, `Child ${idx + 1} Developmental Cond.`, child.hasDevelopmentalCondition, yPos, margin, pageWidth);
+      if (child.developmentalConditionDetails) {
+        yPos = addField(doc, `Child ${idx + 1} Dev. Details`, child.developmentalConditionDetails, yPos, margin, pageWidth);
+      }
+      yPos = addField(doc, `Child ${idx + 1} Medical Cond.`, child.hasMedicalCondition, yPos, margin, pageWidth);
+      if (child.medicalConditionDetails) {
+        yPos = addField(doc, `Child ${idx + 1} Med. Details`, child.medicalConditionDetails, yPos, margin, pageWidth);
+      }
     });
   }
   yPos += 5;
@@ -341,7 +368,17 @@ export const generateLifeInsurancePdf = (
       yPos = addField(doc, `Policy ${idx + 1} Number`, policy.policyNumber, yPos, margin, pageWidth);
       yPos = addField(doc, `Policy ${idx + 1} Coverage Amount`, policy.amountOfCoverage, yPos, margin, pageWidth);
       yPos = addField(doc, `Policy ${idx + 1} Being Replaced`, policy.isBeingReplaced, yPos, margin, pageWidth);
+      if (policy.yearOfIssue) yPos = addField(doc, `Policy ${idx + 1} Year of Issue`, policy.yearOfIssue, yPos, margin, pageWidth);
+      if (policy.coverageType) yPos = addField(doc, `Policy ${idx + 1} Coverage Type`, policy.coverageType, yPos, margin, pageWidth);
+      if (policy.classification) yPos = addField(doc, `Policy ${idx + 1} Classification`, policy.classification, yPos, margin, pageWidth);
+      yPos = addField(doc, `Policy ${idx + 1} 1035 Exchange`, policy.is1035Exchange, yPos, margin, pageWidth);
     });
+  }
+  if (step6.lifeSettlementDiscussion !== undefined) {
+    yPos = addField(doc, "Life Settlement Discussion", step6.lifeSettlementDiscussion, yPos, margin, pageWidth);
+    if (step6.lifeSettlementDetails) {
+      yPos = addField(doc, "Life Settlement Details", step6.lifeSettlementDetails, yPos, margin, pageWidth);
+    }
   }
   yPos += 5;
 
@@ -349,6 +386,124 @@ export const generateLifeInsurancePdf = (
   const step7 = formData.step7 || {};
   yPos = checkPageBreak(doc, yPos, margin, pageWidth);
   yPos = addSectionHeader(doc, "7. Medical & Lifestyle History", yPos, margin, pageWidth);
+  // Physician
+  if (step7.primaryPhysicianName || step7.primaryPhysicianPhone || step7.lastVisitDate) {
+    yPos = addField(doc, "Primary Physician", step7.primaryPhysicianName, yPos, margin, pageWidth);
+    yPos = addField(doc, "Physician Phone", step7.primaryPhysicianPhone, yPos, margin, pageWidth);
+    yPos = addField(doc, "Physician Address", step7.primaryPhysicianAddress, yPos, margin, pageWidth);
+    yPos = addField(doc, "Last Visit Date", formatDate(step7.lastVisitDate as string), yPos, margin, pageWidth);
+    yPos = addField(doc, "Last Visit Reason", step7.lastVisitReason, yPos, margin, pageWidth);
+  }
+  yPos = addField(doc, "Pending Medical Appointment", step7.pendingMedicalAppointment, yPos, margin, pageWidth);
+  if (step7.pendingMedicalAppointment) {
+    yPos = addField(doc, "Pending Appt Details", step7.pendingAppointmentDetails, yPos, margin, pageWidth);
+  }
+  // Build
+  if (step7.heightFeet || step7.weightLbs) {
+    yPos = addField(doc, "Height", `${step7.heightFeet || 0}' ${step7.heightInches || 0}"`, yPos, margin, pageWidth);
+    yPos = addField(doc, "Weight (lbs)", step7.weightLbs, yPos, margin, pageWidth);
+  }
+  yPos = addField(doc, "Weight Change >10 lbs (12mo)", step7.weightChangeOver10Lbs, yPos, margin, pageWidth);
+  if (step7.weightChangeOver10Lbs) {
+    yPos = addField(doc, "Weight Change Amount", step7.weightChangeAmount, yPos, margin, pageWidth);
+    yPos = addField(doc, "Weight Change Direction", step7.weightChangeDirection, yPos, margin, pageWidth);
+    yPos = addField(doc, "Weight Change Reason", step7.weightChangeReason, yPos, margin, pageWidth);
+  }
+  // Family History
+  const fh = (step7.familyHistory || {}) as Record<string, Record<string, unknown>>;
+  (["father", "mother", "siblings"] as const).forEach((rel) => {
+    const m = fh[rel];
+    if (!m) return;
+    const hasData = Object.values(m).some(v => v !== undefined && v !== "" && v !== false);
+    if (!hasData) return;
+    yPos = checkPageBreak(doc, yPos, margin, pageWidth, 30);
+    const label = rel.charAt(0).toUpperCase() + rel.slice(1);
+    if (m.ageIfLiving) yPos = addField(doc, `${label} - Age if Living`, m.ageIfLiving, yPos, margin, pageWidth);
+    if (m.ageAtDeath) yPos = addField(doc, `${label} - Age at Death`, m.ageAtDeath, yPos, margin, pageWidth);
+    if (m.causeOfDeath) yPos = addField(doc, `${label} - Cause of Death`, m.causeOfDeath, yPos, margin, pageWidth);
+    if (m.heartDisease) yPos = addField(doc, `${label} - Heart Disease`, `Yes (onset: ${m.heartDiseaseAgeOfOnset || "N/A"})`, yPos, margin, pageWidth);
+    if (m.cancer) yPos = addField(doc, `${label} - Cancer`, `Yes (${m.cancerType || ""}, onset: ${m.cancerAgeOfOnset || "N/A"})`, yPos, margin, pageWidth);
+  });
+  yPos = addField(doc, "Family Extended Conditions", step7.familyExtendedConditions, yPos, margin, pageWidth);
+  if (step7.familyExtendedConditions) {
+    yPos = addField(doc, "Family Ext. Cond. Details", step7.familyExtendedConditionsDetails, yPos, margin, pageWidth);
+  }
+  yPos = addField(doc, "Family Mental Health History", step7.familyMentalHealthHistory, yPos, margin, pageWidth);
+  if (step7.familyMentalHealthHistory) {
+    yPos = addField(doc, "Family Mental Health Details", step7.familyMentalHealthDetails, yPos, margin, pageWidth);
+  }
+  // 10-year diagnosis history
+  const hxFields: Array<[string, string, string]> = [
+    ["hx10HeartCondition", "hx10HeartConditionDetails", "Heart Condition (10y)"],
+    ["hx10VascularCondition", "hx10VascularConditionDetails", "Vascular Condition (10y)"],
+    ["hx10RespiratoryCondition", "hx10RespiratoryConditionDetails", "Respiratory Condition (10y)"],
+    ["hx10DigestiveCondition", "hx10DigestiveConditionDetails", "Digestive Condition (10y)"],
+    ["hx10CancerOrTumor", "hx10CancerOrTumorDetails", "Cancer/Tumor (10y)"],
+    ["hx10EndocrineDiabetes", "hx10EndocrineDiabetesDetails", "Endocrine/Diabetes (10y)"],
+    ["hx10KidneyUrinary", "hx10KidneyUrinaryDetails", "Kidney/Urinary (10y)"],
+    ["hx10NeurologicalCondition", "hx10NeurologicalConditionDetails", "Neurological (10y)"],
+    ["hx10MentalEmotional", "hx10MentalEmotionalDetails", "Mental/Emotional (10y)"],
+    ["hx10MusculoskeletalAutoimmune", "hx10MusculoskeletalAutoimmuneDetails", "Musculoskeletal/Autoimmune (10y)"],
+    ["hx10BloodImmune", "hx10BloodImmuneDetails", "Blood/Immune (10y)"],
+    ["hx10ReproductiveCondition", "hx10ReproductiveConditionDetails", "Reproductive (10y)"],
+  ];
+  hxFields.forEach(([flag, details, label]) => {
+    yPos = addField(doc, label, step7[flag], yPos, margin, pageWidth);
+    if (step7[flag] && step7[details]) {
+      yPos = addField(doc, `${label} Details`, step7[details], yPos, margin, pageWidth);
+    }
+  });
+  // Recent care
+  yPos = addField(doc, "Treatment in Last 12 Months", step7.recent12MonthsTreatment, yPos, margin, pageWidth);
+  if (step7.recent12MonthsTreatment) {
+    yPos = addField(doc, "Treatment Details", step7.recent12MonthsTreatmentDetails, yPos, margin, pageWidth);
+  }
+  yPos = addField(doc, "Symptoms Not Yet Consulted", step7.recent12MonthsSymptomsUnconsulted, yPos, margin, pageWidth);
+  if (step7.recent12MonthsSymptomsUnconsulted) {
+    yPos = addField(doc, "Symptoms Details", step7.recent12MonthsSymptomsDetails, yPos, margin, pageWidth);
+  }
+  yPos = addField(doc, "Self-Administered Lab Test", step7.selfAdministeredLabTest, yPos, margin, pageWidth);
+  if (step7.selfAdministeredLabTest) {
+    yPos = addField(doc, "Lab Test Details", step7.selfAdministeredLabTestDetails, yPos, margin, pageWidth);
+  }
+  yPos = addField(doc, "ER/Urgent Care Visits (5y)", step7.erUrgentCareVisits5y, yPos, margin, pageWidth);
+  if (step7.erUrgentCareVisits5y) {
+    yPos = addField(doc, "ER/Urgent Care Details", step7.erUrgentCareVisitsDetails, yPos, margin, pageWidth);
+  }
+  yPos = addField(doc, "Advised Nursing Home/Hospice", step7.advisedNursingHomeOrHospice, yPos, margin, pageWidth);
+  if (step7.advisedNursingHomeOrHospice) {
+    yPos = addField(doc, "Nursing Home Details", step7.advisedNursingHomeDetails, yPos, margin, pageWidth);
+  }
+  // Functional / ADL
+  yPos = addField(doc, "Uses Assistive Device", step7.usesAssistiveDevice, yPos, margin, pageWidth);
+  if (step7.usesAssistiveDevice) {
+    yPos = addField(doc, "Assistive Device Details", step7.usesAssistiveDeviceDetails, yPos, margin, pageWidth);
+  }
+  yPos = addField(doc, "Needs Help w/ ADLs", step7.needsHelpADLs, yPos, margin, pageWidth);
+  if (step7.needsHelpADLs) {
+    yPos = addField(doc, "ADL Help Details", step7.needsHelpADLsDetails, yPos, margin, pageWidth);
+  }
+  yPos = addField(doc, "Needs Help w/ IADLs", step7.needsHelpIADLs, yPos, margin, pageWidth);
+  if (step7.needsHelpIADLs) {
+    yPos = addField(doc, "IADL Help Details", step7.needsHelpIADLsDetails, yPos, margin, pageWidth);
+  }
+  // Substance use
+  yPos = addField(doc, "Uses Alcohol", step7.usesAlcohol, yPos, margin, pageWidth);
+  if (step7.usesAlcohol) {
+    yPos = addField(doc, "Drinks per Week", step7.alcoholDrinksPerWeek, yPos, margin, pageWidth);
+  }
+  yPos = addField(doc, "Treated for Alcohol/Drug Use", step7.treatedForAlcoholOrDrugUse, yPos, margin, pageWidth);
+  if (step7.treatedForAlcoholOrDrugUse) {
+    yPos = addField(doc, "Treatment Details", step7.treatedForAlcoholOrDrugUseDetails, yPos, margin, pageWidth);
+  }
+  yPos = addField(doc, "Used Drugs", step7.usedDrugs, yPos, margin, pageWidth);
+  if (step7.usedDrugs) {
+    yPos = addField(doc, "Drug Use Details", step7.usedDrugsDetails, yPos, margin, pageWidth);
+  }
+  yPos = addField(doc, "Disability Claim", step7.disabilityClaim, yPos, margin, pageWidth);
+  if (step7.disabilityClaim) {
+    yPos = addField(doc, "Disability Claim Details", step7.disabilityClaimDetails, yPos, margin, pageWidth);
+  }
   yPos = addField(doc, "Used Tobacco (Last 5 Years)", step7.usedTobacco, yPos, margin, pageWidth);
   if (step7.usedTobacco) {
     yPos = addField(doc, "Tobacco Type", step7.tobaccoType, yPos, margin, pageWidth);
@@ -382,6 +537,10 @@ export const generateLifeInsurancePdf = (
   yPos = addField(doc, "Has Medical Conditions", step7.hasMedicalConditions, yPos, margin, pageWidth);
   if (step7.hasMedicalConditions) {
     yPos = addField(doc, "Medical Conditions Details", step7.medicalConditionsDetails, yPos, margin, pageWidth);
+  }
+  yPos = addField(doc, "Other Undisclosed Condition", step7.otherUndisclosedCondition, yPos, margin, pageWidth);
+  if (step7.otherUndisclosedCondition) {
+    yPos = addField(doc, "Other Condition Details", step7.otherUndisclosedConditionDetails, yPos, margin, pageWidth);
   }
   yPos += 5;
 
