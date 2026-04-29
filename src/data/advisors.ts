@@ -37,6 +37,7 @@ import michelleMartinezImg from "@/assets/advisors/michelle-martinez.jpg";
 import josephGuzmanImg from "@/assets/advisors/joseph-guzman.png";
 import caylaDeePorterImg from "@/assets/advisors/cayla-dee-porter.jpg";
 import merrianeMcGuireImg from "@/assets/advisors/merriane-mcguire.jpg";
+import elizabethRochaImg from "@/assets/advisors/elizabeth-rocha.jpg";
 
 export interface Advisor {
   id: number | string;
@@ -661,6 +662,23 @@ export const advisors: Advisor[] = [
     phone: "951-264-5347",
     yearsOfExperience: 8,
     landingPage: "/advisors/merriane-mcguire"
+  },
+  {
+    id: "elizabeth-rocha",
+    name: "Elizabeth Rocha",
+    title: "Financial Strategist",
+    type: "Advisor",
+    state: "California",
+    city: "Southern California",
+    region: "West",
+    bio: "Licensed Financial Professional serving families across Southern California since 2021, specializing in family financial planning, income protection, mortgage protection, retirement strategies, and life insurance. Guided by faith-led planning, family-first protection, and legacy-driven wealth, Elizabeth helps families build strong financial foundations through education, protection, and long-term planning. As a wife, parent, and homeowner, she understands firsthand the importance of protecting a family's future and building a lasting legacy for the next generation.",
+    specialties: ["Family Financial Planning", "Income Protection", "Mortgage Protection", "Retirement Planning", "Life Insurance", "Business Solutions"],
+    licenses: ["Life & Health (Lic# 4196019)"],
+    image: elizabethRochaImg,
+    email: "elizabeth@tfainsuranceadvisors.com",
+    phone: "626-622-8408",
+    yearsOfExperience: 4,
+    landingPage: "/advisors/elizabeth-rocha"
   }
 ];
 
