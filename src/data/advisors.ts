@@ -38,6 +38,7 @@ import josephGuzmanImg from "@/assets/advisors/joseph-guzman.png";
 import caylaDeePorterImg from "@/assets/advisors/cayla-dee-porter.jpg";
 import merrianeMcGuireImg from "@/assets/advisors/merriane-mcguire.jpg";
 import elizabethRochaImg from "@/assets/advisors/elizabeth-rocha.jpg";
+import rosieNunoImg from "@/assets/advisors/rosie-nuno.jpg";
 
 export interface Advisor {
   id: number | string;
@@ -679,6 +680,22 @@ export const advisors: Advisor[] = [
     phone: "626-622-8408",
     yearsOfExperience: 4,
     landingPage: "/advisors/elizabeth-rocha"
+  },
+  {
+    id: "rosie-nuno",
+    name: "Rosie Nuño",
+    title: "Financial & Estate Planning Strategist",
+    type: "Advisor",
+    state: "California",
+    city: "Brea",
+    region: "West",
+    bio: "Estate Planning Strategist focused on protecting what you've built and preserving what matters most. Rosie has guided clients through living trusts, asset protection, and foundational financial strategies designed to simplify planning and avoid unnecessary complications. Her approach is straightforward and personalized — focused on creating clarity, security, and lasting peace of mind for every client she serves.",
+    specialties: ["Estate Planning & Living Trusts", "Asset Protection Strategies", "Legacy & Wealth Transfer Planning", "Financial Protection Strategies", "Integrated Financial Planning"],
+    licenses: ["CA Life License #0I43845"],
+    image: rosieNunoImg,
+    email: "rosie@tfainsuranceadvisors.com",
+    phone: "(209) 204-9672",
+    landingPage: "/advisors/rosie-nuno"
   }
 ];
 
