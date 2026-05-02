@@ -1,52 +1,53 @@
-# Add Elizabeth Rocha to Meet Our Advisors
+# Add Rosie Nuño to Meet Our Advisors
 
-Add Elizabeth Rocha as a new TFA Financial Architect, matching the same structure used for the most recent advisors (Cayla Dee Porter, Merriane McGuire).
+Add Rosie Nuño as a new advisor, matching the same structure used for recent advisors (Elizabeth Rocha, Cayla Dee Porter, Merriane McGuire).
 
-## 1. Assets
+## 1. Asset
 
-Copy uploaded files into the project:
-- `user-uploads://Elizabeth_Rocha_headshot.jpg` → `src/assets/advisors/elizabeth-rocha.jpg` (directory card + page header)
-- `user-uploads://Elizabeth_Rocha_couple_landing_page.jpeg` → `src/assets/advisors/elizabeth-rocha-couple.jpg` (used as a feature image on her landing page)
-- `user-uploads://Elizabeth_Rocha_Logo_2.png` → `src/assets/advisors/elizabeth-rocha-logo.png` (the version with her name + "Life Insurance Agent | The Financial Architects" — single logo since she said we don't have to use both, and this one is the most informative/branded)
+Copy uploaded headshot into the project:
+- Uploaded headshot → `src/assets/advisors/rosie-nuno.jpg`
+
+(Only a headshot was provided — no landing page photo or logo, so the landing page will use the standard layout without a feature photo, matching advisors like Cayla Dee Porter who use just the headshot.)
 
 ## 2. Directory entry — `src/data/advisors.ts`
 
-Append a new advisor object (alphabetical id slug `elizabeth-rocha`) with:
-- name: Elizabeth Rocha
-- title: Financial Strategist
+Append a new advisor entry with:
+- id: `rosie-nuno`
+- name: Rosie Nuño
+- title: Financial & Estate Planning Strategist
 - type: Advisor
-- state: California, city: Southern California, region: West
-- bio: Condensed from her about copy — focuses on family financial planning, income/mortgage protection, retirement strategies, faith-led/family-first/legacy-driven theme, serving SoCal since 2021.
-- specialties: ["Family Financial Planning", "Income Protection", "Mortgage Protection", "Retirement Planning", "Life Insurance", "Business Solutions"]
-- licenses: ["Life & Health (Lic# 4196019)"]
-- image: `elizabethRochaImg`
-- email: `elizabeth@tfainsuranceadvisors.com` (canonical leads-email pattern)
-- phone: `626-622-8408`
-- landingPage: `/advisors/elizabeth-rocha`
+- state: California, city: Brea, region: West
+- bio: Condensed from her copy — "Protecting What You've Built. Preserving What Matters Most." theme; specializes in living trusts, asset protection, and foundational financial strategies; has guided hundreds of clients through the estate planning process; straightforward, personalized approach focused on clarity, security, and peace of mind.
+- specialties: ["Estate Planning & Living Trusts", "Asset Protection Strategies", "Legacy & Wealth Transfer Planning", "Financial Protection Strategies", "Integrated Financial Planning"]
+- licenses: ["CA Life License #0I43845"]
+- image: `rosieNunoImg`
+- email: `rosie@tfainsuranceadvisors.com`
+- phone: `(209) 204-9672`
+- landingPage: `/advisors/rosie-nuno`
 
-## 3. Landing page — `src/pages/AdvisorElizabethRocha.tsx`
+## 3. Landing page — `src/pages/AdvisorRosieNuno.tsx`
 
 New page modeled after `AdvisorCaylaDeePorter.tsx` (same sections, components, SEO schema, ScheduleModal + ContactModal). Content:
-- **Hero**: headshot + name + title "Financial Strategist | The Financial Architects" + tagline "Faith-led planning. Family-first protection. Legacy-driven wealth." + CTAs (Schedule / Contact / tel: 626-622-8408).
-- **About section**: full bio (4 paragraphs as provided), with the couple photo (`elizabeth-rocha-couple.jpg`) as a side image. Logo used once as a small badge near the title.
-- **Areas of Expertise grid** (5 services with icons): Family Financial Planning, Income Protection, Mortgage Protection, Retirement Planning, Life Insurance + Business Solutions card.
+- **Hero**: headshot + name + title "Financial & Estate Planning Strategist" + tagline "Protecting What You've Built. Preserving What Matters Most." + CTAs (Schedule / Contact / tel: (209) 204-9672).
+- **About**: full bio (2 paragraphs as provided).
+- **Areas of Expertise grid** (5 services with icons): Estate Planning & Living Trusts, Asset Protection Strategies, Legacy & Wealth Transfer Planning, Financial Protection Strategies, Integrated Financial Planning.
 - **Process steps**: standard 4 (Discovery → Analysis → Strategy → Implementation).
-- **Connect section**: phone 626-622-8408, email elizabeth@tfainsuranceadvisors.com, Instagram @tfaelizabeth (https://instagram.com/tfaelizabeth), Facebook https://www.facebook.com/mrselizabethrocha.
-- **License footer line**: "Licensed in California — LIC# 4196019".
-- **SEO**: Person + LocalBusiness schemas (same helper functions).
+- **Connect**: phone (209) 204-9672, office (888) 350-5396, fax (909) 579-2164, email rosie@tfainsuranceadvisors.com, location Brea, CA.
+- **License footer**: "Licensed in California — CA Life License #0I43845".
+- **SEO**: Person + LocalBusiness schemas.
 
-## 4. Wire route — `src/App.tsx`
+## 4. Route — `src/App.tsx`
 
-- Import: `import AdvisorElizabethRocha from "./pages/AdvisorElizabethRocha";`
-- Route: `<Route path="/advisors/elizabeth-rocha" element={<AdvisorElizabethRocha />} />` (added next to other advisor routes around line 233).
+- Import: `import AdvisorRosieNuno from "./pages/AdvisorRosieNuno";`
+- Route: `<Route path="/advisors/rosie-nuno" element={<AdvisorRosieNuno />} />` (added next to other advisor routes).
 
 ## 5. Verification
 
-- Build passes (`tsc --noEmit` + Vite build run automatically).
-- `/advisors` directory shows her card with image and specialties.
-- `/advisors/elizabeth-rocha` renders cleanly with hero, bio, services, schedule modal, contact modal, and SEO meta.
+- Build passes.
+- `/advisors` directory shows her card with image and specialties (alphabetical order will place her between Ruben/Ruth or near Sean — sorted automatically).
+- `/advisors/rosie-nuno` renders cleanly with hero, bio, services, schedule modal, contact modal, and SEO.
 
 ## Out of scope
 
-- No DB migration, no edge functions, no Pipedrive/CRM custom routing (she'll inherit the standard leads inbox per core rule).
-- Only one logo used (the branded "Elizabeth Rocha — Life Insurance Agent | The Financial Architects" version). The crescent-moon-only logo is skipped per your "don't have to use both" note. Easy to swap later if you'd prefer the icon version.
+- No DB, edge functions, or custom Pipedrive routing — inherits standard leads inbox per core rule.
+- No social links provided, so the Connect section uses phone/email/office/fax only.
