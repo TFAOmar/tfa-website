@@ -194,9 +194,9 @@ const AdvisorElizabethRocha = () => {
                   <Phone className="h-5 w-5 mr-2" />
                   626-622-8408
                 </a>
-                <a href="mailto:elizabeth@tfainsuranceadvisors.com" className="flex items-center hover:text-accent transition-colors">
+                <a href="mailto:erocha@tfainsuranceadvisors.com" className="flex items-center hover:text-accent transition-colors">
                   <Mail className="h-5 w-5 mr-2" />
-                  elizabeth@tfainsuranceadvisors.com
+                  erocha@tfainsuranceadvisors.com
                 </a>
               </div>
               <div className="flex gap-4 justify-center lg:justify-start mt-4 text-white/70">
@@ -388,7 +388,7 @@ const AdvisorElizabethRocha = () => {
         open={scheduleModalOpen}
         onOpenChange={setScheduleModalOpen}
         advisorName="Elizabeth Rocha"
-        advisorEmail="elizabeth@tfainsuranceadvisors.com"
+        advisorEmail="erocha@tfainsuranceadvisors.com"
         advisorImage={elizabethRochaImg}
         advisorSlug="elizabeth-rocha"
       />
@@ -396,7 +396,7 @@ const AdvisorElizabethRocha = () => {
         open={contactModalOpen}
         onOpenChange={setContactModalOpen}
         advisorName="Elizabeth Rocha"
-        advisorEmail="elizabeth@tfainsuranceadvisors.com"
+        advisorEmail="erocha@tfainsuranceadvisors.com"
         advisorImage={elizabethRochaImg}
         advisorSlug="elizabeth-rocha"
       />

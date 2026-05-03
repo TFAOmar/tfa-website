@@ -676,7 +676,7 @@ export const advisors: Advisor[] = [
     specialties: ["Family Financial Planning", "Income Protection", "Mortgage Protection", "Retirement Planning", "Life Insurance", "Business Solutions"],
     licenses: ["Life & Health (Lic# 4196019)"],
     image: elizabethRochaImg,
-    email: "elizabeth@tfainsuranceadvisors.com",
+    email: "erocha@tfainsuranceadvisors.com",
     phone: "626-622-8408",
     yearsOfExperience: 4,
     landingPage: "/advisors/elizabeth-rocha"
