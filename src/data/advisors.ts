@@ -61,7 +61,7 @@ export interface Advisor {
 
 export const advisors: Advisor[] = [
   {
-    id: 0,
+    id: "manuel-soto",
     name: "Manuel Soto",
     title: "Founder & CEO",
     type: "Advisor",
