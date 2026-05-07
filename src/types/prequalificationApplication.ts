@@ -29,6 +29,7 @@ export const step2Schema = z.object({
   tobaccoUse: z.string().min(1, "Required"),
   tobaccoFrequency: z.string().optional(),
   medicalConditions: z.array(z.string()).default([]),
+  conditionDetails: z.record(z.string(), z.record(z.string(), z.string())).optional().default({}),
   takingMedications: z.string().min(1, "Required"),
   medicationDetails: z.string().optional(),
   hospitalizedPast5Years: z.string().min(1, "Required"),
@@ -87,6 +88,81 @@ export const MEDICAL_CONDITIONS = [
   "Autoimmune Disorder",
   "Kidney Disease",
 ];
+
+// Condition-specific follow-up question definitions.
+// Each field is rendered dynamically when the parent condition is selected.
+export type ConditionFieldType = "text" | "select" | "year" | "textarea";
+
+export interface ConditionFieldDef {
+  key: string;
+  label: string;
+  type: ConditionFieldType;
+  options?: string[];
+  placeholder?: string;
+}
+
+export const CONDITION_FOLLOWUPS: Record<string, ConditionFieldDef[]> = {
+  "Diabetes": [
+    { key: "type", label: "Type", type: "select", options: ["Type 1", "Type 2", "Gestational", "Pre-diabetes"] },
+    { key: "yearDiagnosed", label: "Year diagnosed", type: "year", placeholder: "e.g., 2015" },
+    { key: "recentA1C", label: "Most recent A1C (if known)", type: "text", placeholder: "e.g., 6.8" },
+    { key: "onInsulin", label: "On insulin?", type: "select", options: ["No", "Yes"] },
+    { key: "complications", label: "Any complications? (neuropathy, retinopathy, kidney, none)", type: "text", placeholder: "None / list any" },
+  ],
+  "Heart Disease": [
+    { key: "diagnosis", label: "Specific diagnosis", type: "select", options: ["Coronary Artery Disease", "Heart Attack", "Bypass Surgery", "Stent", "Arrhythmia", "Heart Failure", "Other"] },
+    { key: "yearOfEvent", label: "Year of event/diagnosis", type: "year" },
+    { key: "treatment", label: "Treatment received", type: "select", options: ["Medication only", "Stent", "Bypass surgery", "Pacemaker/ICD", "Other"] },
+    { key: "currentlySymptomatic", label: "Currently symptomatic?", type: "select", options: ["No", "Yes"] },
+  ],
+  "Cancer": [
+    { key: "typeSite", label: "Type / site of cancer", type: "text", placeholder: "e.g., Breast, Prostate, Skin (basal cell)" },
+    { key: "yearDiagnosed", label: "Year diagnosed", type: "year" },
+    { key: "stage", label: "Stage", type: "select", options: ["Stage I", "Stage II", "Stage III", "Stage IV", "Unknown"] },
+    { key: "treatment", label: "Treatment", type: "text", placeholder: "Surgery, chemo, radiation, immunotherapy" },
+    { key: "inRemission", label: "In remission?", type: "select", options: ["No", "Yes"] },
+    { key: "remissionYear", label: "Year remission began (if applicable)", type: "year" },
+  ],
+  "Stroke": [
+    { key: "strokeOrTia", label: "Stroke or TIA?", type: "select", options: ["Stroke", "TIA (mini-stroke)"] },
+    { key: "year", label: "Year of event", type: "year" },
+    { key: "residualDeficits", label: "Any residual deficits?", type: "select", options: ["No", "Yes"] },
+    { key: "onBloodThinners", label: "On blood thinners?", type: "select", options: ["No", "Yes"] },
+  ],
+  "High Blood Pressure": [
+    { key: "yearDiagnosed", label: "Year diagnosed", type: "year" },
+    { key: "controlledWithMeds", label: "Controlled with medication?", type: "select", options: ["Yes", "No"] },
+    { key: "recentReading", label: "Most recent reading (if known)", type: "text", placeholder: "e.g., 128/82" },
+  ],
+  "High Cholesterol": [
+    { key: "yearDiagnosed", label: "Year diagnosed", type: "year" },
+    { key: "onStatin", label: "On statin/medication?", type: "select", options: ["Yes", "No"] },
+    { key: "recentLevel", label: "Most recent total cholesterol / LDL (if known)", type: "text", placeholder: "e.g., Total 195, LDL 110" },
+  ],
+  "Asthma / COPD": [
+    { key: "which", label: "Which one?", type: "select", options: ["Asthma", "COPD", "Both"] },
+    { key: "severity", label: "Severity", type: "select", options: ["Mild", "Moderate", "Severe"] },
+    { key: "dailyController", label: "On daily controller medication?", type: "select", options: ["No", "Yes"] },
+    { key: "erOrHospitalized2yr", label: "ER visit or hospitalization in past 2 years?", type: "select", options: ["No", "Yes"] },
+  ],
+  "Mental Health Condition": [
+    { key: "condition", label: "Condition", type: "select", options: ["Depression", "Anxiety", "Bipolar", "PTSD", "Other"] },
+    { key: "onMedication", label: "On medication?", type: "select", options: ["No", "Yes"] },
+    { key: "hospitalizedOrAttempt", label: "Any hospitalization or suicide attempt?", type: "select", options: ["No", "Yes"] },
+    { key: "yearIfYes", label: "Year (if yes above)", type: "year" },
+  ],
+  "Autoimmune Disorder": [
+    { key: "specificCondition", label: "Specific condition", type: "text", placeholder: "Lupus, RA, MS, Crohn's, etc." },
+    { key: "yearDiagnosed", label: "Year diagnosed", type: "year" },
+    { key: "onImmunosuppressants", label: "Currently on immunosuppressants/biologics?", type: "select", options: ["No", "Yes"] },
+    { key: "flarePast12mo", label: "Flare in past 12 months?", type: "select", options: ["No", "Yes"] },
+  ],
+  "Kidney Disease": [
+    { key: "stage", label: "Stage", type: "select", options: ["Stage 1", "Stage 2", "Stage 3", "Stage 4", "Stage 5", "Unknown"] },
+    { key: "onDialysis", label: "On dialysis?", type: "select", options: ["No", "Yes"] },
+    { key: "cause", label: "Cause", type: "select", options: ["Diabetes", "High Blood Pressure", "Other", "Unknown"] },
+  ],
+};
 
 export const US_STATES = [
   "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado",

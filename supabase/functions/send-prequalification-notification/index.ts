@@ -56,6 +56,21 @@ const handler = async (req: Request): Promise<Response> => {
 
     const medicalConditions = (step2.medicalConditions as string[]) || [];
     const conditionsSummary = medicalConditions.length > 0 ? medicalConditions.join(", ") : "None reported";
+    const conditionDetails = (step2.conditionDetails as Record<string, Record<string, string>>) || {};
+
+    const conditionDetailsHtml = medicalConditions.length > 0
+      ? medicalConditions.map((cond) => {
+          const details = conditionDetails[cond] || {};
+          const rows = Object.entries(details)
+            .filter(([, v]) => v && String(v).trim() !== "")
+            .map(([k, v]) => `<tr><td class="td-label"><span class="label">${k}:</span></td><td>${v}</td></tr>`)
+            .join("");
+          if (!rows) {
+            return `<div style="margin-top:10px;padding:10px;background:#fff;border-left:3px solid #d4af37;border-radius:4px;"><strong>${cond}</strong><div style="font-size:12px;color:#888;">No additional details provided</div></div>`;
+          }
+          return `<div style="margin-top:10px;padding:10px;background:#fff;border-left:3px solid #d4af37;border-radius:4px;"><strong>${cond}</strong><table style="width:100%;margin-top:6px;">${rows}</table></div>`;
+        }).join("")
+      : "";
 
     const emailHtml = `
       <!DOCTYPE html>
@@ -109,6 +124,7 @@ const handler = async (req: Request): Promise<Response> => {
               <tr><td class="td-label"><span class="label">Hospitalized (5yr):</span></td><td>${step2.hospitalizedPast5Years || "N/A"}</td></tr>
               <tr><td class="td-label"><span class="label">Family History:</span></td><td>${step2.familyHistoryHeartCancer || "N/A"}</td></tr>
             </table>
+            ${conditionDetailsHtml ? `<div style="margin-top:12px;"><h4 style="margin:0 0 4px;color:#1a365d;">Condition-Specific Details</h4>${conditionDetailsHtml}</div>` : ""}
           </div>
 
           ${medicalConditions.length > 0 || step2.tobaccoUse === "Yes" || step2.hospitalizedPast5Years === "Yes" ? `
