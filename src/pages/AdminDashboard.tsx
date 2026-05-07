@@ -171,9 +171,9 @@ const AdminDashboard = () => {
               </Link>
             </Button>
             <Button variant="outline" asChild>
-              <Link to="/admin/applications">
+              <Link to="/admin/submissions">
                 <FileText className="h-4 w-4 mr-2" />
-                Life Insurance Applications
+                Submissions
               </Link>
             </Button>
             <div className="flex items-center gap-3 p-3 rounded-lg bg-card border shadow-sm">
