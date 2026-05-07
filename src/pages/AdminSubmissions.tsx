@@ -256,7 +256,7 @@ const AdminSubmissions = () => {
               <p className="text-sm text-muted-foreground mb-4">
                 Showing {filteredPrequal.length} of {prequalApps.length} pre-qualifications
               </p>
-              <SubmissionsTable
+              <SubmissionsTable<PrequalificationApplication>
                 rows={filteredPrequal}
                 totalSteps={4}
                 onView={setSelectedPrequal}
@@ -294,7 +294,7 @@ const AdminSubmissions = () => {
               <p className="text-sm text-muted-foreground mb-4">
                 Showing {filteredEstate.length} of {estateApps.length} estate planning intakes
               </p>
-              <SubmissionsTable
+              <SubmissionsTable<EstatePlanningApplication>
                 rows={filteredEstate}
                 onView={setSelectedEstate}
                 onDelete={(id) => deleteEstate.mutate(id, {
