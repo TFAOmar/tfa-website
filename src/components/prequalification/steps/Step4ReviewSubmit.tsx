@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { step4Schema, Step4Data, PrequalificationApplicationData, Step1Data, Step2Data, Step3Data } from "@/types/prequalificationApplication";
+import { step4Schema, Step4Data, PrequalificationApplicationData, Step1Data, Step2Data, Step3Data, CONDITION_FOLLOWUPS } from "@/types/prequalificationApplication";
 
 interface Step4Props {
   data: Step4Data | Record<string, unknown>;
@@ -70,6 +70,28 @@ const Step4ReviewSubmit = ({ data, allData, onNext, onBack, onGoToStep }: Step4P
         <Row label="Tobacco Use" value={s2.tobaccoUse} />
         {s2.tobaccoFrequency && <Row label="Tobacco Details" value={s2.tobaccoFrequency} />}
         <Row label="Medical Conditions" value={s2.medicalConditions?.length ? s2.medicalConditions.join(", ") : "None"} />
+        {s2.medicalConditions?.length ? (
+          <div className="mt-2 space-y-2">
+            {s2.medicalConditions.map((cond) => {
+              const details = (s2 as unknown as { conditionDetails?: Record<string, Record<string, string>> }).conditionDetails?.[cond] || {};
+              const fields = CONDITION_FOLLOWUPS[cond] || [];
+              if (!fields.length) return null;
+              return (
+                <div key={cond} className="rounded border bg-muted/30 p-2">
+                  <div className="text-xs font-semibold text-foreground">{cond}</div>
+                  <div className="mt-1 space-y-0.5">
+                    {fields.map((f) => (
+                      <div key={f.key} className="flex justify-between text-xs">
+                        <span className="text-muted-foreground">{f.label}</span>
+                        <span>{details[f.key] || "—"}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        ) : null}
         <Row label="Prescription Medications" value={s2.takingMedications} />
         {s2.medicationDetails && <Row label="Medication Details" value={s2.medicationDetails} />}
         <Row label="Hospitalized (5yr)" value={s2.hospitalizedPast5Years} />
