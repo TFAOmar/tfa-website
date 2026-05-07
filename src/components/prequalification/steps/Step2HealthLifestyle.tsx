@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { step2Schema, Step2Data, MEDICAL_CONDITIONS } from "@/types/prequalificationApplication";
+import { step2Schema, Step2Data, MEDICAL_CONDITIONS, CONDITION_FOLLOWUPS } from "@/types/prequalificationApplication";
 
 interface Step2Props {
   data: Step2Data | Record<string, unknown>;
@@ -34,13 +34,28 @@ const Step2HealthLifestyle = ({ data, onNext, onBack }: Step2Props) => {
   const hospitalizedPast5Years = watch("hospitalizedPast5Years");
   const familyHistoryHeartCancer = watch("familyHistoryHeartCancer");
   const medicalConditions = watch("medicalConditions") || [];
+  const conditionDetails = (watch("conditionDetails") || {}) as Record<string, Record<string, string>>;
 
   const toggleCondition = (condition: string) => {
     const current = medicalConditions;
-    const updated = current.includes(condition)
+    const isRemoving = current.includes(condition);
+    const updated = isRemoving
       ? current.filter((c) => c !== condition)
       : [...current, condition];
     setValue("medicalConditions", updated);
+    if (isRemoving) {
+      const next = { ...conditionDetails };
+      delete next[condition];
+      setValue("conditionDetails", next);
+    }
+  };
+
+  const setConditionField = (condition: string, fieldKey: string, value: string) => {
+    const next = {
+      ...conditionDetails,
+      [condition]: { ...(conditionDetails[condition] || {}), [fieldKey]: value },
+    };
+    setValue("conditionDetails", next);
   };
 
   return (
@@ -113,19 +128,65 @@ const Step2HealthLifestyle = ({ data, onNext, onBack }: Step2Props) => {
       {/* Medical Conditions */}
       <div className="space-y-3">
         <Label>Have you been diagnosed with any of the following?</Label>
-        <div className="grid grid-cols-2 gap-3">
-          {MEDICAL_CONDITIONS.map((condition) => (
-            <label
-              key={condition}
-              className="flex items-center gap-2 p-3 border rounded-lg cursor-pointer hover:bg-muted/50 transition-colors"
-            >
-              <Checkbox
-                checked={medicalConditions.includes(condition)}
-                onCheckedChange={() => toggleCondition(condition)}
-              />
-              <span className="text-sm">{condition}</span>
-            </label>
-          ))}
+        <div className="space-y-3">
+          {MEDICAL_CONDITIONS.map((condition) => {
+            const isSelected = medicalConditions.includes(condition);
+            const followups = CONDITION_FOLLOWUPS[condition] || [];
+            const values = conditionDetails[condition] || {};
+            return (
+              <div key={condition} className="border rounded-lg overflow-hidden">
+                <label className="flex items-center gap-2 p-3 cursor-pointer hover:bg-muted/50 transition-colors">
+                  <Checkbox
+                    checked={isSelected}
+                    onCheckedChange={() => toggleCondition(condition)}
+                  />
+                  <span className="text-sm font-medium">{condition}</span>
+                </label>
+                {isSelected && followups.length > 0 && (
+                  <div className="p-4 bg-muted/30 border-t space-y-3">
+                    <p className="text-xs text-muted-foreground">
+                      Please provide a few details about your {condition.toLowerCase()} so we can match you with the right carrier.
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      {followups.map((field) => (
+                        <div key={field.key} className="space-y-1">
+                          <Label className="text-xs">{field.label}</Label>
+                          {field.type === "select" ? (
+                            <Select
+                              value={values[field.key] || ""}
+                              onValueChange={(v) => setConditionField(condition, field.key, v)}
+                            >
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {field.options?.map((opt) => (
+                                  <SelectItem key={opt} value={opt}>{opt}</SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          ) : field.type === "textarea" ? (
+                            <Textarea
+                              value={values[field.key] || ""}
+                              onChange={(e) => setConditionField(condition, field.key, e.target.value)}
+                              placeholder={field.placeholder}
+                            />
+                          ) : (
+                            <Input
+                              type={field.type === "year" ? "number" : "text"}
+                              value={values[field.key] || ""}
+                              onChange={(e) => setConditionField(condition, field.key, e.target.value)}
+                              placeholder={field.placeholder}
+                            />
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
 
