@@ -25,7 +25,6 @@ import Advisors from "./pages/Advisors";
 import Partners from "./pages/Partners";
 import AdvisorOnboarding from "./pages/AdvisorOnboarding";
 import AdminDashboard from "./pages/AdminDashboard";
-import AdminApplications from "./pages/AdminApplications";
 import AdminFormSubmissions from "./pages/AdminFormSubmissions";
 import AdminSubmissions from "./pages/AdminSubmissions";
 import CompoundGrowthCalculator from "./pages/CompoundGrowthCalculator";
