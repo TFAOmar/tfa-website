@@ -17,7 +17,8 @@ import {
   Award,
   Heart,
   BookOpen,
-  GraduationCap
+  GraduationCap,
+  Building2
 } from "lucide-react";
 import { SEOHead, JsonLd } from "@/components/seo";
 import { generatePersonSchema, generateLocalBusinessSchema } from "@/lib/seo/schemas";
@@ -30,7 +31,9 @@ const specialties = [
   "Indexed Strategies",
   "Retirement Planning",
   "Tax Strategies",
-  "Financial Literacy"
+  "Financial Literacy",
+  "Estate Planning",
+  "Business Planning"
 ];
 
 const services = [
@@ -53,6 +56,16 @@ const services = [
     icon: GraduationCap,
     title: "Financial Literacy & Education",
     description: "Increasing your financial literacy and investment knowledge to help you make powerful and informed decisions for your future."
+  },
+  {
+    icon: FileText,
+    title: "Estate Planning",
+    description: "Protect your legacy and ensure your wealth transfers efficiently to your loved ones with proper estate planning strategies, including trusts, beneficiary designations, and legacy preservation."
+  },
+  {
+    icon: Building2,
+    title: "Business Planning",
+    description: "Strategic planning for business owners, including succession planning, key person protection, buy-sell agreements, and tax-efficient strategies to safeguard your business and its future."
   }
 ];
 
@@ -111,8 +124,8 @@ const AdvisorCaylaDeePorter = () => {
     <>
       <SEOHead
         title="Cayla Dee Porter | Certified Financial Fiduciary® | The Financial Architects"
-        description="Meet Cayla Dee Porter, a Certified Financial Fiduciary® specializing in Indexed Strategies, Retirement Planning, Tax Strategies, and Financial Literacy in Brea, CA."
-        keywords="Cayla Dee Porter, certified financial fiduciary, indexed strategies, retirement planning, tax strategies, financial literacy, Brea CA"
+        description="Meet Cayla Dee Porter, a Certified Financial Fiduciary® specializing in Indexed Strategies, Retirement Planning, Tax Strategies, Financial Literacy, Estate Planning, and Business Planning in Brea, CA."
+        keywords="Cayla Dee Porter, certified financial fiduciary, indexed strategies, retirement planning, tax strategies, financial literacy, estate planning, business planning, Brea CA"
         canonical={`${siteConfig.url}/advisors/cayla-dee-porter`}
       />
       <JsonLd data={[personSchema, localBusinessSchema]} />
