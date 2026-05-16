@@ -54,6 +54,7 @@ export interface Advisor {
   image?: string;
   email?: string;
   phone?: string;
+  businessPhone?: string;
   yearsOfExperience?: number;
   landingPage?: string;
   schedulingLink?: string;
@@ -593,6 +594,7 @@ export const advisors: Advisor[] = [
     image: rubenDavisImg,
     email: "ruben@tfainsuranceadvisors.com",
     phone: "(818) 381-6770",
+    businessPhone: "(213) 444-5479",
     yearsOfExperience: 17,
     landingPage: "/advisors/ruben-davis"
   },
