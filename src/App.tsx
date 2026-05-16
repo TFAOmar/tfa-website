@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Auth from "./pages/Auth";
@@ -256,6 +256,9 @@ const AppLayout = () => {
           <Route path="/advisors/:advisorSlug/living-trust-questionnaire" element={<LivingTrustQuestionnaire />} />
           <Route path="/living-trust-questionnaire" element={<LivingTrustQuestionnaire />} />
           <Route path="/advisors/:advisorSlug/prequalification" element={<PrequalificationQuestionnaire />} />
+          {/* Legacy WordPress redirects */}
+          <Route path="/davis-life-application" element={<Navigate to="/advisors/ruben-davis/life-insurance" replace />} />
+          <Route path="/davis-life-application/*" element={<Navigate to="/advisors/ruben-davis/life-insurance" replace />} />
           <Route path="/estate-guru" element={<EstateGuru />} />
           <Route path="/estate-guru/success" element={<EstateGuruSuccess />} />
           <Route path="/estate-guru/canceled" element={<EstateGuruCanceled />} />
