@@ -116,37 +116,6 @@ const ThankYou = () => {
         </div>
       </section>
 
-      {/* Download Guide Section */}
-      <section className="py-16 md:py-24 bg-gradient-to-br from-[hsl(var(--navy))] to-[hsl(215,45%,18%)]">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-4xl mx-auto">
-            <Card className="bg-white/10 backdrop-blur-xl border-white/20 rounded-2xl overflow-hidden">
-              <CardContent className="p-8 md:p-12">
-                <div className="flex flex-col md:flex-row items-center gap-8">
-                  <div className="w-32 h-40 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <FileText className="h-16 w-16 text-[#E4B548]" />
-                  </div>
-                  <div className="flex-1 text-center md:text-left">
-                    <h3 className="text-2xl md:text-3xl font-bold text-white mb-3">
-                      5-Step Financial Preparation Guide
-                    </h3>
-                    <p className="text-white/70 mb-6 leading-relaxed">
-                      Get the most out of your consultation with our exclusive preparation guide. Learn what documents to gather, questions to ask, and how to clarify your financial goals before we meet.
-                    </p>
-                    <Button 
-                      className="btn-primary-cta px-8 py-6 hover:scale-105"
-                    >
-                      <Download className="mr-2 h-5 w-5" />
-                      Download Free Guide
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
       {/* Contact Info */}
       <section className="py-16 md:py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
