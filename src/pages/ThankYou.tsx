@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { CheckCircle, Calendar, FileText, Phone, Mail, Download, Play, ArrowRight } from "lucide-react";
+import { CheckCircle, Calendar, FileText, Phone, Mail, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { SEOHead } from "@/components/seo";
@@ -67,29 +67,6 @@ const ThankYou = () => {
             <p className="text-lg text-white/60 max-w-xl mx-auto animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
               We're excited to help you plan for a secure financial future. Here's what happens next.
             </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Video Message Section */}
-      <section className="py-16 md:py-24 bg-secondary/30">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-4xl mx-auto">
-            <Card className="bg-white/80 backdrop-blur-sm border-border/50 rounded-2xl overflow-hidden shadow-xl">
-              <CardContent className="p-0">
-                {/* Video Placeholder */}
-                <div className="aspect-video bg-gradient-to-br from-[hsl(var(--navy))] to-[hsl(215,45%,18%)] flex items-center justify-center relative group cursor-pointer">
-                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors" />
-                  <div className="w-20 h-20 rounded-full bg-[#E4B548] flex items-center justify-center relative z-10 group-hover:scale-110 transition-transform shadow-lg">
-                    <Play className="h-8 w-8 text-black ml-1" />
-                  </div>
-                  <div className="absolute bottom-6 left-6 right-6 text-left z-10">
-                    <p className="text-white font-semibold text-lg">A Personal Message from Our Team</p>
-                    <p className="text-white/70 text-sm">Watch to learn what to expect from your consultation</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
           </div>
         </div>
       </section>
