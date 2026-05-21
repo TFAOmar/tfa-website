@@ -120,7 +120,7 @@ const AileenGutierrezReferral = () => {
           name="description"
           content="Referred to Aileen Gutierrez? Get a free, no-pressure consultation on mortgage protection or a living trust. Bilingual. Serving California families."
         />
-        <link rel="canonical" href="https://tfawealthplanning.com/aileen" />
+        <link rel="canonical" href="https://tfawealthplanning.com/advisors/aileen-gutierrez/refer" />
         <meta name="robots" content="index,follow" />
       </Helmet>
 

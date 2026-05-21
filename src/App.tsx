@@ -122,7 +122,7 @@ import AileenPartnerProgram from "./pages/AileenPartnerProgram";
 const queryClient = new QueryClient();
 
 // Standalone pages that have their own header/footer
-const standalonePages = ['/advisors/vanessa-sanchez/living-trust', '/advisors/vanessa-sanchez/think-tax-solutions', '/advisors/vanessa-sanchez/cardenas-and-company', '/advisors/braihyra-medellin/living-trust', '/advisors/erica-valenzuela/living-trust', '/services/kai-zen', '/advisors/mariah-lorenzen/kai-zen', '/advisors/tamara-lee/medicare', '/advisors/recinos', '/advisors/ruth-pacheco/tax-strategy', '/health-insurance/american-way-health', '/admin', '/admin/applications', '/admin/submissions', '/admin/form-submissions', '/admin/sponsorship', '/life-insurance-application', '/living-trust-questionnaire', '/estate-guru', '/estate-guru/success', '/estate-guru/canceled', '/advisors/manuel-soto/coaching', '/advisors/manuel-soto/escobar-realty', '/brea', '/sales-contest', '/aileen', '/aileen/partners'];
+const standalonePages = ['/advisors/vanessa-sanchez/living-trust', '/advisors/vanessa-sanchez/think-tax-solutions', '/advisors/vanessa-sanchez/cardenas-and-company', '/advisors/braihyra-medellin/living-trust', '/advisors/erica-valenzuela/living-trust', '/services/kai-zen', '/advisors/mariah-lorenzen/kai-zen', '/advisors/tamara-lee/medicare', '/advisors/recinos', '/advisors/ruth-pacheco/tax-strategy', '/health-insurance/american-way-health', '/admin', '/admin/applications', '/admin/submissions', '/admin/form-submissions', '/admin/sponsorship', '/life-insurance-application', '/living-trust-questionnaire', '/estate-guru', '/estate-guru/success', '/estate-guru/canceled', '/advisors/manuel-soto/coaching', '/advisors/manuel-soto/escobar-realty', '/brea', '/sales-contest', '/advisors/aileen-gutierrez/refer', '/advisors/aileen-gutierrez/partners'];
 
 const AppLayout = () => {
   const location = useLocation();
@@ -273,8 +273,10 @@ const AppLayout = () => {
           <Route path="/brand-guidelines" element={<BrandGuidelines />} />
           <Route path="/brea" element={<Brea />} />
           <Route path="/sales-contest" element={<SalesContest />} />
-          <Route path="/aileen" element={<AileenGutierrezReferral />} />
-          <Route path="/aileen/partners" element={<AileenPartnerProgram />} />
+          <Route path="/advisors/aileen-gutierrez/refer" element={<AileenGutierrezReferral />} />
+          <Route path="/advisors/aileen-gutierrez/partners" element={<AileenPartnerProgram />} />
+          <Route path="/aileen" element={<Navigate to="/advisors/aileen-gutierrez/refer" replace />} />
+          <Route path="/aileen/partners" element={<Navigate to="/advisors/aileen-gutierrez/partners" replace />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

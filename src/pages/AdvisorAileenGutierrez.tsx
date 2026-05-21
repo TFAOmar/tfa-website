@@ -343,7 +343,7 @@ const AdvisorAileenGutierrez = () => {
                     need mortgage protection or a living trust. They'll feel personally introduced —
                     not sold to.
                   </p>
-                  <Link to="/aileen">
+                  <Link to="/advisors/aileen-gutierrez/refer">
                     <Button className="bg-accent hover:bg-accent/90 text-primary font-semibold">
                       Open Client Referral Page
                       <ArrowRight className="ml-2 h-4 w-4" />
@@ -364,7 +364,7 @@ const AdvisorAileenGutierrez = () => {
                     For real estate professionals, CPAs, attorneys, and financial advisors who want
                     to add value for clients and earn on every successful referral.
                   </p>
-                  <Link to="/aileen/partners">
+                  <Link to="/advisors/aileen-gutierrez/partners">
                     <Button className="bg-accent hover:bg-accent/90 text-primary font-semibold">
                       Open Partner Program
                       <ArrowRight className="ml-2 h-4 w-4" />

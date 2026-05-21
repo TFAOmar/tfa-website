@@ -136,7 +136,7 @@ const AileenPartnerProgram = () => {
           name="description"
           content="Real estate pros, CPAs, attorneys, and advisors: refer clients to Aileen Gutierrez at The Financial Architects and earn on mortgage protection and living trusts."
         />
-        <link rel="canonical" href="https://tfawealthplanning.com/aileen/partners" />
+        <link rel="canonical" href="https://tfawealthplanning.com/advisors/aileen-gutierrez/partners" />
         <meta name="robots" content="index,follow" />
       </Helmet>
 
