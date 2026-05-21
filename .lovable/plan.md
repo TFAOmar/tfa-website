@@ -1,48 +1,44 @@
 ## Goal
 
-Aileen Gutierrez already exists in `src/data/advisors.ts` and has two standalone landing pages (`/aileen` client referral, `/aileen/partners` partner recruitment), but she has no profile page on the main directory like every other advisor. Add one and cross-link the two existing landing pages from it.
+Aileen's two landing pages live at `/aileen` and `/aileen/partners`, which don't match the rest of the site. Every other advisor uses `/advisors/<slug>` for the profile and `/advisors/<slug>/<feature>` for sub-pages. Bring Aileen in line and keep the old links working.
+
+## New URL structure
+
+| Page | Old URL | New URL |
+|---|---|---|
+| Profile | `/advisors/aileen-gutierrez` | `/advisors/aileen-gutierrez` (unchanged) |
+| Client referral landing | `/aileen` | `/advisors/aileen-gutierrez/refer` |
+| Partner program | `/aileen/partners` | `/advisors/aileen-gutierrez/partners` |
+
+`refer` reads naturally for a link someone shares with a friend ("aileen's refer page"); `partners` matches the existing partner-program copy. Both stay short enough to share by text.
 
 ## Changes
 
-### 1. New profile page — `src/pages/AdvisorAileenGutierrez.tsx`
-Mirror the structure used by `AdvisorRubenDavis.tsx` (hero, specialties, services grid, process steps, About, contact CTA with `ScheduleModal` + `ContactModal`, SEO via `SEOHead` + `JsonLd` with `generatePersonSchema` / `generateBreadcrumbSchema` / `generateWebPageSchema`, global Header/Footer via App shell).
+### `src/App.tsx`
+- Add canonical routes:
+  - `/advisors/aileen-gutierrez/refer` → `AileenGutierrezReferral`
+  - `/advisors/aileen-gutierrez/partners` → `AileenPartnerProgram`
+- Replace old routes with permanent redirects (`<Navigate replace>`):
+  - `/aileen` → `/advisors/aileen-gutierrez/refer`
+  - `/aileen/partners` → `/advisors/aileen-gutierrez/partners`
+- Update `standalonePages` to use the new canonical paths.
 
-Content tailored to Aileen:
-- Title: Financial Strategist · Bilingual • Bilingüe
-- Location: Covina, CA · Serving California families
-- Specialties: Mortgage Protection, Living Trusts, Life Insurance, Family Income Protection, Estate Planning, Tax-Free Retirement
-- Services grid: Mortgage Protection, Living Trusts, Life Insurance with Living Benefits, Family Income Protection, Estate Planning Basics, Retirement Strategies
-- Process steps: Discovery Call → Needs Review → Personalized Plan → Implementation & Ongoing Support
-- About: bilingual, family-first, referral-driven practice
-- Contact: phone `(626) 643-0816`, email `aileen@tfainsuranceadvisors.com`, license `CA Lic# 0I97662`
-- Hero image: `@/assets/advisors/aileen-gutierrez.jpg`
+### `src/pages/AileenGutierrezReferral.tsx`
+- Update `<link rel="canonical">` to `https://tfawealthplanning.com/advisors/aileen-gutierrez/refer`.
 
-**Cross-links section** ("Resources & Referral Tools") with two cards:
-- "Refer a client" → `/aileen` (for friends, family, and referral partners sharing her link)
-- "Become a referral partner" → `/aileen/partners` (for real estate pros, CPAs, attorneys)
+### `src/pages/AileenPartnerProgram.tsx`
+- Update `<link rel="canonical">` to `https://tfawealthplanning.com/advisors/aileen-gutierrez/partners`.
 
-### 2. `src/data/advisors.ts`
-Update Aileen's record:
-- `landingPage: "/advisors/aileen-gutierrez"` (so the directory card links to her new profile, matching every other advisor)
-- Expand `specialties` to: `["Mortgage Protection", "Living Trusts", "Life Insurance", "Estate Planning", "Family Income Protection"]`
+### `src/pages/AdvisorAileenGutierrez.tsx`
+- Update the two "Resources & Referral Tools" cards to link to the new canonical URLs.
 
-### 3. `src/App.tsx`
-- `import AdvisorAileenGutierrez from "./pages/AdvisorAileenGutierrez"`
-- Add `<Route path="/advisors/aileen-gutierrez" element={<AdvisorAileenGutierrez />} />` alongside the other advisor profile routes
-- Do NOT add it to `standalonePages` — the profile uses the global Header/Footer like every other advisor profile. `/aileen` and `/aileen/partners` remain standalone as configured.
-
-### 4. Surface referral links on the profile
-On `AdvisorAileenGutierrez.tsx`, add a clearly labeled "Resources" block with two `Link`s/Buttons:
-- "Client referral page" → `/aileen`
-- "Referral partner program" → `/aileen/partners`
-
-## Out of scope
-- No changes to `/aileen` or `/aileen/partners` content.
-- No edits to other advisor records or the directory page (it already iterates `advisors[]` and will pick up the new `landingPage`).
-- No new assets — reuse existing `aileen-gutierrez.jpg`.
+### Out of scope
+- No copy/design changes to either landing page.
+- No changes to form submission, Pipedrive routing, or `advisor_slug` values (they're already `aileen-gutierrez`).
+- No SEO redirect-map work beyond the in-app `<Navigate>` (those handle SPA + crawler redirects fine for new pages with no existing backlinks).
 
 ## QA
-- Visit `/advisors` → Aileen card links to `/advisors/aileen-gutierrez`.
-- Visit `/advisors/aileen-gutierrez` → global Header/Footer present, profile renders, "Resources" links open `/aileen` and `/aileen/partners`.
-- Visit `/aileen` and `/aileen/partners` → unchanged, still standalone.
-- Contact + Schedule modals open and submit to `aileen@tfainsuranceadvisors.com`.
+- `/aileen` and `/aileen/partners` redirect to the new URLs.
+- New URLs render the same standalone pages (no global header/footer).
+- Profile page resource cards point to the new URLs.
+- `?ref=` query param still works on the redirected paths (React Router preserves search by default with `Navigate`; verify with `/aileen?ref=NAHREP`).
