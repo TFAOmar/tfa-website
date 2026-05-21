@@ -39,6 +39,7 @@ import caylaDeePorterImg from "@/assets/advisors/cayla-dee-porter.jpg";
 import merrianeMcGuireImg from "@/assets/advisors/merriane-mcguire.jpg";
 import elizabethRochaImg from "@/assets/advisors/elizabeth-rocha.jpg";
 import rosieNunoImg from "@/assets/advisors/rosie-nuno.jpg";
+import aileenGutierrezImg from "@/assets/advisors/aileen-gutierrez.jpg";
 
 export interface Advisor {
   id: number | string;
@@ -698,6 +699,22 @@ export const advisors: Advisor[] = [
     email: "rosie@tfainsuranceadvisors.com",
     phone: "(209) 204-9672",
     landingPage: "/advisors/rosie-nuno"
+  },
+  {
+    id: "aileen-gutierrez",
+    name: "Aileen Gutierrez",
+    title: "Financial Strategist",
+    type: "Advisor",
+    state: "California",
+    city: "Covina",
+    region: "West",
+    bio: "Bilingual financial strategist helping California families protect their home, family, and legacy through mortgage protection and living trusts.",
+    specialties: ["Life Insurance", "Estate Planning"],
+    licenses: ["CA Lic# 0I97662"],
+    image: aileenGutierrezImg,
+    email: "aileen@tfainsuranceadvisors.com",
+    phone: "(626) 643-0816",
+    landingPage: "/aileen"
   }
 ];
 
