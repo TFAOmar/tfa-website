@@ -1,84 +1,83 @@
 
-# Aileen Gutierrez Referral Landing Page
+# Aileen Gutierrez — Referral Partner Recruitment Page
 
-A single-page, standalone landing page designed for real estate partners to share with their clients. Warm, personal, referral-driven tone — not a corporate insurance pitch.
+A standalone B2B landing page for Aileen to share with real estate pros, CPAs, attorneys, and financial advisors she meets through NAHREP and other networks. Sister page to the existing client referral page at `/aileen`.
 
 ## Route & files
 
-- **Route:** `/aileen` (also accept `?ref=PartnerName` for pre-filling "Referred By")
-- **New page:** `src/pages/AileenGutierrezReferral.tsx`
-- **Register route** in `src/App.tsx` and add `/aileen` to the `standalonePages` array so global Header/Footer/FloatingCTA are excluded (per project convention).
-- **Add Aileen to** `src/data/advisors.ts` (so existing form/notification/Pipedrive routing picks her up by email). Fields:
-  - name: Aileen Gutierrez
-  - title: Financial Strategist
-  - email: aileen@tfainsuranceadvisors.com
-  - phone (mobile): (626) 643-0816
-  - location: 965 N. Grand Ave, Covina, CA 91724
-  - bilingual: true
-  - license: CA Lic #0197662
-- **Assets (copy from uploads):**
-  - `user-uploads://Aileen_Guttierez.jpg` → `src/assets/advisors/aileen-gutierrez.jpg` (clean headshot for About section + small badge)
-  - `user-uploads://email_signature_1_27_25.png` → not used on page (reference only)
+- **Route:** `/aileen/partners` (also accepts `?ref=Source` to track lead origin, e.g. `?ref=NAHREP-Mixer`)
+- **New page:** `src/pages/AileenPartnerProgram.tsx`
+- **Register route** in `src/App.tsx` and add `/aileen/partners` to the `standalonePages` array.
+- **Reuses:** `aileen-gutierrez.jpg` (already in `src/assets/advisors/`), TFA logo, existing palette pattern from `/aileen` for consistency.
 
 ## Page sections (top to bottom)
 
-1. **Minimal header** — small TFA wordmark left, "Bilingual • Bilingüe" gold badge right. No nav.
+1. **Minimal header** — TFA wordmark left; gold "Partner Program" pill right (peer-to-peer signal instead of bilingual badge — different audience).
 2. **Hero**
-   - Headline: "You Were Referred by Someone Who Cares About You"
-   - Sub: "Let's make sure your family and home are protected — it only takes a minute to get started."
-   - Background: soft warm-white with a subtle lifestyle image overlay (family/home). Use a tasteful Unsplash-style placeholder or a soft gradient if no asset is provided — palette-tinted, not loud.
-   - If a referral name is in `?ref=`, show a small chip: "Referred by **{name}**".
-3. **Two-path selector** — two large tap-friendly cards side-by-side (stacked on mobile):
-   - **Mortgage Protection** — house+shield icon (lucide `HomeIcon` + `Shield`). Copy + "Protect My Home" CTA.
-   - **Living Trust** — document+heart/users icon. Copy + "Set Up My Trust" CTA.
-   - Tapping a card smooth-scrolls to the form and sets the `interest` state (drives the form's hidden `interest_category` field + the submit headline).
-4. **Lead form** (appears below; visible by default once a card is tapped, smooth-scrolled into view):
-   - Fields: First Name, Last Name, Phone, Email, Referred By (prefilled from `?ref=`), Optional Message / Preferred Callback Time.
-   - Submit: "Get My Free Consultation"
-   - Validation: zod schema (per project security convention).
-   - Bot protection: `useHoneypot` hook (project rule).
-   - Submission: `submitForm` from `src/lib/formSubmit.ts` with `advisor_email: "aileen@tfainsuranceadvisors.com"`, `form_name: "aileen-referral-landing"`, `interest_category: "Mortgage Protection" | "Living Trust"`, `tags: ["referral-partner", interest]`.
-   - On success: inline confirmation card ("Thank you — Aileen will reach out shortly") instead of redirecting away. Keeps the warm, personal feel.
-5. **Trust strip** — 3 items with check icons:
-   - "No cost to chat — just a conversation"
-   - "Bilingual: English & Spanish"
-   - "Your info stays private, always"
-6. **About Aileen** — left: headshot in soft rounded frame with gold ring; right: first-person quote (copy from brief) and a signature line "— Aileen Gutierrez, The Financial Architects". Below quote: small tel: + mailto: links.
-7. **Footer (page-local, no global footer)**
-   - TFA wordmark + tagline "Protecting Families. Building Legacies."
-   - Aileen's phone | email | Covina address
-   - Disclaimer: "The Financial Architects is an independent financial services firm. All information submitted is confidential."
+   - Eyebrow: "Referral Partner Program"
+   - Headline: "Your Clients Already Trust You. Now Get Paid for It."
+   - Sub: "Join The Financial Architects Referral Partner Program — earn referral fees on mortgage protection and living trusts without changing anything about how you do business."
+   - Primary CTA: "Become a Partner" (smooth-scrolls to form anchor)
+   - Secondary text link: "How it works ↓"
+   - Background: navy gradient with subtle gold glow accents (premium feel — different from the warm client page).
+3. **What's In It For You** — 3-column value grid with gold-circle icons:
+   - Earn Referral Fees (DollarSign / Handshake)
+   - Higher Comp If Licensed (TrendingUp)
+   - Get Paid on Living Trusts (ShieldCheck / FileText)
+4. **How It Actually Works** — 4-step horizontal flow with numbered gold circles connected by a thin gold line on desktop, stacked vertically on mobile. Copy verbatim from brief (Sign Up → Refer → We Handle Everything → Get Paid).
+5. **What Makes This Different** — Two-column checklist (gold Check icons, navy text) with the 5 bullet items from the brief.
+6. **Credibility strip** — Single full-width band on warm gray:
+   - Lead line: "The Financial Architects partners with top-rated carriers to protect families across California."
+   - 3 small stat chips: "50+ referral partners and growing" · "Bilingual: English & Spanish" · "Backed by The Financial Architects"
+   - (No fabricated testimonial — leave room for one later by including a structured `<blockquote>` slot commented for future use.)
+7. **Meet Your Partner — About Aileen** — Same layout as `/aileen` (rounded gold-ringed headshot + first-person quote from brief). Reinforces it's a personal partnership.
+8. **Partner Sign-Up Form** (anchor target `#partner-form`):
+   - Fields: Full Name, Business Name, Industry (Select), Phone, Email, Currently Life-Licensed? (Select: Yes / No / Interested in getting licensed), How did you hear about this program? (text, optional).
+   - Validation: zod schema.
+   - Bot protection: `useHoneypot` hook.
+   - Submission: `submitForm` from `src/lib/formSubmit.ts` with
+     - `form_name: "aileen-partner-program"`
+     - `advisor_email: "aileen@tfainsuranceadvisors.com"`
+     - `advisor_slug: "aileen-gutierrez"`
+     - `company_name: <business name>`
+     - `interest_category: "Referral Partner"`
+     - `tags: ["partner-recruitment", <industry>, <licensed status>]`
+     - `notes`: industry + licensed status + how-heard + `?ref=` source.
+   - Submit button: "Let's Partner Up"
+   - On success: inline confirmation panel — "You're in! Aileen will reach out within 24 hours to get you set up with your own referral portal." Includes Aileen's direct phone/email for impatient partners.
+9. **Footer** (page-local)
+   - TFA wordmark + tagline: "Protecting Families. Building Legacies. Empowering Partners."
+   - Aileen's phone, email, Covina address
+   - Disclaimer (verbatim): "The Financial Architects is an independent financial services firm. Referral compensation varies by product and licensing status. All partner information is confidential."
 
-## Design system
+## Design notes
 
-- Use existing semantic tokens (navy, gold, warm-white background, soft gray). All HSL via Tailwind tokens — no hard-coded hex in JSX. If the warm-white `#FDFBF7` and the slightly different navy `#1B2A4A` shades aren't already in `index.css`, add page-scoped CSS variables (`--aileen-bg`, `--aileen-navy`, `--aileen-gold`, `--aileen-trust-green`) in `index.css` and reference via Tailwind arbitrary values or a small `.aileen-*` class set. Keep tokens isolated so they don't affect the rest of the site.
-- Typography: existing Inter (project default). Hero headline in a slightly larger serif-feeling weight via tracking/size only (no new font install needed).
-- Buttons: existing `Button` component with `variant="default"` (navy) and a gold accent variant via className override using tokens.
-- Subtle motion: fade-in on card tap → form reveal. Use existing Tailwind transitions; no new deps.
+- Inverts the client-page palette to feel premium B2B: hero uses navy `#1B2A4A` background with white text and gold `#C8A951` accents; body sections use white with navy text and warm gray `#F4F1EA` section breaks. Gold check/circle accents throughout. Inline CSS palette object (same pattern as `/aileen`) to keep tokens isolated.
+- Slightly tighter spacing, more confident typography weights than the client page (font-bold for hero, font-semibold for section headings).
+- Subtle hover lift on value cards and the form button. No heavy animation.
+- All icons: lucide-react (already in project).
 
 ## SEO
 
-- `<Helmet>`:
-  - Title: "Aileen Gutierrez | Mortgage Protection & Living Trusts | TFA"
-  - Description: "Referred to Aileen Gutierrez? Get a free, no-pressure consultation on mortgage protection or a living trust. Bilingual. Serving California families."
-  - Canonical: `https://tfawealthplanning.com/aileen`
-  - `<meta name="robots" content="index,follow">`
+- Title: "Referral Partner Program | Aileen Gutierrez · TFA"
+- Description: "Real estate pros, CPAs, attorneys, and advisors: refer clients to Aileen Gutierrez at The Financial Architects and earn on mortgage protection and living trusts."
+- Canonical: `https://tfawealthplanning.com/aileen/partners`
+- `robots: index,follow`
 
-## Routing integration details
+## Pipedrive routing
 
-- Pipedrive: form submission uses standard `pipedrive-submit` edge function. Because Aileen will exist in `advisors.ts` with her TFA email, leads route to her in the Leads Inbox automatically (matches project's "Leads Inbox only" rule and email-based routing).
-- Email notifications go to `aileen@tfainsuranceadvisors.com` via existing form notification path (no new edge function).
+- Standard `pipedrive-submit` edge function; routes to Aileen's Leads Inbox via her advisor email (already in `src/data/advisors.ts`).
+- `interest_category: "Referral Partner"` keeps these distinguishable from client leads in Pipedrive.
 
-## Out of scope (will not do unless asked)
+## Out of scope
 
-- Building separate Mortgage Protection or Living Trust deep-dive pages.
-- Wiring Aileen into the public `/advisors` directory grid (this page is standalone for referral sharing only).
-- Adding a scheduling/calendar link (Aileen hasn't provided one).
-- Creating a full advisor profile page like other advisors.
+- Building an actual partner portal, real-time tracking dashboard, or co-branded landing-page generator (those are referenced as features in the copy but are operational systems Aileen runs separately — not built here).
+- A separate partner-only Pipedrive pipeline (using Leads Inbox + tag/category is sufficient, per project's Leads-Inbox-only rule).
+- Real testimonials or partner logos (none provided yet — placeholder copy only).
 
 ## QA before handoff
 
-- Test `/aileen` and `/aileen?ref=John%20Smith` — ref chip + prefilled field both render.
-- Submit a test lead, verify it lands as a Leads Inbox lead routed to Aileen's email (or, if she isn't yet a Pipedrive user, the fallback default-routing behavior is acceptable — flag in note).
-- Mobile viewport (375px): cards stack, form is thumb-friendly, headshot scales.
-- Confirm no global Header/Footer/FloatingCTA leak onto the page.
+- Render `/aileen/partners` and `/aileen/partners?ref=NAHREP` — `ref` value attached to submission notes.
+- Submit a test lead, confirm it lands in `form_submissions` with `form_type: "aileen-partner-program"` and routes to Aileen.
+- Mobile viewport (375px): hero stacks, 3-column value grid → 1 column, 4-step flow → vertical, form is thumb-friendly.
+- Confirm no global Header/Footer/FloatingCTA leak.
