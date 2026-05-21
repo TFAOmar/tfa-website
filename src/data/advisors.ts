@@ -709,12 +709,12 @@ export const advisors: Advisor[] = [
     city: "Covina",
     region: "West",
     bio: "Bilingual financial strategist helping California families protect their home, family, and legacy through mortgage protection and living trusts.",
-    specialties: ["Life Insurance", "Estate Planning"],
+    specialties: ["Mortgage Protection", "Living Trusts", "Life Insurance", "Estate Planning", "Family Income Protection"],
     licenses: ["CA Lic# 0I97662"],
     image: aileenGutierrezImg,
     email: "aileen@tfainsuranceadvisors.com",
     phone: "(626) 643-0816",
-    landingPage: "/aileen"
+    landingPage: "/advisors/aileen-gutierrez"
   }
 ];
 
