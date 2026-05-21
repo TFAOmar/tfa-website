@@ -39,6 +39,7 @@ import caylaDeePorterImg from "@/assets/advisors/cayla-dee-porter.jpg";
 import merrianeMcGuireImg from "@/assets/advisors/merriane-mcguire.jpg";
 import elizabethRochaImg from "@/assets/advisors/elizabeth-rocha.jpg";
 import rosieNunoImg from "@/assets/advisors/rosie-nuno.jpg";
+import aileenGutierrezImg from "@/assets/advisors/aileen-gutierrez.jpg";
 
 export interface Advisor {
   id: number | string;
