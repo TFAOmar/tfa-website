@@ -1,44 +1,25 @@
 ## Goal
+Host the two attached images at stable public URLs on tfawealthplanning.com so they can be embedded in an email via `<img src="...">`.
 
-Aileen's two landing pages live at `/aileen` and `/aileen/partners`, which don't match the rest of the site. Every other advisor uses `/advisors/<slug>` for the profile and `/advisors/<slug>/<feature>` for sub-pages. Bring Aileen in line and keep the old links working.
+## Approach
+Per project convention (email assets must live in `/public/images/` for stable, unhashed URLs), copy both uploads into the `public/images/` folder. Once published, they'll be accessible at permanent URLs on the canonical domain.
 
-## New URL structure
+## Files to add
+- `public/images/yacht-party-2026.png` (from `Yacht_Party_2026.PNG`)
+- `public/images/tfa-stacked-logo.png` (from `stacked_logo.png`)
 
-| Page | Old URL | New URL |
-|---|---|---|
-| Profile | `/advisors/aileen-gutierrez` | `/advisors/aileen-gutierrez` (unchanged) |
-| Client referral landing | `/aileen` | `/advisors/aileen-gutierrez/refer` |
-| Partner program | `/aileen/partners` | `/advisors/aileen-gutierrez/partners` |
+## Resulting URLs (after publish)
+- Flyer: `https://tfawealthplanning.com/images/yacht-party-2026.png`
+- Logo: `https://tfawealthplanning.com/images/tfa-stacked-logo.png`
 
-`refer` reads naturally for a link someone shares with a friend ("aileen's refer page"); `partners` matches the existing partner-program copy. Both stay short enough to share by text.
+## Email-ready HTML snippet I'll provide
+```html
+<a href="https://tfawealthplanning.com/images/yacht-party-2026.png">
+  <img src="https://tfawealthplanning.com/images/yacht-party-2026.png" alt="Yacht Party 2026 — Newport Beach" width="600" style="display:block;max-width:100%;height:auto;" />
+</a>
 
-## Changes
+<img src="https://tfawealthplanning.com/images/tfa-stacked-logo.png" alt="The Financial Architects" width="240" style="display:block;height:auto;" />
+```
 
-### `src/App.tsx`
-- Add canonical routes:
-  - `/advisors/aileen-gutierrez/refer` → `AileenGutierrezReferral`
-  - `/advisors/aileen-gutierrez/partners` → `AileenPartnerProgram`
-- Replace old routes with permanent redirects (`<Navigate replace>`):
-  - `/aileen` → `/advisors/aileen-gutierrez/refer`
-  - `/aileen/partners` → `/advisors/aileen-gutierrez/partners`
-- Update `standalonePages` to use the new canonical paths.
-
-### `src/pages/AileenGutierrezReferral.tsx`
-- Update `<link rel="canonical">` to `https://tfawealthplanning.com/advisors/aileen-gutierrez/refer`.
-
-### `src/pages/AileenPartnerProgram.tsx`
-- Update `<link rel="canonical">` to `https://tfawealthplanning.com/advisors/aileen-gutierrez/partners`.
-
-### `src/pages/AdvisorAileenGutierrez.tsx`
-- Update the two "Resources & Referral Tools" cards to link to the new canonical URLs.
-
-### Out of scope
-- No copy/design changes to either landing page.
-- No changes to form submission, Pipedrive routing, or `advisor_slug` values (they're already `aileen-gutierrez`).
-- No SEO redirect-map work beyond the in-app `<Navigate>` (those handle SPA + crawler redirects fine for new pages with no existing backlinks).
-
-## QA
-- `/aileen` and `/aileen/partners` redirect to the new URLs.
-- New URLs render the same standalone pages (no global header/footer).
-- Profile page resource cards point to the new URLs.
-- `?ref=` query param still works on the redirected paths (React Router preserves search by default with `Navigate`; verify with `/aileen?ref=NAHREP`).
+## Note
+URLs go live only after you publish. I'll remind you to hit Publish once the files are added.
