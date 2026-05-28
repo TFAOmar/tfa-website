@@ -9,7 +9,7 @@ const reasons = [
   },
   {
     icon: MapPin,
-    value: "29",
+    value: "32",
     label: "Locations Nationwide",
     description: "Coast-to-coast presence to serve you locally",
   },
