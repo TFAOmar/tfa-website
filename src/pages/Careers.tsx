@@ -36,7 +36,7 @@ const Careers = () => {
           ]),
           generateJobPostingSchema(
             "Licensed Financial Advisor",
-            "Join our team of 280+ licensed advisors. Help families achieve financial security while building your own successful practice. Full training and support provided.",
+            "Join our team of 300+ licensed advisors. Help families achieve financial security while building your own successful practice. Full training and support provided.",
             `${siteConfig.url}/careers`
           ),
         ]}

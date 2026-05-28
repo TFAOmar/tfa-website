@@ -4,13 +4,13 @@ import { Card, CardContent } from "@/components/ui/card";
 const stats = [
   {
     icon: Users,
-    value: "280+",
+    value: "300+",
     label: "Licensed Advisors",
     description: "Highly trained professionals dedicated to your success",
   },
   {
     icon: MapPin,
-    value: "29",
+    value: "32",
     label: "Office Locations",
     description: "Nationwide presence from coast to coast",
   },

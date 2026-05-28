@@ -46,7 +46,7 @@ const CareersCTA = () => {
             </a>
             <div className="flex items-center gap-2">
               <MapPin className="h-5 w-5" />
-              <span>19+ Locations Nationwide</span>
+              <span>32 Locations Nationwide</span>
             </div>
           </div>
         </div>

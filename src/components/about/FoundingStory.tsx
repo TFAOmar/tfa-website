@@ -24,7 +24,7 @@ const FoundingStory = () => {
             </p>
 
             <p className="text-lg text-foreground leading-relaxed">
-              Today, with 280+ licensed advisors across 29 nationwide locations, we remain true to that founding vision. We measure our success not in assets under management, but in the peace of mind our clients experience and the financial legacies they build for generations to come.
+              Today, with 300+ licensed advisors across 32 nationwide locations, we remain true to that founding vision. We measure our success not in assets under management, but in the peace of mind our clients experience and the financial legacies they build for generations to come.
             </p>
           </div>
         </div>

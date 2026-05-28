@@ -11,7 +11,7 @@ const ContactInfo = () => {
             Our Expert Team
           </h3>
           <p className="text-muted-foreground">
-            280+ licensed advisors ready to guide you toward financial success
+            300+ licensed advisors ready to guide you toward financial success
           </p>
         </div>
       </div>
@@ -77,7 +77,7 @@ const ContactInfo = () => {
             <p className="text-foreground">200 W Imperial Hwy</p>
             <p className="text-foreground mb-2">Brea, CA 92821</p>
             <Link to="/locations" className="text-accent hover:underline text-sm font-medium">
-              View all 21 office locations →
+              View all 32 office locations →
             </Link>
           </div>
         </div>
@@ -86,7 +86,7 @@ const ContactInfo = () => {
       {/* Quick Stats */}
       <div className="grid grid-cols-2 gap-4">
         <div className="glass p-6 rounded-xl text-center">
-          <p className="text-3xl font-bold text-accent mb-1">280+</p>
+          <p className="text-3xl font-bold text-accent mb-1">300+</p>
           <p className="text-sm text-muted-foreground">Licensed Advisors</p>
         </div>
         <div className="glass p-6 rounded-xl text-center">

@@ -3,13 +3,13 @@ import { Users, MapPin, Heart, Shield } from "lucide-react";
 const reasons = [
   {
     icon: Users,
-    value: "280+",
+    value: "300+",
     label: "Licensed Advisors",
     description: "Experienced professionals dedicated to your success",
   },
   {
     icon: MapPin,
-    value: "29",
+    value: "32",
     label: "Locations Nationwide",
     description: "Coast-to-coast presence to serve you locally",
   },

@@ -33,7 +33,7 @@ const CareersHero = () => {
           {/* Quick Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 max-w-3xl mx-auto">
             {[
-              { value: "19+", label: "Office Locations" },
+              { value: "32", label: "Office Locations" },
               { value: "92%", label: "Franchise Success Rate" },
               { value: "$84T", label: "Wealth Transfer Opportunity" },
               { value: "100%", label: "Commission Potential" },
