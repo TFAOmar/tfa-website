@@ -3,12 +3,12 @@ import { Users, MapPin, Heart, Calendar } from "lucide-react";
 const stats = [
   {
     icon: Users,
-    value: "280+",
+    value: "300+",
     label: "Licensed Advisors",
   },
   {
     icon: MapPin,
-    value: "29",
+    value: "32",
     label: "Locations Nationwide",
   },
   {

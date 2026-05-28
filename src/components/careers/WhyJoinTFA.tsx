@@ -29,7 +29,7 @@ const benefits = [
   {
     icon: Globe,
     title: "Growing Network",
-    description: "With 19+ office locations across California, Arizona, and Oregon, you're part of a rapidly expanding organization.",
+    description: "With 32 office locations across California, Arizona, and Oregon, you're part of a rapidly expanding organization.",
   },
 ];
 

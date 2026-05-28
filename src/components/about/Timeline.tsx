@@ -29,7 +29,7 @@ const milestones = [
   {
     year: "2025",
     title: "Leading the Way",
-    description: "29 nationwide locations, 280+ advisors, and thousands of families served. Continuing to set the standard for comprehensive, education-first wealth planning.",
+    description: "32 nationwide locations, 300+ advisors, and thousands of families served. Continuing to set the standard for comprehensive, education-first wealth planning.",
   },
 ];
 
