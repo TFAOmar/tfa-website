@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import NonMedicalLifeCTA from "@/components/advisors/NonMedicalLifeCTA";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -331,6 +332,7 @@ const AdvisorFabianSerrano = () => {
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
+                  <NonMedicalLifeCTA advisorSlug="fabian-serrano" />
           </div>
           <a 
             href="tel:+19093237601" 

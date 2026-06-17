@@ -360,6 +360,7 @@ export type Database = {
           id: string
           last_notification_error: string | null
           notification_attempts: number
+          product_type: string
           resume_email: string | null
           resume_token: string | null
           status: Database["public"]["Enums"]["application_status"]
@@ -380,6 +381,7 @@ export type Database = {
           id?: string
           last_notification_error?: string | null
           notification_attempts?: number
+          product_type?: string
           resume_email?: string | null
           resume_token?: string | null
           status?: Database["public"]["Enums"]["application_status"]
@@ -400,6 +402,7 @@ export type Database = {
           id?: string
           last_notification_error?: string | null
           notification_attempts?: number
+          product_type?: string
           resume_email?: string | null
           resume_token?: string | null
           status?: Database["public"]["Enums"]["application_status"]
@@ -797,6 +800,7 @@ export type Database = {
           id: string
           last_notification_error: string | null
           notification_attempts: number
+          product_type: string
           resume_email: string | null
           resume_token: string | null
           status: Database["public"]["Enums"]["application_status"]

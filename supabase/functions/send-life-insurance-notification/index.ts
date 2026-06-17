@@ -70,6 +70,7 @@ const notificationRequestSchema = z.object({
   applicantPhone: z.string().max(30).optional(),
   advisorId: z.string().max(255).optional().or(z.literal("")).or(z.null()),
   advisorName: z.string().max(200).optional(),
+  productType: z.enum(["medical", "non_medical_term"]).optional(),
   formData: z.object({
     step1: z.object({
       firstName: z.string().max(100).optional(),
@@ -1294,6 +1295,10 @@ const handler = async (req: Request): Promise<Response> => {
     console.log("Received notification request for application:", data.applicationId);
     console.log("Form data steps received:", Object.keys(data.formData || {}).join(", "));
 
+    // Product label for subject/body wording (default to medical for backward compat)
+    const isNonMedical = data.productType === "non_medical_term";
+    const productLabel = isNonMedical ? "Non-Medical Term Life" : "Life Insurance";
+
     // Background work: do all PDF generation + email sending AFTER returning a response
     // so the browser navigating to /thank-you can't kill the function mid-flight.
     const backgroundWork = (async () => {
@@ -1401,7 +1406,7 @@ const handler = async (req: Request): Promise<Response> => {
         } = {
           from: FROM_EMAIL,
           to: [advisorEmail],
-          subject: `New Life Insurance Application Assigned - ${data.applicantName}`,
+          subject: `New ${productLabel} Application Assigned - ${data.applicantName}`,
           html: generateAdminEmail(dataWithEmail),
         };
 
@@ -1445,7 +1450,7 @@ const handler = async (req: Request): Promise<Response> => {
       } = {
         from: FROM_EMAIL,
         to: [ADMIN_EMAIL],
-        subject: `New Life Insurance Application - ${data.applicantName}`,
+        subject: `New ${productLabel} Application - ${data.applicantName}`,
         html: generateAdminEmail(dataWithEmail),
       };
 
@@ -1480,7 +1485,7 @@ const handler = async (req: Request): Promise<Response> => {
       const applicantSend = await sendEmailWithRetry({
         from: FROM_EMAIL,
         to: [data.applicantEmail],
-        subject: "Your Life Insurance Application Has Been Received",
+        subject: `Your ${productLabel} Application Has Been Received`,
         html: generateApplicantEmail(dataWithEmail),
       }, "Applicant email");
 

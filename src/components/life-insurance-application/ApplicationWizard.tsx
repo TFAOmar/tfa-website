@@ -50,6 +50,7 @@ interface ApplicationWizardProps {
   advisorId?: string;
   advisorName?: string;
   advisorEmail?: string;
+  productType?: "medical" | "non_medical_term";
 }
 
 // Generate a cryptographically secure resume token
@@ -260,6 +261,7 @@ const ApplicationWizard = ({
   advisorId,
   advisorName,
   advisorEmail,
+  productType = "medical",
 }: ApplicationWizardProps) => {
   const { toast } = useToast();
   const { fireConfetti } = useConfetti();
@@ -431,6 +433,7 @@ const ApplicationWizard = ({
               applicant_email: applicantEmail,
               applicant_phone: applicantPhone,
               resume_token: token,
+              product_type: productType,
             });
 
           if (insertError) {
@@ -834,6 +837,7 @@ const ApplicationWizard = ({
               applicant_email: applicantEmail,
               applicant_phone: applicantPhone,
               resume_token: token,
+              product_type: productType,
             });
 
           if (createError) {
@@ -1021,6 +1025,7 @@ const ApplicationWizard = ({
             advisorId: advisorId || null,
             advisorName: advisorName || null,
             formData: finalFormData,
+            productType,
           },
         }
       ).then((result) => {

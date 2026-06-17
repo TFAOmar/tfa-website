@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import NonMedicalLifeCTA from "@/components/advisors/NonMedicalLifeCTA";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -186,6 +187,7 @@ const AdvisorManoloMonter = () => {
                     Start Life Insurance Application
                   </Button>
                 </Link>
+                  <NonMedicalLifeCTA advisorSlug="manolo-monter" />
                 <Link to="/advisors/manolo-monter/living-trust-questionnaire">
                   <Button 
                     size="lg" 

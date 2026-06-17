@@ -335,6 +335,12 @@ const AdvisorPatriciaSerafin = () => {
                     Apply for Life Insurance
                   </Button>
                 </Link>
+                <Link to="/advisors/patricia-serafin/non-medical-life">
+                  <Button size="lg" variant="outline" className="text-lg px-8 py-6 w-full sm:w-auto border-accent bg-transparent text-accent hover:bg-accent/20">
+                    <Briefcase className="mr-2 h-5 w-5" />
+                    Apply for Non-Medical Term Life
+                  </Button>
+                </Link>
               </div>
 
               <p className="text-white/60 mt-6 text-sm">
