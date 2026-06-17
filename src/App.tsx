@@ -98,6 +98,7 @@ import InsuranceServices from "./pages/InsuranceServices";
 import GroupRetirement from "./pages/GroupRetirement";
 import AmericanWayHealth from "./pages/AmericanWayHealth";
 import LifeInsuranceApplication from "./pages/LifeInsuranceApplication";
+import NonMedicalLifeApplication from "./pages/NonMedicalLifeApplication";
 import LivingTrustQuestionnaire from "./pages/LivingTrustQuestionnaire";
 import EstateGuru from "./pages/EstateGuru";
 import EstateGuruSuccess from "./pages/EstateGuruSuccess";
@@ -122,7 +123,7 @@ import AileenPartnerProgram from "./pages/AileenPartnerProgram";
 const queryClient = new QueryClient();
 
 // Standalone pages that have their own header/footer
-const standalonePages = ['/advisors/vanessa-sanchez/living-trust', '/advisors/vanessa-sanchez/think-tax-solutions', '/advisors/vanessa-sanchez/cardenas-and-company', '/advisors/braihyra-medellin/living-trust', '/advisors/erica-valenzuela/living-trust', '/services/kai-zen', '/advisors/mariah-lorenzen/kai-zen', '/advisors/tamara-lee/medicare', '/advisors/recinos', '/advisors/ruth-pacheco/tax-strategy', '/health-insurance/american-way-health', '/admin', '/admin/applications', '/admin/submissions', '/admin/form-submissions', '/admin/sponsorship', '/life-insurance-application', '/living-trust-questionnaire', '/estate-guru', '/estate-guru/success', '/estate-guru/canceled', '/advisors/manuel-soto/coaching', '/advisors/manuel-soto/escobar-realty', '/brea', '/sales-contest', '/advisors/aileen-gutierrez/refer', '/advisors/aileen-gutierrez/partners'];
+const standalonePages = ['/advisors/vanessa-sanchez/living-trust', '/advisors/vanessa-sanchez/think-tax-solutions', '/advisors/vanessa-sanchez/cardenas-and-company', '/advisors/braihyra-medellin/living-trust', '/advisors/erica-valenzuela/living-trust', '/services/kai-zen', '/advisors/mariah-lorenzen/kai-zen', '/advisors/tamara-lee/medicare', '/advisors/recinos', '/advisors/ruth-pacheco/tax-strategy', '/health-insurance/american-way-health', '/admin', '/admin/applications', '/admin/submissions', '/admin/form-submissions', '/admin/sponsorship', '/life-insurance-application', '/non-medical-life-application', '/living-trust-questionnaire', '/estate-guru', '/estate-guru/success', '/estate-guru/canceled', '/advisors/manuel-soto/coaching', '/advisors/manuel-soto/escobar-realty', '/brea', '/sales-contest', '/advisors/aileen-gutierrez/refer', '/advisors/aileen-gutierrez/partners'];
 
 const AppLayout = () => {
   const location = useLocation();
@@ -133,6 +134,7 @@ const AppLayout = () => {
   
   const isStandalonePage = standalonePages.includes(normalizedPathname) || 
     /^\/advisors\/[^/]+\/life-insurance\/?$/.test(location.pathname) ||
+    /^\/advisors\/[^/]+\/non-medical-life\/?$/.test(location.pathname) ||
     /^\/advisors\/[^/]+\/living-trust-questionnaire\/?$/.test(location.pathname) ||
     /^\/advisors\/[^/]+\/prequalification\/?$/.test(location.pathname);
 
@@ -257,6 +259,8 @@ const AppLayout = () => {
           <Route path="/health-insurance/american-way-health" element={<AmericanWayHealth />} />
           <Route path="/advisors/:advisorSlug/life-insurance" element={<LifeInsuranceApplication />} />
           <Route path="/life-insurance-application" element={<LifeInsuranceApplication />} />
+          <Route path="/advisors/:advisorSlug/non-medical-life" element={<NonMedicalLifeApplication />} />
+          <Route path="/non-medical-life-application" element={<NonMedicalLifeApplication />} />
           <Route path="/advisors/:advisorSlug/living-trust-questionnaire" element={<LivingTrustQuestionnaire />} />
           <Route path="/living-trust-questionnaire" element={<LivingTrustQuestionnaire />} />
           <Route path="/advisors/:advisorSlug/prequalification" element={<PrequalificationQuestionnaire />} />
