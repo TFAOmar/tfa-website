@@ -377,6 +377,17 @@ const AdvisorPatriciaSerafinSpanish = () => {
                   Solicitar Seguro de Vida
                 </Link>
               </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                className="px-8 py-6 text-lg border-accent bg-transparent text-accent hover:bg-accent/20"
+                asChild
+              >
+                <Link to="/advisors/patricia-serafin/non-medical-life">
+                  <Shield className="w-5 h-5 mr-2" />
+                  Seguro de Vida Sin Examen Médico
+                </Link>
+              </Button>
             </div>
             <p className="text-sm text-muted-foreground mt-6">
               Sin compromiso. Solo una conversación sobre su futuro.
