@@ -1010,33 +1010,36 @@ const ApplicationWizard = ({
     try {
       console.log("Sending life insurance notification emails...");
       
-      // Fire-and-forget: the edge function now uses EdgeRuntime.waitUntil to keep
-      // sending in the background after responding 202. We do NOT await here so the
-      // user gets to the thank-you page instantly and the function isn't killed by
-      // browser navigation. A scheduled retry job catches any missed sends.
-      supabase.functions.invoke(
-        "send-life-insurance-notification",
-        {
-          body: {
-            applicationId,
-            applicantName,
-            applicantEmail,
-            applicantPhone,
-            advisorId: advisorId || null,
-            advisorName: advisorName || null,
-            formData: finalFormData,
-            productType,
-          },
-        }
-      ).then((result) => {
+      // IMPORTANT: We must AWAIT this invoke. Fire-and-forget caused the browser
+      // to abort the request mid-upload during navigate("/thank-you"), which killed
+      // the edge function before it could read the request body — emails never sent.
+      // The function returns 202 quickly (it queues PDF/email work via
+      // EdgeRuntime.waitUntil), so the user still reaches /thank-you almost instantly.
+      try {
+        const result = await supabase.functions.invoke(
+          "send-life-insurance-notification",
+          {
+            body: {
+              applicationId,
+              applicantName,
+              applicantEmail,
+              applicantPhone,
+              advisorId: advisorId || null,
+              advisorName: advisorName || null,
+              formData: finalFormData,
+              productType,
+            },
+          }
+        );
         if (result?.error) {
           console.error("Notification invoke returned error:", result.error);
         } else {
           console.log("Notification accepted for background delivery");
         }
-      }).catch((err) => {
+      } catch (err) {
+        // Don't block success — the retry cron will catch any missed sends.
         console.error("Notification invoke threw:", err);
-      });
+      }
     } catch (emailError) {
       console.error("Email notification issue (application still saved):", emailError);
       // Don't block success - application data is safely in the database
