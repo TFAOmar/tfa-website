@@ -119,7 +119,7 @@ const NonMedicalLifeApplication = () => {
           <ApplicationWizard
             advisorId={advisor?.id}
             advisorName={advisor?.name}
-            advisorEmail={advisor?.email}
+            advisorEmail={undefined}
             productType="non_medical_term"
           />
         </main>
