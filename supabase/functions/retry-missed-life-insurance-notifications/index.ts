@@ -24,6 +24,32 @@ serve(async (req) => {
   }
 
   try {
+    // Authorization: only allow internal/cron callers presenting the service
+    // role key, or an authenticated admin user.
+    const authHeader = req.headers.get("Authorization") || "";
+    const token = authHeader.replace(/^Bearer\s+/i, "").trim();
+
+    let authorized = false;
+    if (token && token === supabaseServiceKey) {
+      authorized = true;
+    } else if (token) {
+      const { data: userData, error: userErr } = await supabase.auth.getUser(token);
+      if (!userErr && userData.user) {
+        const { data: isAdmin } = await supabase.rpc("has_role", {
+          _user_id: userData.user.id,
+          _role: "admin",
+        });
+        if (isAdmin === true) authorized = true;
+      }
+    }
+
+    if (!authorized) {
+      return new Response(
+        JSON.stringify({ error: "Unauthorized" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     const cutoff = new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString();
 
     const { data: missed, error } = await supabase
