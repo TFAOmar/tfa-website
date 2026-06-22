@@ -453,6 +453,32 @@ serve(async (req) => {
   }
 
   try {
+    // Authorization: require either the service-role key (internal calls
+    // from other edge functions / cron) OR an authenticated admin JWT.
+    const authHeader = req.headers.get("Authorization") || "";
+    const token = authHeader.replace(/^Bearer\s+/i, "").trim();
+
+    let authorized = false;
+    if (token && token === supabaseServiceKey) {
+      authorized = true;
+    } else if (token) {
+      const { data: userData, error: userErr } = await supabaseAdmin.auth.getUser(token);
+      if (!userErr && userData.user) {
+        const { data: isAdmin } = await supabaseAdmin.rpc("has_role", {
+          _user_id: userData.user.id,
+          _role: "admin",
+        });
+        if (isAdmin === true) authorized = true;
+      }
+    }
+
+    if (!authorized) {
+      return new Response(
+        JSON.stringify({ error: "Unauthorized" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     const { applicationId } = await req.json();
 
     if (!applicationId) {
