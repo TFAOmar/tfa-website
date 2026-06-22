@@ -108,6 +108,7 @@ import TFA2026KickoffSponsorship from "./pages/TFA2026KickoffSponsorship";
 import SponsorshipSuccess from "./pages/SponsorshipSuccess";
 import GeneralSponsorshipSuccess from "./pages/GeneralSponsorshipSuccess";
 import OnboardingChecklist from "./pages/OnboardingChecklist";
+import AgentOnboardingApplication from "./pages/AgentOnboardingApplication";
 import SubmitEvent from "./pages/SubmitEvent";
 import EventSponsorship from "./pages/EventSponsorship";
 import AdminSponsorshipEvents from "./pages/AdminSponsorshipEvents";
@@ -123,7 +124,7 @@ import AileenPartnerProgram from "./pages/AileenPartnerProgram";
 const queryClient = new QueryClient();
 
 // Standalone pages that have their own header/footer
-const standalonePages = ['/advisors/vanessa-sanchez/living-trust', '/advisors/vanessa-sanchez/think-tax-solutions', '/advisors/vanessa-sanchez/cardenas-and-company', '/advisors/braihyra-medellin/living-trust', '/advisors/erica-valenzuela/living-trust', '/services/kai-zen', '/advisors/mariah-lorenzen/kai-zen', '/advisors/tamara-lee/medicare', '/advisors/recinos', '/advisors/ruth-pacheco/tax-strategy', '/health-insurance/american-way-health', '/admin', '/admin/applications', '/admin/submissions', '/admin/form-submissions', '/admin/sponsorship', '/life-insurance-application', '/non-medical-life-application', '/living-trust-questionnaire', '/estate-guru', '/estate-guru/success', '/estate-guru/canceled', '/advisors/manuel-soto/coaching', '/advisors/manuel-soto/escobar-realty', '/brea', '/sales-contest', '/advisors/aileen-gutierrez/refer', '/advisors/aileen-gutierrez/partners'];
+const standalonePages = ['/advisors/vanessa-sanchez/living-trust', '/advisors/vanessa-sanchez/think-tax-solutions', '/advisors/vanessa-sanchez/cardenas-and-company', '/advisors/braihyra-medellin/living-trust', '/advisors/erica-valenzuela/living-trust', '/services/kai-zen', '/advisors/mariah-lorenzen/kai-zen', '/advisors/tamara-lee/medicare', '/advisors/recinos', '/advisors/ruth-pacheco/tax-strategy', '/health-insurance/american-way-health', '/admin', '/admin/applications', '/admin/submissions', '/admin/form-submissions', '/admin/sponsorship', '/life-insurance-application', '/non-medical-life-application', '/living-trust-questionnaire', '/estate-guru', '/estate-guru/success', '/estate-guru/canceled', '/advisors/manuel-soto/coaching', '/advisors/manuel-soto/escobar-realty', '/brea', '/sales-contest', '/advisors/aileen-gutierrez/refer', '/advisors/aileen-gutierrez/partners', '/agent-onboarding-application'];
 
 const AppLayout = () => {
   const location = useLocation();
@@ -271,6 +272,7 @@ const AppLayout = () => {
           <Route path="/estate-guru/success" element={<EstateGuruSuccess />} />
           <Route path="/estate-guru/canceled" element={<EstateGuruCanceled />} />
           <Route path="/onboarding-checklist" element={<OnboardingChecklist />} />
+          <Route path="/agent-onboarding-application" element={<AgentOnboardingApplication />} />
           <Route path="/submit-event" element={<SubmitEvent />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-of-service" element={<TermsOfService />} />

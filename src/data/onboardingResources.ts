@@ -27,6 +27,14 @@ export interface OnboardingResource {
 
 export const ONBOARDING_RESOURCES: OnboardingResource[] = [
   {
+    key: "agent_onboarding_application_link",
+    title: "Agent Onboarding Application",
+    description: "Complete the full 15-section contracting application — licensing, E&O, AML, background, references, and direct deposit",
+    url: "/agent-onboarding-application",
+    buttonText: "Open Application",
+    logo: "/src/assets/tfa-logo.png"
+  },
+  {
     key: "tfa_onboarding_registration_link",
     title: "TFA Onboarding Registration",
     description: "NDA + $49.99 onboarding fee payment form for new agents",

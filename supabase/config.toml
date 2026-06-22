@@ -2,3 +2,6 @@ project_id = "cstkeblqqyjwlrbppucu"
 
 [functions.send-prequalification-notification]
 verify_jwt = false
+
+[functions.send-agent-onboarding-notification]
+verify_jwt = false
