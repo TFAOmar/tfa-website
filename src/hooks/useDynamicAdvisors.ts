@@ -184,7 +184,6 @@ export interface AdvisorBySlug {
   title: string;
   image_url: string | null;
   scheduling_link: string | null;
-  email: string;
 }
 
 // Fetch advisor by slug (public - for life insurance application linking)
