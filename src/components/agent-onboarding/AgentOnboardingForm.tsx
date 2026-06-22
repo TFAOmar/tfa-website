@@ -363,7 +363,7 @@ export const AgentOnboardingForm = () => {
           <input type="text" name="company_url" className={honeypotClassName} {...honeypotProps} />
 
           {/* 1. APPLICANT */}
-          <section ref={(el) => { sectionRefs.current[0] = el; }} className="bg-white rounded-lg border border-[#D8DEE7] p-6 sm:p-8">
+          <section ref={(el: HTMLDivElement | null) => { sectionRefs.current[0] = el; }} className="bg-white rounded-lg border border-[#D8DEE7] p-6 sm:p-8">
             <SectionHeader num="01" title="Applicant information" help={SECTION_TITLES[0].help} showHelp={showHelp} />
             <div className="grid sm:grid-cols-2 gap-4">
               <div className="sm:col-span-2">
@@ -392,7 +392,7 @@ export const AgentOnboardingForm = () => {
           </section>
 
           {/* 2. CONTACT */}
-          <section ref={(el) => { sectionRefs.current[1] = el; }} className="bg-white rounded-lg border border-[#D8DEE7] p-6 sm:p-8">
+          <section ref={(el: HTMLDivElement | null) => { sectionRefs.current[1] = el; }} className="bg-white rounded-lg border border-[#D8DEE7] p-6 sm:p-8">
             <SectionHeader num="02" title="Contact information" help={SECTION_TITLES[1].help} showHelp={showHelp} />
             <div className="grid sm:grid-cols-4 gap-4">
               <div className="sm:col-span-4"><Label required>Residential address</Label>
@@ -421,7 +421,7 @@ export const AgentOnboardingForm = () => {
           </section>
 
           {/* 3. EMERGENCY */}
-          <section ref={(el) => { sectionRefs.current[2] = el; }} className="bg-white rounded-lg border border-[#D8DEE7] p-6 sm:p-8">
+          <section ref={(el: HTMLDivElement | null) => { sectionRefs.current[2] = el; }} className="bg-white rounded-lg border border-[#D8DEE7] p-6 sm:p-8">
             <SectionHeader num="03" title="Emergency contact" help={SECTION_TITLES[2].help} showHelp={showHelp} />
             <div className="grid sm:grid-cols-2 gap-4">
               <div><Label>Full name</Label>
@@ -436,7 +436,7 @@ export const AgentOnboardingForm = () => {
           </section>
 
           {/* 4. LICENSING */}
-          <section ref={(el) => { sectionRefs.current[3] = el; }} className="bg-white rounded-lg border border-[#D8DEE7] p-6 sm:p-8">
+          <section ref={(el: HTMLDivElement | null) => { sectionRefs.current[3] = el; }} className="bg-white rounded-lg border border-[#D8DEE7] p-6 sm:p-8">
             <SectionHeader num="04" title="Licensing & producer information" help={SECTION_TITLES[3].help} showHelp={showHelp} />
             <div className="grid sm:grid-cols-2 gap-4 mb-4">
               <div><Label required>National producer number (NPN)</Label>
@@ -487,7 +487,7 @@ export const AgentOnboardingForm = () => {
           </section>
 
           {/* 5. E&O */}
-          <section ref={(el) => { sectionRefs.current[4] = el; }} className="bg-white rounded-lg border border-[#D8DEE7] p-6 sm:p-8">
+          <section ref={(el: HTMLDivElement | null) => { sectionRefs.current[4] = el; }} className="bg-white rounded-lg border border-[#D8DEE7] p-6 sm:p-8">
             <SectionHeader num="05" title="Errors & omissions (E&O) coverage" help={SECTION_TITLES[4].help} showHelp={showHelp} />
             <div className="grid sm:grid-cols-2 gap-4 mb-4">
               <div><Label required>E&O carrier</Label>
@@ -511,7 +511,7 @@ export const AgentOnboardingForm = () => {
           </section>
 
           {/* 6. AML */}
-          <section ref={(el) => { sectionRefs.current[5] = el; }} className="bg-white rounded-lg border border-[#D8DEE7] p-6 sm:p-8">
+          <section ref={(el: HTMLDivElement | null) => { sectionRefs.current[5] = el; }} className="bg-white rounded-lg border border-[#D8DEE7] p-6 sm:p-8">
             <SectionHeader num="06" title="AML certification & continuing education" help={SECTION_TITLES[5].help} showHelp={showHelp} />
             <div className="grid sm:grid-cols-2 gap-4 mb-4">
               <div><Label>AML provider</Label>
@@ -540,7 +540,7 @@ export const AgentOnboardingForm = () => {
           </section>
 
           {/* 7. BACKGROUND */}
-          <section ref={(el) => { sectionRefs.current[6] = el; }} className="bg-white rounded-lg border border-[#D8DEE7] p-6 sm:p-8">
+          <section ref={(el: HTMLDivElement | null) => { sectionRefs.current[6] = el; }} className="bg-white rounded-lg border border-[#D8DEE7] p-6 sm:p-8">
             <SectionHeader num="07" title="Background & compliance disclosure" help={SECTION_TITLES[6].help} showHelp={showHelp} />
             <div className="space-y-5">
               {[
@@ -597,7 +597,7 @@ export const AgentOnboardingForm = () => {
           </section>
 
           {/* 8. EMPLOYMENT */}
-          <section ref={(el) => { sectionRefs.current[7] = el; }} className="bg-white rounded-lg border border-[#D8DEE7] p-6 sm:p-8">
+          <section ref={(el: HTMLDivElement | null) => { sectionRefs.current[7] = el; }} className="bg-white rounded-lg border border-[#D8DEE7] p-6 sm:p-8">
             <SectionHeader num="08" title="Employment & industry history" help={SECTION_TITLES[7].help} showHelp={showHelp} />
             <div className="overflow-x-auto">
               <table className="w-full text-xs border-collapse">
@@ -635,7 +635,7 @@ export const AgentOnboardingForm = () => {
           </section>
 
           {/* 9. REFERENCES */}
-          <section ref={(el) => { sectionRefs.current[8] = el; }} className="bg-white rounded-lg border border-[#D8DEE7] p-6 sm:p-8">
+          <section ref={(el: HTMLDivElement | null) => { sectionRefs.current[8] = el; }} className="bg-white rounded-lg border border-[#D8DEE7] p-6 sm:p-8">
             <SectionHeader num="09" title="Professional references" help={SECTION_TITLES[8].help} showHelp={showHelp} />
             <div className="overflow-x-auto">
               <table className="w-full text-xs border-collapse">
@@ -673,7 +673,7 @@ export const AgentOnboardingForm = () => {
           </section>
 
           {/* 10. SUB-FIRM */}
-          <section ref={(el) => { sectionRefs.current[9] = el; }} className="bg-white rounded-lg border border-[#D8DEE7] p-6 sm:p-8">
+          <section ref={(el: HTMLDivElement | null) => { sectionRefs.current[9] = el; }} className="bg-white rounded-lg border border-[#D8DEE7] p-6 sm:p-8">
             <SectionHeader num="10" title="Sub-firm & upline information" help={SECTION_TITLES[9].help} showHelp={showHelp} />
             <div className="grid sm:grid-cols-2 gap-4">
               <div><Label>Recruited by</Label>
@@ -688,7 +688,7 @@ export const AgentOnboardingForm = () => {
           </section>
 
           {/* 11. EDUCATION */}
-          <section ref={(el) => { sectionRefs.current[10] = el; }} className="bg-white rounded-lg border border-[#D8DEE7] p-6 sm:p-8">
+          <section ref={(el: HTMLDivElement | null) => { sectionRefs.current[10] = el; }} className="bg-white rounded-lg border border-[#D8DEE7] p-6 sm:p-8">
             <SectionHeader num="11" title="Education & professional designations" help={SECTION_TITLES[10].help} showHelp={showHelp} />
             <div className="grid sm:grid-cols-3 gap-4">
               <div><Label>Highest education</Label>
@@ -701,7 +701,7 @@ export const AgentOnboardingForm = () => {
           </section>
 
           {/* 12. DIRECT DEPOSIT */}
-          <section ref={(el) => { sectionRefs.current[11] = el; }} className="bg-white rounded-lg border border-[#D8DEE7] p-6 sm:p-8">
+          <section ref={(el: HTMLDivElement | null) => { sectionRefs.current[11] = el; }} className="bg-white rounded-lg border border-[#D8DEE7] p-6 sm:p-8">
             <SectionHeader num="12" title="Commission direct deposit" help={SECTION_TITLES[11].help} showHelp={showHelp} />
             <div className="grid sm:grid-cols-2 gap-4 mb-4">
               <div><Label>Bank name</Label>
@@ -731,7 +731,7 @@ export const AgentOnboardingForm = () => {
           </section>
 
           {/* 13. TAX */}
-          <section ref={(el) => { sectionRefs.current[12] = el; }} className="bg-white rounded-lg border border-[#D8DEE7] p-6 sm:p-8">
+          <section ref={(el: HTMLDivElement | null) => { sectionRefs.current[12] = el; }} className="bg-white rounded-lg border border-[#D8DEE7] p-6 sm:p-8">
             <SectionHeader num="13" title="Tax information" help={SECTION_TITLES[12].help} showHelp={showHelp} />
             <div className="grid sm:grid-cols-3 gap-4">
               <div><Label>Tax classification</Label>
@@ -751,7 +751,7 @@ export const AgentOnboardingForm = () => {
           </section>
 
           {/* 14. AUTHORIZATION */}
-          <section ref={(el) => { sectionRefs.current[13] = el; }} className="bg-white rounded-lg border border-[#D8DEE7] p-6 sm:p-8">
+          <section ref={(el: HTMLDivElement | null) => { sectionRefs.current[13] = el; }} className="bg-white rounded-lg border border-[#D8DEE7] p-6 sm:p-8">
             <SectionHeader num="14" title="Authorization & background check consent" showHelp={showHelp} />
             <div className="space-y-3 text-sm text-[#475467] leading-relaxed">
               <p>By signing this application, I authorize The Financial Architects (TFA) and its designated agents to investigate and verify all information provided herein, including but not limited to my licensing status, employment history, professional references, credit history, and any records maintained by insurance regulatory authorities, carriers, and reporting agencies.</p>
@@ -765,7 +765,7 @@ export const AgentOnboardingForm = () => {
           </section>
 
           {/* 15. CERTIFICATION */}
-          <section ref={(el) => { sectionRefs.current[14] = el; }} className="bg-white rounded-lg border border-[#D8DEE7] p-6 sm:p-8">
+          <section ref={(el: HTMLDivElement | null) => { sectionRefs.current[14] = el; }} className="bg-white rounded-lg border border-[#D8DEE7] p-6 sm:p-8">
             <SectionHeader num="15" title="Applicant certification & signature" showHelp={showHelp} />
             <p className="text-sm text-[#475467] leading-relaxed">
               I certify that the information provided in this application is true, complete, and accurate
