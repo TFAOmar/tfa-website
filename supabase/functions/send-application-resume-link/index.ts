@@ -1,12 +1,42 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
+const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+
+// Hardcoded allowlist of trusted app origins for the resume link
+const ALLOWED_RESUME_ORIGINS = [
+  "https://tfawealthplanning.com",
+  "https://www.tfawealthplanning.com",
+  "https://tfawealthplanning.lovable.app",
+];
+const DEFAULT_RESUME_PATH = "/life-insurance-application";
+
+// Best-effort in-memory rate limit (per warm instance)
+const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000; // 1 hour
+const RATE_LIMIT_MAX = 3;
+const rateBuckets = new Map<string, number[]>();
+const rateLimited = (key: string): boolean => {
+  const now = Date.now();
+  const hits = (rateBuckets.get(key) ?? []).filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
+  if (hits.length >= RATE_LIMIT_MAX) {
+    rateBuckets.set(key, hits);
+    return true;
+  }
+  hits.push(now);
+  rateBuckets.set(key, hits);
+  return false;
+};
 
 // Allowed origins for CORS
 const ALLOWED_ORIGINS = [
   "https://tfainsuranceadvisors.com",
   "https://www.tfainsuranceadvisors.com",
+  "https://tfawealthplanning.com",
+  "https://www.tfawealthplanning.com",
+  "https://tfawealthplanning.lovable.app",
   "http://localhost:5173",
   "http://localhost:8080",
 ];
@@ -23,8 +53,7 @@ const getCorsHeaders = (origin: string | null): Record<string, string> => {
 
 const requestSchema = z.object({
   email: z.string().trim().email("Invalid email address").max(255, "Email too long"),
-  resumeUrl: z.string().url("Invalid resume URL"),
-  resumeToken: z.string().min(1, "Resume token is required"),
+  resumeToken: z.string().min(8).max(128).regex(/^[a-zA-Z0-9_-]+$/, "Invalid resume token"),
 });
 
 const handler = async (req: Request): Promise<Response> => {
@@ -54,7 +83,51 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    const { email, resumeUrl, resumeToken } = validationResult.data;
+    const { email, resumeToken } = validationResult.data;
+
+    // Rate limit by email + IP
+    const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+    if (rateLimited(`email:${email.toLowerCase()}`) || rateLimited(`ip:${ip}`)) {
+      return new Response(
+        JSON.stringify({ error: "Too many requests. Please try again later." }),
+        { status: 429, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+
+    // Verify the token exists in the database AND matches the provided email
+    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+    const { data: app, error: lookupError } = await supabase
+      .from("life_insurance_applications")
+      .select("id, applicant_email, resume_email, resume_token, status")
+      .eq("resume_token", resumeToken)
+      .eq("status", "draft")
+      .maybeSingle();
+
+    if (lookupError) {
+      console.error("Token lookup error:", lookupError);
+      return new Response(
+        JSON.stringify({ error: "Unable to verify resume token" }),
+        { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+
+    const emailLc = email.toLowerCase();
+    const tokenEmail = (app?.applicant_email || app?.resume_email || "").toLowerCase();
+    if (!app || (tokenEmail && tokenEmail !== emailLc)) {
+      // Always return a generic response to avoid leaking token validity
+      console.warn("Resume link request rejected: token/email mismatch");
+      return new Response(
+        JSON.stringify({ success: true }),
+        { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+
+    // Build the resume URL server-side from a trusted origin (never from client input)
+    const requestOrigin = req.headers.get("origin");
+    const baseOrigin = requestOrigin && ALLOWED_RESUME_ORIGINS.includes(requestOrigin)
+      ? requestOrigin
+      : ALLOWED_RESUME_ORIGINS[0];
+    const resumeUrl = `${baseOrigin}${DEFAULT_RESUME_PATH}?resume=${encodeURIComponent(resumeToken)}`;
 
     console.log("Sending resume link email to:", email);
     console.log("Resume URL:", resumeUrl);

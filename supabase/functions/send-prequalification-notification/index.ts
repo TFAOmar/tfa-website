@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "https://esm.sh/resend@2.0.0";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -8,16 +9,31 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-interface PrequalificationRequest {
-  applicantName: string;
-  applicantEmail: string;
-  applicantPhone: string;
-  formData: Record<string, unknown>;
-  advisorId?: string;
-  advisorEmail?: string;
-  advisorName?: string;
-  sourceUrl?: string;
-}
+const esc = (v: unknown): string =>
+  String(v ?? "")
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+
+const RATE_WINDOW_MS = 60_000;
+const RATE_MAX = 5;
+const rateMap = new Map<string, number[]>();
+const limited = (k: string) => {
+  const now = Date.now();
+  const arr = (rateMap.get(k) ?? []).filter((t) => now - t < RATE_WINDOW_MS);
+  if (arr.length >= RATE_MAX) { rateMap.set(k, arr); return true; }
+  arr.push(now); rateMap.set(k, arr); return false;
+};
+
+const schema = z.object({
+  applicantName: z.string().trim().min(1).max(120),
+  applicantEmail: z.string().trim().email().max(255),
+  applicantPhone: z.string().trim().min(1).max(40),
+  formData: z.record(z.unknown()),
+  advisorId: z.string().trim().max(120).optional(),
+  advisorEmail: z.string().trim().email().max(255).optional(),
+  advisorName: z.string().trim().max(120).optional(),
+  sourceUrl: z.string().trim().max(2000).optional(),
+});
 
 const handler = async (req: Request): Promise<Response> => {
   console.log("Prequalification notification function invoked");
@@ -27,23 +43,41 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const requestData: PrequalificationRequest = await req.json();
+    const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+    if (limited(`ip:${ip}`)) {
+      return new Response(JSON.stringify({ error: "Too many requests" }), {
+        status: 429, headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
+    }
+    const parsedReq = schema.safeParse(await req.json());
+    if (!parsedReq.success) {
+      return new Response(
+        JSON.stringify({ error: parsedReq.error.flatten().fieldErrors }),
+        { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } },
+      );
+    }
+    const requestData = parsedReq.data;
     console.log("Request data:", {
       applicantName: requestData.applicantName,
       advisorName: requestData.advisorName,
     });
 
     const {
-      applicantName,
-      applicantEmail,
-      applicantPhone,
+      applicantName: rawApplicantName,
+      applicantEmail: rawApplicantEmail,
+      applicantPhone: rawApplicantPhone,
       formData,
       advisorEmail = "info@tfainsuranceadvisors.com",
       advisorName = "TFA Advisor",
       sourceUrl,
     } = requestData;
+    const applicantName = esc(rawApplicantName);
+    const applicantEmail = esc(rawApplicantEmail);
+    const applicantPhone = esc(rawApplicantPhone);
+    const advisorNameEsc = esc(advisorName);
+    const sourceUrlEsc = sourceUrl ? esc(sourceUrl) : "";
 
-    if (!applicantName || !applicantEmail || !formData) {
+    if (!rawApplicantName || !rawApplicantEmail || !formData) {
       return new Response(
         JSON.stringify({ error: "Missing required fields" }),
         { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
@@ -55,7 +89,7 @@ const handler = async (req: Request): Promise<Response> => {
     const step3 = (formData.step3 as Record<string, unknown>) || {};
 
     const medicalConditions = (step2.medicalConditions as string[]) || [];
-    const conditionsSummary = medicalConditions.length > 0 ? medicalConditions.join(", ") : "None reported";
+    const conditionsSummary = medicalConditions.length > 0 ? esc(medicalConditions.join(", ")) : "None reported";
     const conditionDetails = (step2.conditionDetails as Record<string, Record<string, string>>) || {};
 
     const conditionDetailsHtml = medicalConditions.length > 0
@@ -63,12 +97,12 @@ const handler = async (req: Request): Promise<Response> => {
           const details = conditionDetails[cond] || {};
           const rows = Object.entries(details)
             .filter(([, v]) => v && String(v).trim() !== "")
-            .map(([k, v]) => `<tr><td class="td-label"><span class="label">${k}:</span></td><td>${v}</td></tr>`)
+            .map(([k, v]) => `<tr><td class="td-label"><span class="label">${esc(k)}:</span></td><td>${esc(v)}</td></tr>`)
             .join("");
           if (!rows) {
-            return `<div style="margin-top:10px;padding:10px;background:#fff;border-left:3px solid #d4af37;border-radius:4px;"><strong>${cond}</strong><div style="font-size:12px;color:#888;">No additional details provided</div></div>`;
+            return `<div style="margin-top:10px;padding:10px;background:#fff;border-left:3px solid #d4af37;border-radius:4px;"><strong>${esc(cond)}</strong><div style="font-size:12px;color:#888;">No additional details provided</div></div>`;
           }
-          return `<div style="margin-top:10px;padding:10px;background:#fff;border-left:3px solid #d4af37;border-radius:4px;"><strong>${cond}</strong><table style="width:100%;margin-top:6px;">${rows}</table></div>`;
+          return `<div style="margin-top:10px;padding:10px;background:#fff;border-left:3px solid #d4af37;border-radius:4px;"><strong>${esc(cond)}</strong><table style="width:100%;margin-top:6px;">${rows}</table></div>`;
         }).join("")
       : "";
 
@@ -96,33 +130,33 @@ const handler = async (req: Request): Promise<Response> => {
         <div class="container">
           <div class="header">
             <h1 style="margin:0;">New Life Insurance Pre-Qualification</h1>
-            <p style="margin:8px 0 0;">Advisor: ${advisorName}</p>
+            <p style="margin:8px 0 0;">Advisor: ${advisorNameEsc}</p>
           </div>
 
           <div class="section">
             <h3>👤 Personal Information</h3>
             <table>
               <tr><td class="td-label"><span class="label">Name:</span></td><td>${applicantName}</td></tr>
-              <tr><td class="td-label"><span class="label">Date of Birth:</span></td><td>${step1.dateOfBirth || "N/A"}</td></tr>
-              <tr><td class="td-label"><span class="label">Gender:</span></td><td>${step1.gender || "N/A"}</td></tr>
+              <tr><td class="td-label"><span class="label">Date of Birth:</span></td><td>${esc(step1.dateOfBirth) || "N/A"}</td></tr>
+              <tr><td class="td-label"><span class="label">Gender:</span></td><td>${esc(step1.gender) || "N/A"}</td></tr>
               <tr><td class="td-label"><span class="label">Phone:</span></td><td>${applicantPhone}</td></tr>
               <tr><td class="td-label"><span class="label">Email:</span></td><td>${applicantEmail}</td></tr>
-              <tr><td class="td-label"><span class="label">State:</span></td><td>${step1.stateOfResidence || "N/A"}</td></tr>
+              <tr><td class="td-label"><span class="label">State:</span></td><td>${esc(step1.stateOfResidence) || "N/A"}</td></tr>
             </table>
           </div>
 
           <div class="section">
             <h3>🏥 Health & Lifestyle</h3>
             <table>
-              <tr><td class="td-label"><span class="label">Height:</span></td><td>${step2.heightFeet || ""}' ${step2.heightInches || ""}"</td></tr>
-              <tr><td class="td-label"><span class="label">Weight:</span></td><td>${step2.weight || "N/A"} lbs</td></tr>
-              <tr><td class="td-label"><span class="label">Tobacco Use:</span></td><td>${step2.tobaccoUse || "N/A"}</td></tr>
-              ${step2.tobaccoFrequency ? `<tr><td class="td-label"><span class="label">Tobacco Details:</span></td><td>${step2.tobaccoFrequency}</td></tr>` : ""}
+              <tr><td class="td-label"><span class="label">Height:</span></td><td>${esc(step2.heightFeet) || ""}' ${esc(step2.heightInches) || ""}"</td></tr>
+              <tr><td class="td-label"><span class="label">Weight:</span></td><td>${esc(step2.weight) || "N/A"} lbs</td></tr>
+              <tr><td class="td-label"><span class="label">Tobacco Use:</span></td><td>${esc(step2.tobaccoUse) || "N/A"}</td></tr>
+              ${step2.tobaccoFrequency ? `<tr><td class="td-label"><span class="label">Tobacco Details:</span></td><td>${esc(step2.tobaccoFrequency)}</td></tr>` : ""}
               <tr><td class="td-label"><span class="label">Medical Conditions:</span></td><td>${conditionsSummary}</td></tr>
-              <tr><td class="td-label"><span class="label">Medications:</span></td><td>${step2.takingMedications || "N/A"}</td></tr>
-              ${step2.medicationDetails ? `<tr><td class="td-label"><span class="label">Medication Details:</span></td><td>${step2.medicationDetails}</td></tr>` : ""}
-              <tr><td class="td-label"><span class="label">Hospitalized (5yr):</span></td><td>${step2.hospitalizedPast5Years || "N/A"}</td></tr>
-              <tr><td class="td-label"><span class="label">Family History:</span></td><td>${step2.familyHistoryHeartCancer || "N/A"}</td></tr>
+              <tr><td class="td-label"><span class="label">Medications:</span></td><td>${esc(step2.takingMedications) || "N/A"}</td></tr>
+              ${step2.medicationDetails ? `<tr><td class="td-label"><span class="label">Medication Details:</span></td><td>${esc(step2.medicationDetails)}</td></tr>` : ""}
+              <tr><td class="td-label"><span class="label">Hospitalized (5yr):</span></td><td>${esc(step2.hospitalizedPast5Years) || "N/A"}</td></tr>
+              <tr><td class="td-label"><span class="label">Family History:</span></td><td>${esc(step2.familyHistoryHeartCancer) || "N/A"}</td></tr>
             </table>
             ${conditionDetailsHtml ? `<div style="margin-top:12px;"><h4 style="margin:0 0 4px;color:#1a365d;">Condition-Specific Details</h4>${conditionDetailsHtml}</div>` : ""}
           </div>
@@ -142,19 +176,19 @@ const handler = async (req: Request): Promise<Response> => {
           <div class="section">
             <h3>📋 Coverage Needs</h3>
             <table>
-              <tr><td class="td-label"><span class="label">Coverage Amount:</span></td><td>${step3.coverageAmount || "N/A"}</td></tr>
-              <tr><td class="td-label"><span class="label">Coverage Type:</span></td><td>${step3.coverageType || "N/A"}</td></tr>
-              <tr><td class="td-label"><span class="label">Monthly Budget:</span></td><td>${step3.monthlyBudget || "N/A"}</td></tr>
-              <tr><td class="td-label"><span class="label">Existing Insurance:</span></td><td>${step3.hasExistingInsurance || "N/A"}</td></tr>
-              ${step3.existingCarrier ? `<tr><td class="td-label"><span class="label">Current Carrier:</span></td><td>${step3.existingCarrier}</td></tr>` : ""}
-              ${step3.existingAmount ? `<tr><td class="td-label"><span class="label">Current Amount:</span></td><td>${step3.existingAmount}</td></tr>` : ""}
-              <tr><td class="td-label"><span class="label">Purpose:</span></td><td>${step3.purposeOfCoverage || "N/A"}</td></tr>
+              <tr><td class="td-label"><span class="label">Coverage Amount:</span></td><td>${esc(step3.coverageAmount) || "N/A"}</td></tr>
+              <tr><td class="td-label"><span class="label">Coverage Type:</span></td><td>${esc(step3.coverageType) || "N/A"}</td></tr>
+              <tr><td class="td-label"><span class="label">Monthly Budget:</span></td><td>${esc(step3.monthlyBudget) || "N/A"}</td></tr>
+              <tr><td class="td-label"><span class="label">Existing Insurance:</span></td><td>${esc(step3.hasExistingInsurance) || "N/A"}</td></tr>
+              ${step3.existingCarrier ? `<tr><td class="td-label"><span class="label">Current Carrier:</span></td><td>${esc(step3.existingCarrier)}</td></tr>` : ""}
+              ${step3.existingAmount ? `<tr><td class="td-label"><span class="label">Current Amount:</span></td><td>${esc(step3.existingAmount)}</td></tr>` : ""}
+              <tr><td class="td-label"><span class="label">Purpose:</span></td><td>${esc(step3.purposeOfCoverage) || "N/A"}</td></tr>
             </table>
           </div>
 
           <div class="footer">
             <p>Submitted: ${new Date().toLocaleString()}</p>
-            ${sourceUrl ? `<p>Source: ${sourceUrl}</p>` : ""}
+            ${sourceUrlEsc ? `<p>Source: ${sourceUrlEsc}</p>` : ""}
             <p>This pre-qualification was submitted through the TFA website.</p>
           </div>
         </div>
@@ -166,12 +200,12 @@ const handler = async (req: Request): Promise<Response> => {
     try {
       await resend.emails.send({
         from: "TFA Life Insurance <noreply@tfainsuranceadvisors.com>",
-        to: [applicantEmail],
+        to: [rawApplicantEmail],
         subject: `Pre-Qualification Received - ${advisorName} will be in touch`,
         html: `
           <div style="font-family:Arial,sans-serif;max-width:500px;margin:0 auto;padding:20px;">
-            <h2 style="color:#1a365d;">Thank You, ${applicantName.split(" ")[0]}!</h2>
-            <p>We've received your life insurance pre-qualification questionnaire. ${advisorName} will review your information and reach out within 1-2 business days to discuss your options.</p>
+            <h2 style="color:#1a365d;">Thank You, ${esc(rawApplicantName.split(" ")[0])}!</h2>
+            <p>We've received your life insurance pre-qualification questionnaire. ${advisorNameEsc} will review your information and reach out within 1-2 business days to discuss your options.</p>
             <p>If you have any immediate questions, feel free to call us at <a href="tel:+18883505396">(888) 350-5396</a>.</p>
             <p style="color:#666;font-size:12px;margin-top:20px;">© ${new Date().getFullYear()} TFA Group. All rights reserved.</p>
           </div>
@@ -188,7 +222,7 @@ const handler = async (req: Request): Promise<Response> => {
       from: "TFA Life Insurance <noreply@tfainsuranceadvisors.com>",
       to: [advisorEmail],
       cc: ["clients@tfainsuranceadvisors.com"],
-      subject: `New Pre-Qualification - ${applicantName} (Advisor: ${advisorName})`,
+      subject: `New Pre-Qualification - ${rawApplicantName} (Advisor: ${advisorName})`,
       html: emailHtml,
     });
 

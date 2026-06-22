@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "https://esm.sh/resend@2.0.0";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -8,17 +9,32 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-interface SponsorshipNotificationRequest {
-  companyName: string;
-  contactName: string;
-  email: string;
-  phone: string;
-  sponsorshipPackage: string;
-  industry: string;
-  eventsInterested?: string[];
-  message?: string;
-  isGeneralInquiry?: boolean;
-}
+const esc = (v: unknown): string =>
+  String(v ?? "")
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+
+const RATE_WINDOW_MS = 60_000;
+const RATE_MAX = 5;
+const rateMap = new Map<string, number[]>();
+const limited = (k: string) => {
+  const now = Date.now();
+  const arr = (rateMap.get(k) ?? []).filter((t) => now - t < RATE_WINDOW_MS);
+  if (arr.length >= RATE_MAX) { rateMap.set(k, arr); return true; }
+  arr.push(now); rateMap.set(k, arr); return false;
+};
+
+const schema = z.object({
+  companyName: z.string().trim().min(1).max(200),
+  contactName: z.string().trim().min(1).max(120),
+  email: z.string().trim().email().max(255),
+  phone: z.string().trim().min(1).max(40),
+  sponsorshipPackage: z.string().trim().min(1).max(60),
+  industry: z.string().trim().min(1).max(120),
+  eventsInterested: z.array(z.string().max(60)).max(20).optional(),
+  message: z.string().trim().max(2000).optional().or(z.literal("")),
+  isGeneralInquiry: z.boolean().optional(),
+});
 
 const packageLabels: Record<string, string> = {
   title: "Title Sponsor — $5,000/event",
@@ -43,12 +59,37 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const data: SponsorshipNotificationRequest = await req.json();
-    console.log("Processing sponsorship notification for:", data.companyName);
+    const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+    if (limited(`ip:${ip}`)) {
+      return new Response(JSON.stringify({ error: "Too many requests" }), {
+        status: 429, headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
+    }
+    const parsed = schema.safeParse(await req.json());
+    if (!parsed.success) {
+      return new Response(
+        JSON.stringify({ error: parsed.error.flatten().fieldErrors }),
+        { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } },
+      );
+    }
+    // Escaped view used in HTML; raw email used only for recipient address
+    const raw = parsed.data;
+    const data = {
+      companyName: esc(raw.companyName),
+      contactName: esc(raw.contactName),
+      email: esc(raw.email),
+      phone: esc(raw.phone),
+      sponsorshipPackage: esc(raw.sponsorshipPackage),
+      industry: esc(raw.industry),
+      eventsInterested: (raw.eventsInterested ?? []).map((s) => esc(s)),
+      message: raw.message ? esc(raw.message) : "",
+      isGeneralInquiry: raw.isGeneralInquiry,
+    };
+    console.log("Processing sponsorship notification for:", raw.companyName);
 
-    const packageLabel = packageLabels[data.sponsorshipPackage] || data.sponsorshipPackage;
+    const packageLabel = esc(packageLabels[raw.sponsorshipPackage] || raw.sponsorshipPackage);
     const isGeneral = data.isGeneralInquiry ?? false;
-    const eventsInterested = data.eventsInterested || [];
+    const eventsInterested = data.eventsInterested;
 
     // Build events list HTML for emails
     const eventsListHtml = eventsInterested.length > 0
@@ -62,8 +103,8 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Internal notification subject
     const internalSubject = isGeneral
-      ? `🎉 New General Sponsorship Inquiry: ${data.companyName}`
-      : `🎉 New Sponsorship Application: ${data.companyName} (${packageLabel})`;
+      ? `🎉 New General Sponsorship Inquiry: ${raw.companyName}`
+      : `🎉 New Sponsorship Application: ${raw.companyName} (${packageLabels[raw.sponsorshipPackage] || raw.sponsorshipPackage})`;
 
     // Send internal notification to leads email
     const internalEmailResponse = await resend.emails.send({
@@ -153,7 +194,7 @@ const handler = async (req: Request): Promise<Response> => {
     // Send confirmation email to sponsor
     const sponsorEmailResponse = await resend.emails.send({
       from: "TFA Events <noreply@tfainsuranceadvisors.com>",
-      to: [data.email],
+      to: [raw.email],
       subject: sponsorSubject,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
