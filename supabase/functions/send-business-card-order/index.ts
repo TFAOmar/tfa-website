@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
@@ -8,24 +9,45 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
-interface BusinessCardOrderRequest {
-  // Business card details
-  fullName: string;
-  jobTitle: string;
-  phoneNumber: string;
-  emailAddress: string;
-  website?: string;
-  companyAddress?: string;
-  specialInstructions?: string;
-  headshotUrl?: string;
-  headshotFileName?: string;
-  // Order details
-  productTitle: string;
-  variantTitle: string;
-  price: string;
-  currencyCode: string;
-  quantity: number;
-}
+const escapeHtml = (v: unknown): string =>
+  String(v ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+const safeUrl = (v: unknown): string => {
+  const s = String(v ?? "");
+  return /^https?:\/\//i.test(s) ? encodeURI(s) : "#";
+};
+
+const RATE_WINDOW_MS = 60_000;
+const RATE_MAX = 5;
+const rateMap = new Map<string, number[]>();
+const limited = (k: string) => {
+  const now = Date.now();
+  const arr = (rateMap.get(k) ?? []).filter((t) => now - t < RATE_WINDOW_MS);
+  if (arr.length >= RATE_MAX) { rateMap.set(k, arr); return true; }
+  arr.push(now); rateMap.set(k, arr); return false;
+};
+
+const schema = z.object({
+  fullName: z.string().trim().min(1).max(120),
+  jobTitle: z.string().trim().min(1).max(120),
+  phoneNumber: z.string().trim().min(1).max(40),
+  emailAddress: z.string().trim().email().max(255),
+  website: z.string().trim().max(255).optional().or(z.literal("")),
+  companyAddress: z.string().trim().max(500).optional().or(z.literal("")),
+  specialInstructions: z.string().trim().max(1000).optional().or(z.literal("")),
+  headshotUrl: z.string().trim().url().max(2000).optional().or(z.literal("")),
+  headshotFileName: z.string().trim().max(255).optional().or(z.literal("")),
+  productTitle: z.string().trim().min(1).max(200),
+  variantTitle: z.string().trim().min(1).max(200),
+  price: z.string().trim().max(40),
+  currencyCode: z.string().trim().max(10),
+  quantity: z.number().int().min(1).max(10000),
+});
 
 const handler = async (req: Request): Promise<Response> => {
   // Handle CORS preflight requests
@@ -34,15 +56,47 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const orderData: BusinessCardOrderRequest = await req.json();
+    const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+    if (limited(`ip:${ip}`)) {
+      return new Response(JSON.stringify({ error: "Too many requests" }), {
+        status: 429, headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
+    }
+    const parsed = schema.safeParse(await req.json());
+    if (!parsed.success) {
+      return new Response(
+        JSON.stringify({ error: parsed.error.flatten().fieldErrors }),
+        { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } },
+      );
+    }
+    const raw = parsed.data;
+    // Build escaped view object used for HTML interpolation
+    const orderData = {
+      fullName: escapeHtml(raw.fullName),
+      jobTitle: escapeHtml(raw.jobTitle),
+      phoneNumber: escapeHtml(raw.phoneNumber),
+      emailAddress: escapeHtml(raw.emailAddress),
+      website: raw.website ? escapeHtml(raw.website) : "",
+      websiteHref: raw.website ? safeUrl(raw.website) : "",
+      companyAddress: raw.companyAddress ? escapeHtml(raw.companyAddress) : "",
+      specialInstructions: raw.specialInstructions ? escapeHtml(raw.specialInstructions) : "",
+      headshotUrl: raw.headshotUrl ? safeUrl(raw.headshotUrl) : "",
+      headshotFileName: raw.headshotFileName ? escapeHtml(raw.headshotFileName) : "",
+      productTitle: escapeHtml(raw.productTitle),
+      variantTitle: escapeHtml(raw.variantTitle),
+      price: raw.price,
+      currencyCode: escapeHtml(raw.currencyCode),
+      quantity: raw.quantity,
+      _rawEmail: raw.emailAddress,
+    };
     
     console.log("Received business card order:", {
-      fullName: orderData.fullName,
-      productTitle: orderData.productTitle,
-      variantTitle: orderData.variantTitle,
+      fullName: raw.fullName,
+      productTitle: raw.productTitle,
+      variantTitle: raw.variantTitle,
     });
 
-    const totalPrice = (parseFloat(orderData.price) * orderData.quantity).toFixed(2);
+    const totalPrice = (parseFloat(raw.price) * raw.quantity).toFixed(2);
 
     const emailHtml = `
       <!DOCTYPE html>
@@ -186,7 +240,7 @@ const handler = async (req: Request): Promise<Response> => {
               ${orderData.website ? `
               <div class="detail-row">
                 <span class="detail-label">Website:</span>
-                <span class="detail-value"><a href="${orderData.website}" target="_blank">${orderData.website}</a></span>
+                <span class="detail-value"><a href="${orderData.websiteHref}" target="_blank" rel="noopener noreferrer">${orderData.website}</a></span>
               </div>
               ` : ''}
             </div>
@@ -209,7 +263,7 @@ const handler = async (req: Request): Promise<Response> => {
             <div class="section">
               <h2 class="section-title">📷 Headshot Photo</h2>
               <p style="margin-bottom: 15px;">File: ${orderData.headshotFileName || 'Uploaded image'}</p>
-              <a href="${orderData.headshotUrl}" target="_blank" class="headshot-link">
+              <a href="${orderData.headshotUrl}" target="_blank" rel="noopener noreferrer" class="headshot-link">
                 View/Download Headshot
               </a>
             </div>
@@ -445,7 +499,7 @@ const handler = async (req: Request): Promise<Response> => {
       body: JSON.stringify({
         from: "TFA Shop <noreply@tfainsuranceadvisors.com>",
         to: ["orders@tfainsuranceadvisors.com"],
-        subject: `New Business Card Order - ${orderData.fullName}`,
+        subject: `New Business Card Order - ${raw.fullName}`,
         html: emailHtml,
       }),
     });
@@ -468,7 +522,7 @@ const handler = async (req: Request): Promise<Response> => {
       },
       body: JSON.stringify({
         from: "TFA Shop <noreply@tfainsuranceadvisors.com>",
-        to: [orderData.emailAddress],
+        to: [orderData._rawEmail],
         subject: `Order Confirmation - TFA Custom Business Cards`,
         html: customerEmailHtml,
       }),

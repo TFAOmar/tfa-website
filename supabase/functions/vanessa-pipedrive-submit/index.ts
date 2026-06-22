@@ -8,6 +8,19 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// Best-effort in-memory rate limit (per warm instance)
+const RATE_WINDOW_MS = 60_000;
+const RATE_MAX = 5;
+const rateMap = new Map<string, number[]>();
+const limited = (k: string) => {
+  const now = Date.now();
+  const arr = (rateMap.get(k) ?? []).filter((t) => now - t < RATE_WINDOW_MS);
+  if (arr.length >= RATE_MAX) { rateMap.set(k, arr); return true; }
+  arr.push(now); rateMap.set(k, arr); return false;
+};
+
+const MAX_BODY_BYTES = 200_000; // 200KB
+
 interface PipedriveSubmitRequest {
   submission_type: "contact" | "living_trust_questionnaire" | "living_trust_landing";
   first_name?: string;
@@ -343,12 +356,40 @@ serve(async (req) => {
   }
 
   try {
+    const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+    if (limited(`ip:${ip}`)) {
+      return new Response(JSON.stringify({ error: "Too many requests" }), {
+        status: 429, headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
+    }
+    const contentLength = Number(req.headers.get("content-length") || 0);
+    if (contentLength > MAX_BODY_BYTES) {
+      return new Response(JSON.stringify({ error: "Payload too large" }), {
+        status: 413, headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
+    }
     const apiToken = Deno.env.get("VANESSA_PIPEDRIVE_API_TOKEN");
     if (!apiToken) {
       throw new Error("VANESSA_PIPEDRIVE_API_TOKEN not configured");
     }
 
     const requestData: PipedriveSubmitRequest = await req.json();
+    // Basic shape validation
+    const allowedTypes = new Set(["contact", "living_trust_questionnaire", "living_trust_landing"]);
+    if (!requestData || typeof requestData !== "object" || !allowedTypes.has(requestData.submission_type)) {
+      return new Response(JSON.stringify({ error: "Invalid submission_type" }), {
+        status: 400, headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
+    }
+    const cap = (s: unknown, n: number) => (typeof s === "string" ? s.slice(0, n) : s);
+    requestData.first_name = cap(requestData.first_name, 120) as string | undefined;
+    requestData.last_name = cap(requestData.last_name, 120) as string | undefined;
+    requestData.email = cap(requestData.email, 255) as string | undefined;
+    requestData.phone = cap(requestData.phone, 40) as string | undefined;
+    requestData.applicant_name = cap(requestData.applicant_name, 200) as string | undefined;
+    requestData.applicant_email = cap(requestData.applicant_email, 255) as string | undefined;
+    requestData.applicant_phone = cap(requestData.applicant_phone, 40) as string | undefined;
+    requestData.notes = cap(requestData.notes, 5000) as string | undefined;
     console.log("Received submission:", requestData.submission_type);
 
     const { submission_type } = requestData;

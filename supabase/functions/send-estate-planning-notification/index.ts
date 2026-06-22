@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { Resend } from "https://esm.sh/resend@2.0.0";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -9,16 +10,31 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-interface EstatePlanningRequest {
-  applicantName: string;
-  applicantEmail: string;
-  applicantPhone: string;
-  spouseName?: string | null;
-  formData: Record<string, unknown>;
-  advisorEmail?: string;
-  advisorName?: string;
-  sourceUrl?: string;
-}
+const esc = (v: unknown): string =>
+  String(v ?? "")
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+
+const RATE_WINDOW_MS = 60_000;
+const RATE_MAX = 5;
+const rateMap = new Map<string, number[]>();
+const limited = (k: string) => {
+  const now = Date.now();
+  const arr = (rateMap.get(k) ?? []).filter((t) => now - t < RATE_WINDOW_MS);
+  if (arr.length >= RATE_MAX) { rateMap.set(k, arr); return true; }
+  arr.push(now); rateMap.set(k, arr); return false;
+};
+
+const schema = z.object({
+  applicantName: z.string().trim().min(1).max(200),
+  applicantEmail: z.string().trim().email().max(255),
+  applicantPhone: z.string().trim().min(1).max(40),
+  spouseName: z.string().trim().max(200).nullable().optional(),
+  formData: z.record(z.unknown()),
+  advisorEmail: z.string().trim().email().max(255).optional(),
+  advisorName: z.string().trim().max(200).optional(),
+  sourceUrl: z.string().trim().max(2000).optional(),
+});
 
 const handler = async (req: Request): Promise<Response> => {
   console.log("Estate planning notification function invoked");
@@ -29,7 +45,20 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const requestData: EstatePlanningRequest = await req.json();
+    const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+    if (limited(`ip:${ip}`)) {
+      return new Response(JSON.stringify({ error: "Too many requests" }), {
+        status: 429, headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
+    }
+    const parsedReq = schema.safeParse(await req.json());
+    if (!parsedReq.success) {
+      return new Response(
+        JSON.stringify({ error: parsedReq.error.flatten().fieldErrors }),
+        { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+    const requestData = parsedReq.data;
     console.log("Request data received:", {
       applicantName: requestData.applicantName,
       applicantEmail: requestData.applicantEmail,
@@ -48,14 +77,6 @@ const handler = async (req: Request): Promise<Response> => {
     } = requestData;
 
     // Validate required fields
-    if (!applicantName || !applicantEmail || !formData) {
-      console.error("Missing required fields");
-      return new Response(
-        JSON.stringify({ error: "Missing required fields" }),
-        { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
-      );
-    }
-
     // Initialize Supabase client
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
@@ -163,25 +184,25 @@ const handler = async (req: Request): Promise<Response> => {
             <table>
               <tr>
                 <td class="td-label"><span class="label">Trustor 1:</span></td>
-                <td><span class="value">${step1.trustor1FirstName || ''} ${step1.trustor1MiddleName || ''} ${step1.trustor1LastName || ''}</span></td>
+                <td><span class="value">${esc(step1.trustor1FirstName) || ''} ${esc(step1.trustor1MiddleName) || ''} ${esc(step1.trustor1LastName) || ''}</span></td>
               </tr>
               <tr>
                 <td class="td-label"><span class="label">Email:</span></td>
-                <td><span class="value">${applicantEmail}</span></td>
+                <td><span class="value">${esc(applicantEmail)}</span></td>
               </tr>
               <tr>
                 <td class="td-label"><span class="label">Phone:</span></td>
-                <td><span class="value">${applicantPhone}</span></td>
+                <td><span class="value">${esc(applicantPhone)}</span></td>
               </tr>
               ${spouseName ? `
               <tr>
                 <td class="td-label"><span class="label">Trustor 2:</span></td>
-                <td><span class="value">${spouseName}</span></td>
+                <td><span class="value">${esc(spouseName)}</span></td>
               </tr>
               ` : ''}
               <tr>
                 <td class="td-label"><span class="label">Address:</span></td>
-                <td><span class="value">${step1.address || ''}, ${step1.city || ''}, ${step1.state || ''} ${step1.zipCode || ''}</span></td>
+                <td><span class="value">${esc(step1.address) || ''}, ${esc(step1.city) || ''}, ${esc(step1.state) || ''} ${esc(step1.zipCode) || ''}</span></td>
               </tr>
             </table>
           </div>
@@ -191,7 +212,7 @@ const handler = async (req: Request): Promise<Response> => {
             <table>
               <tr>
                 <td class="td-label"><span class="label">Children:</span></td>
-                <td><span class="value">${childrenSummary}</span></td>
+                <td><span class="value">${esc(childrenSummary)}</span></td>
               </tr>
               <tr>
                 <td class="td-label"><span class="label">Total Children:</span></td>
@@ -202,7 +223,7 @@ const handler = async (req: Request): Promise<Response> => {
 
           <div class="section">
             <h3>💝 Beneficiaries</h3>
-            <p><span class="value">${beneficiariesSummary}</span></p>
+            <p><span class="value">${esc(beneficiariesSummary)}</span></p>
           </div>
 
           <div class="section">
@@ -210,11 +231,11 @@ const handler = async (req: Request): Promise<Response> => {
             <table>
               <tr>
                 <td class="td-label"><span class="label">Attorney-in-Fact:</span></td>
-                <td><span class="value">${agentName}</span></td>
+                <td><span class="value">${esc(agentName)}</span></td>
               </tr>
               <tr>
                 <td class="td-label"><span class="label">Management Style:</span></td>
-                <td><span class="value">${step3.managementStyle || 'Not specified'}</span></td>
+                <td><span class="value">${esc(step3.managementStyle) || 'Not specified'}</span></td>
               </tr>
             </table>
           </div>
@@ -224,11 +245,11 @@ const handler = async (req: Request): Promise<Response> => {
             <table>
               <tr>
                 <td class="td-label"><span class="label">Life Support:</span></td>
-                <td><span class="value">${lifeSupportPref}</span></td>
+                <td><span class="value">${esc(lifeSupportPref)}</span></td>
               </tr>
               <tr>
                 <td class="td-label"><span class="label">Organ Donor:</span></td>
-                <td><span class="value">${organDonor}</span></td>
+                <td><span class="value">${esc(organDonor)}</span></td>
               </tr>
             </table>
           </div>
@@ -238,11 +259,11 @@ const handler = async (req: Request): Promise<Response> => {
             <table>
               <tr>
                 <td class="td-label"><span class="label">Real Estate (${realEstate.length}):</span></td>
-                <td><span class="value">${realEstateSummary}</span></td>
+                <td><span class="value">${esc(realEstateSummary)}</span></td>
               </tr>
               <tr>
                 <td class="td-label"><span class="label">Financial Accounts (${accounts.length}):</span></td>
-                <td><span class="value">${accountsSummary}</span></td>
+                <td><span class="value">${esc(accountsSummary)}</span></td>
               </tr>
             </table>
           </div>
@@ -252,11 +273,11 @@ const handler = async (req: Request): Promise<Response> => {
             <table>
               <tr>
                 <td class="td-label"><span class="label">Electronic Signature:</span></td>
-                <td><span class="value">${step8.electronicSignature || 'N/A'}</span></td>
+                <td><span class="value">${esc(step8.electronicSignature) || 'N/A'}</span></td>
               </tr>
               <tr>
                 <td class="td-label"><span class="label">Date Signed:</span></td>
-                <td><span class="value">${step8.signatureDate || new Date().toLocaleDateString()}</span></td>
+                <td><span class="value">${esc(step8.signatureDate) || new Date().toLocaleDateString()}</span></td>
               </tr>
             </table>
           </div>

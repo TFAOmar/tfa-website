@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "https://esm.sh/resend@2.0.0";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -9,22 +10,41 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
-interface EventNotificationRequest {
-  agentName: string;
-  agentEmail: string;
-  agentPhone?: string;
-  eventName: string;
-  description: string;
-  shortDescription: string;
-  location: string;
-  startTime: string;
-  endTime: string;
-  primaryImageUrl: string;
-  thumbnailUrl?: string;
-  enableRsvp: boolean;
-  rsvpEmail?: string;
-  maxAttendees?: number;
-}
+const esc = (v: unknown): string =>
+  String(v ?? "")
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+const safeUrl = (v: unknown): string => {
+  const s = String(v ?? "");
+  return /^https?:\/\//i.test(s) ? encodeURI(s) : "";
+};
+
+const RATE_WINDOW_MS = 60_000;
+const RATE_MAX = 5;
+const rateMap = new Map<string, number[]>();
+const limited = (k: string) => {
+  const now = Date.now();
+  const arr = (rateMap.get(k) ?? []).filter((t) => now - t < RATE_WINDOW_MS);
+  if (arr.length >= RATE_MAX) { rateMap.set(k, arr); return true; }
+  arr.push(now); rateMap.set(k, arr); return false;
+};
+
+const schema = z.object({
+  agentName: z.string().trim().min(1).max(120),
+  agentEmail: z.string().trim().email().max(255),
+  agentPhone: z.string().trim().max(40).optional().or(z.literal("")),
+  eventName: z.string().trim().min(1).max(200),
+  description: z.string().trim().min(1).max(5000),
+  shortDescription: z.string().trim().min(1).max(500),
+  location: z.string().trim().min(1).max(300),
+  startTime: z.string().trim().min(1).max(64),
+  endTime: z.string().trim().min(1).max(64),
+  primaryImageUrl: z.string().trim().url().max(2000).optional().or(z.literal("")),
+  thumbnailUrl: z.string().trim().url().max(2000).optional().or(z.literal("")),
+  enableRsvp: z.boolean(),
+  rsvpEmail: z.string().trim().email().max(255).optional().or(z.literal("")),
+  maxAttendees: z.number().int().min(0).max(100000).optional(),
+});
 
 const handler = async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
@@ -32,22 +52,35 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const {
-      agentName,
-      agentEmail,
-      agentPhone,
-      eventName,
-      description,
-      shortDescription,
-      location,
-      startTime,
-      endTime,
-      primaryImageUrl,
-      thumbnailUrl,
-      enableRsvp,
-      rsvpEmail,
-      maxAttendees,
-    }: EventNotificationRequest = await req.json();
+    const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+    if (limited(`ip:${ip}`)) {
+      return new Response(JSON.stringify({ error: "Too many requests" }), {
+        status: 429, headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
+    }
+    const parsed = schema.safeParse(await req.json());
+    if (!parsed.success) {
+      return new Response(
+        JSON.stringify({ error: parsed.error.flatten().fieldErrors }),
+        { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } },
+      );
+    }
+    const raw = parsed.data;
+    // Escaped values for HTML interpolation
+    const agentName = esc(raw.agentName);
+    const agentEmail = esc(raw.agentEmail);
+    const agentPhone = raw.agentPhone ? esc(raw.agentPhone) : "";
+    const eventName = esc(raw.eventName);
+    const description = esc(raw.description);
+    const shortDescription = esc(raw.shortDescription);
+    const location = esc(raw.location);
+    const startTime = raw.startTime;
+    const endTime = raw.endTime;
+    const primaryImageUrl = raw.primaryImageUrl ? safeUrl(raw.primaryImageUrl) : "";
+    const thumbnailUrl = raw.thumbnailUrl ? safeUrl(raw.thumbnailUrl) : "";
+    const enableRsvp = raw.enableRsvp;
+    const rsvpEmail = raw.rsvpEmail ? esc(raw.rsvpEmail) : "";
+    const maxAttendees = raw.maxAttendees;
 
     const startDate = new Date(startTime);
     const endDate = new Date(endTime);
@@ -70,7 +103,7 @@ const handler = async (req: Request): Promise<Response> => {
     const adminEmailResponse = await resend.emails.send({
       from: "TFA Events <noreply@tfainsuranceadvisors.com>",
       to: ["events@tfainsuranceadvisors.com"],
-      subject: `New Event Submission: ${eventName}`,
+      subject: `New Event Submission: ${raw.eventName}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 700px; margin: 0 auto; background: #ffffff;">
           <!-- Header with Logo -->
@@ -190,8 +223,8 @@ const handler = async (req: Request): Promise<Response> => {
     // Send confirmation to agent
     const agentEmailResponse = await resend.emails.send({
       from: "TFA Events <noreply@tfainsuranceadvisors.com>",
-      to: [agentEmail],
-      subject: `Event Submission Received: ${eventName}`,
+      to: [raw.agentEmail],
+      subject: `Event Submission Received: ${raw.eventName}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff;">
           <!-- Header with Logo -->
