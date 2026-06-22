@@ -48,7 +48,15 @@ serve(async (req) => {
       }
     }
 
-    const origin = req.headers.get("origin") || "https://tfainsuranceadvisors.com";
+    const ALLOWED_ORIGINS = [
+      "https://tfainsuranceadvisors.com",
+      "https://www.tfainsuranceadvisors.com",
+      "https://tfawealthplanning.com",
+      "https://www.tfawealthplanning.com",
+      "https://tfawealthplanning.lovable.app",
+    ];
+    const reqOrigin = req.headers.get("origin") ?? "";
+    const origin = ALLOWED_ORIGINS.includes(reqOrigin) ? reqOrigin : ALLOWED_ORIGINS[0];
 
     // Build checkout session config
     const sessionConfig: Stripe.Checkout.SessionCreateParams = {
