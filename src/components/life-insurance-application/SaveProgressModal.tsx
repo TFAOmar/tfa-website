@@ -113,7 +113,6 @@ const SaveProgressModal = ({
         {
           body: {
             email,
-            resumeUrl,
             resumeToken,
           },
         }
