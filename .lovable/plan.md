@@ -1,55 +1,78 @@
-## What happened
+## New Agent Onboarding Application
 
-Omar's Non-Medical Term Life test submission (`f0c5f0ba-8067-4e41-832e-396baa59badb`, submitted 2026-06-18 00:04 UTC) was saved correctly, but the advisor/admin/applicant emails never went out.
+Replicate the standalone HTML as a real multi-step form on the site. Carrier-agnostic, navy/gold branding to match the bundle (Inter, #1E3A5F header, #E4B548 accent), with the same 15 sections, same field labels, same required-field asterisks, and same legal copy.
 
-Edge function logs for `send-life-insurance-notification` for that submission show only:
+### Route & entry points
+- New page: `/agent-onboarding-application` (standalone — no global Header/Footer, added to `standalonePages` list).
+- Linked from the existing `/onboarding-checklist` "Resources" panel as "New Agent Onboarding Application" and from `/advisors/onboard` page.
 
+### Multi-step wizard (15 steps, mirrors the bundle)
+1. Applicant information — Full legal name*, Preferred name, DOB*, SSN*, US citizen/work auth*, Driver's license #, Issuing state
+2. Contact information — Residential address*, City*, State*, ZIP*, Mailing address, Mobile*, Alt phone, Email*, Preferred language, Best time to contact
+3. Emergency contact — Name, Relationship, Phone, Alt phone
+4. Licensing & producer information — NPN*, Resident license state*, Dynamic table of state licenses (state, license #, lines of authority, expiration), Years licensed, # states licensed
+5. E&O coverage — Carrier*, Policy #*, Coverage amount, Expiration*, Upload declaration page
+6. AML certification & CE — Provider, Date completed, Expiration, CE compliant?, Upload AML certificate
+7. Background & compliance disclosure — 8 yes/no questions with conditional explain textareas (felony, license action, termination, investigation, bond refusal, bankruptcy, debit balance, other contracts)
+8. Employment & industry history — Dynamic table (company, title, from, to, reason for leaving)
+9. Professional references — Dynamic table (name, relationship, company, phone/email; min 3)
+10. Sub-firm & upline — Recruited by, Upline/mentor, Sub-firm, Referral source
+11. Education & designations — Highest education, School, Designations
+12. Commission direct deposit — Bank name, Account type, Routing #, Account #, Name on account, Upload voided check
+13. Tax information — Tax classification (Individual/Sole Prop/LLC/S-Corp/C-Corp), Business/entity name, EIN
+14. Authorization & background check consent — Exact legal copy from bundle, checkbox "I authorize"
+15. Certification & signature — Exact legal copy, typed signature, date (auto), printed name, NPN, checkbox "I certify"
+
+Each step: progress bar, Back/Save & continue, autosave to draft on blur/step change. Resume-by-token pattern reused from life-insurance wizard.
+
+### Storage
+- New Supabase table `agent_onboarding_applications`: `id`, `status` (draft/submitted), `current_step`, `resume_token`, `applicant_name`, `applicant_email`, `applicant_phone`, `form_data jsonb`, `signature`, `signed_at`, `submitted_at`, `created_at`, `updated_at`.
+- New Supabase storage bucket `agent-onboarding-uploads` (private) for E&O dec page, AML cert, voided check, plus optional driver's license/W-9. Signed URLs delivered in the notification.
+- RLS: anonymous insert/update on own draft via `resume_token` (security-definer RPC, same pattern as `update_draft_application_by_token`); admins (has_role) can read all.
+- Honeypot field via `useHoneypot` (per project rule).
+
+### Notifications
+- New edge function `send-agent-onboarding-notification`:
+  - To: `contracting@tfainsuranceadvisors.com`, From: `noreply@tfainsuranceadvisors.com` (project rules).
+  - Subject: `New Agent Onboarding Application — {applicant_name}`.
+  - Body: summary of all 15 sections, plus signed-URL links to uploaded documents.
+  - Generates a PDF mirroring the bundle layout (jsPDF + autoTable, same pattern as `lifeInsurancePdfGenerator.ts`) and attaches it.
+- Pipedrive: per project rule, post a Lead (Leads Inbox only) tagged `Agent Onboarding`. No Deal.
+- Fire-and-forget invocation uses `await` + try/catch around `supabase.functions.invoke` (per recent fix to avoid navigation aborting the request).
+
+### Files to add / change
+
+```text
+src/pages/AgentOnboardingApplication.tsx               (new — standalone shell)
+src/components/agent-onboarding/OnboardingWizard.tsx   (new — step controller + autosave)
+src/components/agent-onboarding/steps/Step01..Step15.tsx (new — one file per section)
+src/components/agent-onboarding/ProgressBar.tsx        (new)
+src/components/agent-onboarding/FileUploadField.tsx    (new — wraps Supabase Storage)
+src/types/agentOnboardingApplication.ts                (new — zod schemas + TS types)
+src/hooks/useAgentOnboardingApplication.ts             (new — draft load/save)
+src/lib/agentOnboardingPdfGenerator.ts                 (new — branded PDF)
+supabase/functions/send-agent-onboarding-notification/ (new edge function)
+supabase/migrations/<ts>_agent_onboarding.sql          (new table, RPCs, bucket, policies, GRANTs)
+
+src/App.tsx                                            (add route + standalonePages entry)
+src/components/onboarding/ResourcesPanel.tsx           (add link to new application)
+src/pages/AdvisorOnboarding.tsx                        (CTA to new application)
 ```
-function invoked
-... (1 second of silence)
-shutdown
-```
 
-No "Received notification request", no validation error, no email send attempts. The function was killed before it could even read the request body.
+### Visual design
+Carrier-agnostic, matches bundle:
+- Navy `#1E3A5F` headers, gold `#E4B548` accent on section numbers and step indicators
+- Inter font (already in project)
+- White card on light gray background, 15 numbered section cards
+- Asterisk in gold for required fields
+- "Help" inline hints under each section heading (toggleable like the bundle's `showHelp`)
 
-## Root cause
+### Validation
+- Zod schemas per step (`src/types/agentOnboardingApplication.ts`).
+- SSN, EIN, routing/account numbers: format-checked, never logged.
+- All file uploads: type/size limits (10MB, pdf/jpg/png).
+- Required fields enforced before each "Continue".
 
-In `src/components/life-insurance-application/ApplicationWizard.tsx` (around line 1017) the wizard fires the notification as **fire-and-forget** and then immediately calls `navigate("/thank-you")`:
-
-```ts
-supabase.functions.invoke("send-life-insurance-notification", { body: {...} })
-  .then(...).catch(...);
-// no await
-...
-navigate("/thank-you");
-```
-
-Browser navigation aborts the in-flight `fetch` before the request body finishes streaming to the edge function. The edge function logs `function invoked` (top of handler), then `await req.json()` never resolves because the client closed the connection, and the runtime kills the worker. `EdgeRuntime.waitUntil` can't save us — it only runs **after** we've parsed the body and queued the background work.
-
-The 48-hour retry cron (`retry-missed-life-insurance-notifications`) didn't pick it up yet because it last ran before this submission.
-
-## Fix
-
-### 1. Make the invoke call survive navigation (`ApplicationWizard.tsx`)
-
-Two small changes around the notification call:
-
-- `await` the `supabase.functions.invoke(...)` call. The edge function returns `202` as soon as it has parsed the body and queued the background work (PDF + emails happen inside `EdgeRuntime.waitUntil`), so the await is short (typically <500 ms) and the user still sees the thank-you page almost immediately.
-- Wrap it in `try/catch` so a slow/failing invoke never blocks the success flow; on error we just log and continue (the retry cron will catch it).
-
-Result: the request body is fully transmitted before `navigate("/thank-you")` runs, so the edge function can actually do its job. No change to the edge function is needed.
-
-### 2. Manually resend the missed notification
-
-For the already-submitted Omar Sanchez application that never sent, invoke the existing `resend-life-insurance-pdf` edge function once with `{ applicationId: "f0c5f0ba-8067-4e41-832e-396baa59badb" }` so Omar and the leads inbox get the application and PDF now.
-
-### 3. (Optional, recommended) Verify
-
-- Re-check `life_insurance_applications` row `f0c5f0ba…` — `advisor_notification_sent_at` should be populated after the manual resend.
-- Submit one test non-medical application end-to-end and confirm the function logs show `Received notification request → Sending advisor notification → Advisor email sent successfully`, and that the email arrives.
-
-## Files changed
-
-- `src/components/life-insurance-application/ApplicationWizard.tsx` — `await` the notification invoke inside try/catch.
-
-No database, no edge function, no schema changes.
+### Out of scope
+- No changes to the existing `/advisors/onboard` $49.99 payment form or the `/onboarding-checklist` UX itself (only a new link is added).
+- No auth gate — public form, like other applications. Drafts resumable only via tokenized URL emailed to the applicant.

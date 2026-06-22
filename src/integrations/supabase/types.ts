@@ -35,6 +35,57 @@ export type Database = {
         }
         Relationships: []
       }
+      agent_onboarding_applications: {
+        Row: {
+          advisor_notification_sent_at: string | null
+          applicant_email: string | null
+          applicant_name: string | null
+          applicant_phone: string | null
+          created_at: string
+          current_section: number
+          form_data: Json
+          id: string
+          resume_token: string
+          signature: string | null
+          signed_at: string | null
+          status: string
+          submitted_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          advisor_notification_sent_at?: string | null
+          applicant_email?: string | null
+          applicant_name?: string | null
+          applicant_phone?: string | null
+          created_at?: string
+          current_section?: number
+          form_data?: Json
+          id?: string
+          resume_token?: string
+          signature?: string | null
+          signed_at?: string | null
+          status?: string
+          submitted_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          advisor_notification_sent_at?: string | null
+          applicant_email?: string | null
+          applicant_name?: string | null
+          applicant_phone?: string | null
+          created_at?: string
+          current_section?: number
+          form_data?: Json
+          id?: string
+          resume_token?: string
+          signature?: string | null
+          signed_at?: string | null
+          status?: string
+          submitted_at?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       dynamic_advisors: {
         Row: {
           bio: string
@@ -783,6 +834,31 @@ export type Database = {
           title: string
         }[]
       }
+      get_agent_onboarding_by_token: {
+        Args: { p_resume_token: string }
+        Returns: {
+          advisor_notification_sent_at: string | null
+          applicant_email: string | null
+          applicant_name: string | null
+          applicant_phone: string | null
+          created_at: string
+          current_section: number
+          form_data: Json
+          id: string
+          resume_token: string
+          signature: string | null
+          signed_at: string | null
+          status: string
+          submitted_at: string | null
+          updated_at: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "agent_onboarding_applications"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       get_draft_application_by_token: {
         Args: { p_resume_token: string }
         Returns: {
@@ -843,9 +919,24 @@ export type Database = {
         }
         Returns: boolean
       }
+      submit_agent_onboarding_application: {
+        Args: { p_application_id: string; p_signature: string }
+        Returns: undefined
+      }
       submit_life_insurance_application: {
         Args: { application_id: string }
         Returns: undefined
+      }
+      update_agent_onboarding_by_token: {
+        Args: {
+          p_applicant_email?: string
+          p_applicant_name?: string
+          p_applicant_phone?: string
+          p_current_section: number
+          p_form_data: Json
+          p_resume_token: string
+        }
+        Returns: string
       }
       update_draft_application_by_token: {
         Args: {
