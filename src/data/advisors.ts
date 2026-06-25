@@ -716,6 +716,20 @@ export const advisors: Advisor[] = [
     email: "aileen@tfainsuranceadvisors.com",
     phone: "(626) 643-0816",
     landingPage: "/advisors/aileen-gutierrez"
+  },
+  {
+    id: "kristin-romo",
+    name: "Kristin Romo",
+    title: "Director of Agent Development & Operations",
+    type: "Advisor",
+    state: "California",
+    city: "Los Angeles",
+    region: "West",
+    bio: "Director of Agent Development & Operations leading agent growth, training, and operational excellence across LA, OC, and the Inland Empire.",
+    specialties: ["Leadership Development", "Agent Training & Mentorship", "Business Development", "Operations"],
+    licenses: ["CA Lic# 4334059"],
+    image: kristinRomoImg,
+    yearsOfExperience: 7
   }
 ];
 
