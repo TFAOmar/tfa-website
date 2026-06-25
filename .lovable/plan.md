@@ -1,26 +1,32 @@
-## Goal
+# Add Kristin Romo to Meet Our Advisors
 
-Eliminate the critical `jspdf` path-traversal advisory (GHSA-f8cm-6447-x5h2), which affects all versions `<= 3.0.4`. The fix is shipped in `jspdf@4.0.0`.
-
-## Approach
-
-Bump `jspdf` from `^3.0.4` to `^4.0.0` in `package.json` and reinstall. Per the jsPDF maintainers, v4.0.0 has **no breaking API changes** — it only restricts Node.js filesystem access by default. Our usage is browser-side PDF generation (`src/lib/lifeInsurancePdfGenerator.ts`, `src/lib/calculatorPdfGenerator.ts`, `src/lib/brandGuidelinesPdf.ts`, `src/lib/salesContestPdf.ts`) plus one Deno edge function (`supabase/functions/resend-life-insurance-pdf/index.ts`) that imports `jspdf@2.5.1` from esm.sh — none use `loadFile`, `addFont`, or filesystem paths, so behavior is unchanged.
-
-As a bonus, this same bump also clears the other two open jspdf findings reported by the scanner:
-- High: AcroFormChoiceField PDF injection + BMP DoS
-- Medium: XMP injection + addJS race condition
-
-(all three advisories are remediated in the 4.x line)
+Add Kristin Romo as a new entry on the `/advisors` page, matching the format of existing advisors.
 
 ## Steps
 
-1. Update `package.json`: `"jspdf": "^4.0.0"`.
-2. Run `bun install` to refresh the lockfile.
-3. Build to confirm the browser PDF generators still compile against the v4 typings.
-4. Smoke-check one PDF code path (e.g. the life-insurance PDF generator) to confirm no runtime regressions.
-5. Optionally bump the Deno import in `supabase/functions/resend-life-insurance-pdf/index.ts` from `jspdf@2.5.1` to `jspdf@4.0.0` for consistency (the edge function runs in Deno, not Node, so it isn't directly affected by the Node-build LFI, but staying current is good hygiene).
-6. Mark the three `vulnerable_dependencies_*` findings as fixed after the install succeeds.
+1. **Upload headshot as a project asset**
+   - Save the uploaded `Kristin Romo.jpg` to `src/assets/advisors/kristin-romo.jpg`.
 
-## Risk
+2. **Add advisor entry to `src/data/advisors.ts`**
+   - Import the new headshot.
+   - Append a new `Advisor` object with:
+     - `id`: `"kristin-romo"`
+     - `name`: "Kristin Romo"
+     - `title`: "Director of Agent Development & Operations"
+     - `type`: `"Advisor"`
+     - `state`: "California"
+     - `city`: "Los Angeles" (covers LA, OC, IE)
+     - `region`: "West"
+     - `bio`: Condensed 1–2 sentence summary derived from the provided bio (full bio reserved for a future profile page, matching how other directory entries store a short bio).
+     - `specialties`: ["Leadership Development", "Agent Training & Mentorship", "Operations", "Business Development"]
+     - `licenses`: ["Life & Health (Lic# 4334059)"]
+     - `image`: imported headshot
+     - `yearsOfExperience`: 7
 
-Low. jsPDF 4.0.0 is documented as a semver-major release only because of the Node filesystem default change; the JS API surface is unchanged. Browser bundles (which is what every call site here uses) behave identically.
+3. **No new profile page** is being created (user asked for the advisors listing only). The card will appear in the directory alphabetically (or per admin custom order if configured).
+
+## Notes / Questions handled by defaults
+
+- Only the headshot was provided in this message (no separate full-body photo attachment was received) — using the headshot for the card.
+- Title kept as "Director of Agent Development & Operations" even though `type` is `"Advisor"`, since that drives card styling/filtering and she is part of the advisor directory.
+- No dedicated `/advisors/kristin-romo` landing page is added. If you want a full profile page like Manuel Soto's, say the word and I'll add it as a follow-up.
