@@ -729,7 +729,8 @@ export const advisors: Advisor[] = [
     specialties: ["Leadership Development", "Agent Training & Mentorship", "Business Development", "Operations"],
     licenses: ["CA Lic# 4334059"],
     image: kristinRomoImg,
-    yearsOfExperience: 7
+    yearsOfExperience: 7,
+    landingPage: "/advisors/kristin-romo"
   }
 ];
 
