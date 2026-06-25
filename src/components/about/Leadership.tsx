@@ -133,7 +133,7 @@ const Leadership = () => {
                   <img
                     src={leader.image}
                     alt={leader.name}
-                    className="w-full h-full object-cover"
+                    className={`w-full h-full object-cover ${leader.name === "Kristin Romo" ? "object-top lg:object-center" : ""}`}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-navy/80 via-navy/20 to-transparent" />
                   
