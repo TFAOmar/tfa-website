@@ -3,6 +3,7 @@ import { Linkedin, Mail, Facebook, Instagram, Youtube, Quote, CheckCircle } from
 import mannySotoImg from "@/assets/leadership/manny-soto.jpg";
 import omarSanchezImg from "@/assets/leadership/omar-sanchez.jpg";
 import ravvenMurphyImg from "@/assets/leadership/ravven-murphy.jpg";
+import kristinRomoImg from "@/assets/leadership/kristin-romo.jpg";
 import { Button } from "@/components/ui/button";
 
 interface Leader {
@@ -81,6 +82,29 @@ const leaders: Leader[] = [
       "Known for adaptability, strong communication skills, and commitment to excellence",
     ],
     closing: `As Executive Assistant, Ravven plays a critical role in managing the day-to-day operations of the CEO, ensuring efficiency, discretion, and seamless execution. Her ability to balance high-pressure demands with strategic problem-solving makes her an integral part of The Financial Architects leadership ecosystem — bringing structure, clarity, and momentum to fast-moving environments.`,
+  },
+  {
+    name: "Kristin Romo",
+    title: "Director of Agent Development & Operations",
+    subtitle: "Leadership • Training • Operations",
+    image: kristinRomoImg,
+    intro: `Kristin Romo is the Director of Agent Development & Operations at The Financial Architects, where she leads agent growth, training, and operational excellence across Los Angeles, Orange County, the Inland Empire, and broader California. With over seven years of industry experience, Kristin combines strategic vision with people-focused leadership to develop high-performing professionals and strengthen the organization's long-term mission.`,
+    highlights: [
+      "Leads agent development, training, and mentorship programs across California",
+      "Drives operational excellence and scalable systems supporting advisor growth",
+      "Champions a people-first leadership culture rooted in mentorship and accountability",
+      "Partners with leadership to advance TFA's long-term vision and strategic initiatives",
+      "Licensed professional (CA Lic# 4334059) with 7+ years of industry experience",
+    ],
+    expertise: [
+      "Agent Development",
+      "Training & Mentorship",
+      "Operations & Process",
+      "Strategic Partnerships",
+      "Leadership Coaching",
+      "Business Growth",
+    ],
+    closing: `Strategic, relationship-focused, and growth-minded, Kristin brings a results-driven, operationally focused approach to everything she does. Through mentorship, innovation, and a passion for growth, she continues to make a meaningful impact on both the agents she serves and the future of The Financial Architects.`,
   },
 ];
 
