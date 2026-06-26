@@ -22,17 +22,13 @@ import {
 } from "@/components/ui/accordion";
 import {
   ArrowRight,
-  Play,
   Check,
-  AlertTriangle,
   Instagram,
   Loader2,
   CheckCircle2,
   Target,
   Compass,
   Layers,
-  Users,
-  GraduationCap,
   TrendingUp,
 } from "lucide-react";
 import { SEOHead } from "@/components/seo";
@@ -96,20 +92,12 @@ const fitItems = [
     desc: "You want to learn how to help families, build client relationships, and grow in the industry.",
   },
   {
-    title: "Sales-minded",
-    desc: "You are willing to communicate, follow up, handle rejection, and improve your skills.",
-  },
-  {
     title: "Leadership-driven",
     desc: "You do not just want to produce. You want to develop into someone who can lead.",
   },
   {
     title: "Licensed or willing to get licensed",
     desc: "Experience is helpful, but the right attitude and willingness to learn matter.",
-  },
-  {
-    title: "Bilingual is a plus",
-    desc: "Spanish-speaking professionals have a powerful opportunity to serve underserved communities.",
   },
 ];
 
@@ -130,16 +118,6 @@ const focusCards = [
     desc: "Growth requires more than motivation. It requires process, consistency, and accountability.",
   },
   {
-    icon: GraduationCap,
-    title: "Client Education",
-    desc: "Learn how to help families understand protection, planning, and financial decisions more clearly.",
-  },
-  {
-    icon: Users,
-    title: "Team Culture",
-    desc: "Surround yourself with people who value work ethic, development, and execution.",
-  },
-  {
     icon: TrendingUp,
     title: "Agency Growth",
     desc: "Understand what it takes to grow from individual production into leadership and team-building.",
@@ -151,13 +129,6 @@ const processSteps = [
   { n: "02", title: "Review", desc: "Our team reviews your information to understand your background, goals, and potential fit." },
   { n: "03", title: "Intro Conversation", desc: "If there is alignment, we will schedule a conversation to answer questions and explain next steps." },
   { n: "04", title: "Next Steps", desc: "If it makes sense on both sides, we will discuss licensing, training, onboarding, and expectations." },
-];
-
-const standards = [
-  "Structure beats motivation.",
-  "Culture is built through standards.",
-  "Leadership starts with personal discipline.",
-  "The goal is long-term growth, not shortcuts.",
 ];
 
 const faqs = [
@@ -172,14 +143,6 @@ const faqs = [
   {
     q: "Is income guaranteed?",
     a: "No. Income is not guaranteed. Results vary based on many factors, including licensing, effort, skill development, consistency, market conditions, and individual performance.",
-  },
-  {
-    q: "Is training provided?",
-    a: "The Financial Architects focuses on training, systems, leadership, sales development, and team culture. Specific details can be discussed during the intro process.",
-  },
-  {
-    q: "Can I do this part-time?",
-    a: "That depends on your goals, availability, licensing status, and fit. The best next step is to apply and have a real conversation.",
   },
   {
     q: "I'm looking for life insurance, not a career opportunity. Where should I go?",
