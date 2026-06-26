@@ -121,11 +121,12 @@ import EscobarRealtyLivingTrust from "./pages/EscobarRealtyLivingTrust";
 import SalesContest from "./pages/SalesContest";
 import AileenGutierrezReferral from "./pages/AileenGutierrezReferral";
 import AileenPartnerProgram from "./pages/AileenPartnerProgram";
+import OmarConnect from "./pages/OmarConnect";
 
 const queryClient = new QueryClient();
 
 // Standalone pages that have their own header/footer
-const standalonePages = ['/advisors/vanessa-sanchez/living-trust', '/advisors/vanessa-sanchez/think-tax-solutions', '/advisors/vanessa-sanchez/cardenas-and-company', '/advisors/braihyra-medellin/living-trust', '/advisors/erica-valenzuela/living-trust', '/services/kai-zen', '/advisors/mariah-lorenzen/kai-zen', '/advisors/tamara-lee/medicare', '/advisors/recinos', '/advisors/ruth-pacheco/tax-strategy', '/health-insurance/american-way-health', '/admin', '/admin/applications', '/admin/submissions', '/admin/form-submissions', '/admin/sponsorship', '/life-insurance-application', '/non-medical-life-application', '/living-trust-questionnaire', '/estate-guru', '/estate-guru/success', '/estate-guru/canceled', '/advisors/manuel-soto/coaching', '/advisors/manuel-soto/escobar-realty', '/brea', '/sales-contest', '/advisors/aileen-gutierrez/refer', '/advisors/aileen-gutierrez/partners', '/agent-onboarding-application'];
+const standalonePages = ['/advisors/vanessa-sanchez/living-trust', '/advisors/vanessa-sanchez/think-tax-solutions', '/advisors/vanessa-sanchez/cardenas-and-company', '/advisors/braihyra-medellin/living-trust', '/advisors/erica-valenzuela/living-trust', '/services/kai-zen', '/advisors/mariah-lorenzen/kai-zen', '/advisors/tamara-lee/medicare', '/advisors/recinos', '/advisors/ruth-pacheco/tax-strategy', '/health-insurance/american-way-health', '/admin', '/admin/applications', '/admin/submissions', '/admin/form-submissions', '/admin/sponsorship', '/life-insurance-application', '/non-medical-life-application', '/living-trust-questionnaire', '/estate-guru', '/estate-guru/success', '/estate-guru/canceled', '/advisors/manuel-soto/coaching', '/advisors/manuel-soto/escobar-realty', '/brea', '/sales-contest', '/advisors/aileen-gutierrez/refer', '/advisors/aileen-gutierrez/partners', '/agent-onboarding-application', '/connect-with-omar'];
 
 const AppLayout = () => {
   const location = useLocation();
@@ -285,6 +286,7 @@ const AppLayout = () => {
           <Route path="/advisors/aileen-gutierrez/partners" element={<AileenPartnerProgram />} />
           <Route path="/aileen" element={<Navigate to="/advisors/aileen-gutierrez/refer" replace />} />
           <Route path="/aileen/partners" element={<Navigate to="/advisors/aileen-gutierrez/partners" replace />} />
+          <Route path="/connect-with-omar" element={<OmarConnect />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
