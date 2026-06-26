@@ -36,6 +36,7 @@ import { submitForm } from "@/lib/formSubmit";
 import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
 import { useToast } from "@/hooks/use-toast";
 import omarImage from "@/assets/advisors/omar-sanchez.jpg";
+import tfaLogo from "@/assets/tfa-logo.png";
 
 const OMAR_SCHEDULER =
   "https://tfa.pipedrive.com/scheduler/M93alkfo/strategic-call-with-omar-sanchez-the-financial-architects";
@@ -263,9 +264,12 @@ const OmarConnect = () => {
         {/* Sticky Header */}
         <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur supports-[backdrop-filter]:bg-background/70">
           <div className="container mx-auto flex items-center justify-between px-4 py-3">
-            <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-foreground sm:text-xs">
-              The Financial Architects
-            </span>
+            <a href="/" className="flex items-center gap-2.5" aria-label="The Financial Architects home">
+              <img src={tfaLogo} alt="The Financial Architects" className="h-8 w-auto sm:h-9" />
+              <span className="hidden text-[11px] font-semibold uppercase tracking-[0.22em] text-foreground sm:inline sm:text-xs">
+                The Financial Architects
+              </span>
+            </a>
             <Button
               size="sm"
               onClick={scrollToApply}
@@ -671,9 +675,12 @@ const OmarConnect = () => {
           <div className="container mx-auto px-4">
             <div className="grid gap-8 lg:grid-cols-3">
               <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-foreground">
-                  The Financial Architects
-                </p>
+                <div className="flex items-center gap-3">
+                  <img src={tfaLogo} alt="The Financial Architects" className="h-10 w-auto" />
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-foreground">
+                    The Financial Architects
+                  </p>
+                </div>
                 <p className="mt-4 text-sm text-muted-foreground">
                   Omar Sanchez, COO
                 </p>
