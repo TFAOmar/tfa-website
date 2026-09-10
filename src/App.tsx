@@ -24,6 +24,7 @@ import BlogPost from "./pages/BlogPost";
 import Advisors from "./pages/Advisors";
 import Partners from "./pages/Partners";
 import PreferredPartners from "./pages/PreferredPartners";
+import PreferredPartnerProfile from "./pages/PreferredPartnerProfile";
 import AdvisorOnboarding from "./pages/AdvisorOnboarding";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminFormSubmissions from "./pages/AdminFormSubmissions";
@@ -136,6 +137,7 @@ import MinhNewsletter from "./pages/MinhNewsletter";
 import Trust from "./pages/Trust";
 import AdminLeads from "./pages/AdminLeads";
 import AdminPartners from "./pages/AdminPartners";
+import AdminPreferredPartners from "./pages/AdminPreferredPartners";
 import Start from "./pages/Start";
 import Concierge from "./pages/Concierge";
 import IntakeDashboard from "./pages/IntakeDashboard";
@@ -178,6 +180,8 @@ const AppLayout = () => {
           <Route path="/locations" element={<Locations />} />
           <Route path="/partners" element={<Partners />} />
           <Route path="/preferred-partners" element={<PreferredPartners />} />
+          <Route path="/preferred-partners/:slug" element={<PreferredPartnerProfile />} />
+
           <Route path="/contact" element={<Contact />} />
           <Route path="/shop" element={<Shop />} />
           <Route path="/shop/:handle" element={<ProductDetail />} />
