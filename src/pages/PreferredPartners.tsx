@@ -5,6 +5,7 @@ import { siteConfig } from "@/lib/seo/siteConfig";
 import { generateWebPageSchema, generateBreadcrumbSchema } from "@/lib/seo/schemas";
 import { partnerCategories } from "@/components/preferred-partners/partnerCategories";
 import PartnerApplicationForm from "@/components/preferred-partners/PartnerApplicationForm";
+import PartnerDirectory from "@/components/preferred-partners/PartnerDirectory";
 import { Handshake, Users, CalendarCheck, Repeat, Award, MessageSquare } from "lucide-react";
 
 const benefits = [

@@ -229,6 +229,12 @@ const AppLayout = () => {
               <AdminPartners />
             </ProtectedRoute>
           } />
+          <Route path="/admin/preferred-partners" element={
+            <ProtectedRoute requireAdmin>
+              <AdminPreferredPartners />
+            </ProtectedRoute>
+          } />
+
           <Route path="/protect" element={<Protect />} />
           <Route path="/trust" element={<Trust />} />
           <Route path="/start" element={<Start />} />
