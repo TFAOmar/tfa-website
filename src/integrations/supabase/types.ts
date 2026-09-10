@@ -1156,6 +1156,69 @@ export type Database = {
         }
         Relationships: []
       }
+      preferred_partners: {
+        Row: {
+          bio: string | null
+          category: string
+          city: string | null
+          company: string | null
+          created_at: string
+          display_order: number
+          email: string | null
+          id: string
+          is_published: boolean
+          name: string
+          phone: string | null
+          photo_url: string | null
+          slug: string
+          specialties: string[]
+          state: string | null
+          title: string | null
+          updated_at: string
+          website_url: string | null
+        }
+        Insert: {
+          bio?: string | null
+          category: string
+          city?: string | null
+          company?: string | null
+          created_at?: string
+          display_order?: number
+          email?: string | null
+          id?: string
+          is_published?: boolean
+          name: string
+          phone?: string | null
+          photo_url?: string | null
+          slug: string
+          specialties?: string[]
+          state?: string | null
+          title?: string | null
+          updated_at?: string
+          website_url?: string | null
+        }
+        Update: {
+          bio?: string | null
+          category?: string
+          city?: string | null
+          company?: string | null
+          created_at?: string
+          display_order?: number
+          email?: string | null
+          id?: string
+          is_published?: boolean
+          name?: string
+          phone?: string | null
+          photo_url?: string | null
+          slug?: string
+          specialties?: string[]
+          state?: string | null
+          title?: string | null
+          updated_at?: string
+          website_url?: string | null
+        }
+        Relationships: []
+      }
       prequalification_applications: {
         Row: {
           advisor_email: string | null
