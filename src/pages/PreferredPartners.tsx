@@ -5,6 +5,7 @@ import { siteConfig } from "@/lib/seo/siteConfig";
 import { generateWebPageSchema, generateBreadcrumbSchema } from "@/lib/seo/schemas";
 import { partnerCategories } from "@/components/preferred-partners/partnerCategories";
 import PartnerApplicationForm from "@/components/preferred-partners/PartnerApplicationForm";
+import PartnerDirectory from "@/components/preferred-partners/PartnerDirectory";
 import { Handshake, Users, CalendarCheck, Repeat, Award, MessageSquare } from "lucide-react";
 
 const benefits = [
@@ -115,7 +116,10 @@ const PreferredPartners = () => {
           </div>
         </section>
 
+        <PartnerDirectory />
+
         {/* Categories */}
+
         <section className="py-20 bg-gradient-to-b from-background to-secondary/20">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-14">
