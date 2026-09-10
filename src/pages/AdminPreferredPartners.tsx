@@ -174,7 +174,7 @@ const AdminPreferredPartners = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <SEOHead title="Manage Preferred Partners" description="Admin management of preferred partner profiles." noindex />
+      <SEOHead title="Manage Preferred Partners" description="Admin management of preferred partner profiles." noIndex />
       <AdminTopBar />
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10">
