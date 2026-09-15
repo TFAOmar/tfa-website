@@ -544,29 +544,41 @@ const KristinMartinConnect = () => {
           <p className="mx-auto mt-2 max-w-xl text-center text-muted-foreground">
             Tap any topic to add it to your clarity application.
           </p>
-          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-8 grid items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {TOPICS.map((t) => {
               const Icon = t.icon;
               const active = interests.includes(t.slug);
               return (
-                <button
+                <div
                   key={t.slug}
-                  type="button"
-                  onClick={() => tapCard(t.slug)}
-                  aria-pressed={active}
-                  className={`rounded-xl border p-6 text-left shadow-sm transition hover:shadow-md ${
+                  onClick={() => toggleCard(t.slug)}
+                  className={`flex h-full cursor-pointer flex-col rounded-xl border-2 p-6 text-left shadow-sm transition hover:shadow-md ${
                     active ? "border-accent bg-accent/10" : "border-border bg-white"
                   }`}
                 >
                   <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-navy/10">
                     <Icon className="h-6 w-6 text-navy" aria-hidden="true" />
                   </span>
-                  <span className="mt-4 block text-lg font-semibold text-navy">{t.label}</span>
-                  <span className="mt-2 block text-sm text-muted-foreground">{t.blurb}</span>
-                  <span className="mt-3 block text-sm font-medium text-navy">
-                    {active ? "Added to your request ✓" : "Add to my request"}
+                  <span className="mt-4 block min-h-[3.5rem] text-lg font-semibold leading-snug text-navy">
+                    {t.label}
                   </span>
-                </button>
+                  <span className="mt-2 block text-sm text-muted-foreground">{t.blurb}</span>
+                  <button
+                    type="button"
+                    aria-pressed={active}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleCard(t.slug);
+                    }}
+                    className={`mt-4 w-full rounded-lg border-2 px-4 py-2 text-sm font-semibold transition ${
+                      active
+                        ? "border-accent bg-accent text-navy"
+                        : "border-navy/30 bg-white text-navy hover:border-navy"
+                    }`}
+                  >
+                    {active ? "✓ Added" : "Add to my request"}
+                  </button>
+                </div>
               );
             })}
           </div>
