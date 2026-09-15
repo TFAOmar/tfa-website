@@ -283,7 +283,7 @@ const KristinMartinConnect = () => {
           <div className="container mx-auto max-w-5xl px-5 pt-8">
             <img src={tfaLogo} alt="The Financial Architects" className="h-12 w-auto" />
           </div>
-          <div className="container mx-auto max-w-5xl grid gap-6 px-5 py-8 md:grid-cols-[minmax(0,320px)_1fr] md:items-end">
+          <div className="container mx-auto max-w-5xl grid gap-6 px-5 py-8 md:grid-cols-[minmax(0,320px)_1fr] md:items-center">
             <img
               src={kristinFull.url}
               alt={`${KRISTIN.name}, ${KRISTIN.title} at The Financial Architects`}
@@ -472,6 +472,7 @@ const KristinMartinConnect = () => {
                       <Input
                         id="preferredDate"
                         type="date"
+                        min={todayISO}
                         className="mt-1"
                         value={preferredDate}
                         onChange={(e) => setPreferredDate(e.target.value)}
