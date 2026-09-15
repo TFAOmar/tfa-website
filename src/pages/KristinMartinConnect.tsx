@@ -176,6 +176,7 @@ const KristinMartinConnect = () => {
   };
 
   const smsRequiredMissing = follow === "text" && !smsConsent;
+  const todayISO = new Date().toISOString().split("T")[0];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
