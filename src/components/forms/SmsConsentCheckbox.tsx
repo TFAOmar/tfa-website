@@ -71,7 +71,7 @@ const SmsConsentCheckbox = ({
           {required
             ? es
               ? "(Requerido para recibir seguimiento por texto.)"
-              : "(Required because you chose text as your follow-up method.)"
+              : "(Required for text follow-up.)"
             : es
               ? "(Opcional)"
               : "(Optional — not required to submit.)"}
