@@ -598,7 +598,12 @@ const KristinMartinConnect = () => {
             <p>
               {KRISTIN.name} · {KRISTIN.license} · The Financial Architects
             </p>
-            <p>{SMS_CONSENT_TEXT_EN}</p>
+            <p>
+              By submitting a form on this page you agree to be contacted by The Financial
+              Architects by phone or email. SMS messages are sent only if you opt in via the
+              consent checkbox. Message frequency varies. Message and data rates may apply. Reply
+              STOP to opt out or HELP for help.
+            </p>
             <p className="flex flex-wrap justify-center gap-x-4 gap-y-1">
               <Link to="/privacy-policy" className="underline">
                 Privacy Policy
