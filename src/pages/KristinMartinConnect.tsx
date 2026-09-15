@@ -499,7 +499,11 @@ const KristinMartinConnect = () => {
                 </div>
 
                 <div className="mt-6">
-                  <SmsConsentCheckbox checked={smsConsent} onChange={setSmsConsent} />
+                  <SmsConsentCheckbox
+                    checked={smsConsent}
+                    onChange={setSmsConsent}
+                    required={follow === "text"}
+                  />
                 </div>
 
                 <Button
