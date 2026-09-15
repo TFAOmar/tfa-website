@@ -268,13 +268,14 @@ const KristinMartinConnect = () => {
         ogType="profile"
       />
       <JsonLd
-        data={generatePersonSchema({
-          name: KRISTIN.name,
-          jobTitle: KRISTIN.title,
-          url: `${siteConfig.url}/kristin`,
-          email: KRISTIN.email,
-          telephone: KRISTIN.call,
-        })}
+        data={generatePersonSchema(
+          KRISTIN.name,
+          KRISTIN.title,
+          "Director of Agents & Operations at The Financial Architects, serving clients and future agents across Southern California.",
+          kristinFull.url,
+          `${siteConfig.url}/kristin`,
+          TOPICS.map((t) => t.label),
+        )}
       />
 
       <div className="min-h-screen bg-white">
