@@ -570,7 +570,7 @@ const KristinMartinConnect = () => {
                   <span className="mt-4 block min-h-[3.5rem] text-lg font-semibold leading-snug text-navy">
                     {t.label}
                   </span>
-                  <span className="mt-2 block text-sm text-muted-foreground">{t.blurb}</span>
+                  <span className="mb-4 mt-2 block text-sm text-muted-foreground">{t.blurb}</span>
                   <button
                     type="button"
                     aria-pressed={active}
