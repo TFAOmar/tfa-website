@@ -30,7 +30,7 @@ import { generatePersonSchema } from "@/lib/seo/schemas";
 import { siteConfig } from "@/lib/seo/siteConfig";
 import SmsConsentCheckbox, {
   SMS_CONSENT_TEXT_VERSION,
-  SMS_CONSENT_TEXT_EN,
+  
 } from "@/components/forms/SmsConsentCheckbox";
 import tfaLogo from "@/assets/tfa-logo.png";
 import kristinFull from "@/assets/advisors/kristin-martin-full.png.asset.json";
