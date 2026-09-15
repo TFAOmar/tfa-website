@@ -30,7 +30,7 @@ import { generatePersonSchema } from "@/lib/seo/schemas";
 import { siteConfig } from "@/lib/seo/siteConfig";
 import SmsConsentCheckbox, {
   SMS_CONSENT_TEXT_VERSION,
-  SMS_CONSENT_TEXT_EN,
+  
 } from "@/components/forms/SmsConsentCheckbox";
 import tfaLogo from "@/assets/tfa-logo.png";
 import kristinFull from "@/assets/advisors/kristin-martin-full.png.asset.json";
@@ -169,6 +169,14 @@ const KristinMartinConnect = () => {
     );
   };
 
+  const toggleCard = (slug: string) => {
+    if (interests.includes(slug)) {
+      setInterests((prev) => prev.filter((s) => s !== slug));
+      return;
+    }
+    tapCard(slug);
+  };
+
   const tapCard = (slug: string) => {
     setPath("clarity");
     setInterests((prev) => (prev.includes(slug) ? prev : [...prev, slug]));
@@ -176,6 +184,7 @@ const KristinMartinConnect = () => {
   };
 
   const smsRequiredMissing = follow === "text" && !smsConsent;
+  const todayISO = new Date().toISOString().split("T")[0];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -282,7 +291,7 @@ const KristinMartinConnect = () => {
           <div className="container mx-auto max-w-5xl px-5 pt-8">
             <img src={tfaLogo} alt="The Financial Architects" className="h-12 w-auto" />
           </div>
-          <div className="container mx-auto max-w-5xl grid gap-6 px-5 py-8 md:grid-cols-[minmax(0,320px)_1fr] md:items-end">
+          <div className="container mx-auto max-w-5xl grid gap-6 px-5 py-8 md:grid-cols-[minmax(0,320px)_1fr] md:items-center">
             <img
               src={kristinFull.url}
               alt={`${KRISTIN.name}, ${KRISTIN.title} at The Financial Architects`}
@@ -471,6 +480,7 @@ const KristinMartinConnect = () => {
                       <Input
                         id="preferredDate"
                         type="date"
+                        min={todayISO}
                         className="mt-1"
                         value={preferredDate}
                         onChange={(e) => setPreferredDate(e.target.value)}
@@ -542,29 +552,41 @@ const KristinMartinConnect = () => {
           <p className="mx-auto mt-2 max-w-xl text-center text-muted-foreground">
             Tap any topic to add it to your clarity application.
           </p>
-          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-8 grid items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {TOPICS.map((t) => {
               const Icon = t.icon;
               const active = interests.includes(t.slug);
               return (
-                <button
+                <div
                   key={t.slug}
-                  type="button"
-                  onClick={() => tapCard(t.slug)}
-                  aria-pressed={active}
-                  className={`rounded-xl border p-6 text-left shadow-sm transition hover:shadow-md ${
+                  onClick={() => toggleCard(t.slug)}
+                  className={`flex h-full cursor-pointer flex-col rounded-xl border-2 p-6 text-left shadow-sm transition hover:shadow-md ${
                     active ? "border-accent bg-accent/10" : "border-border bg-white"
                   }`}
                 >
                   <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-navy/10">
                     <Icon className="h-6 w-6 text-navy" aria-hidden="true" />
                   </span>
-                  <span className="mt-4 block text-lg font-semibold text-navy">{t.label}</span>
-                  <span className="mt-2 block text-sm text-muted-foreground">{t.blurb}</span>
-                  <span className="mt-3 block text-sm font-medium text-navy">
-                    {active ? "Added to your request ✓" : "Add to my request"}
+                  <span className="mt-4 block min-h-[3.5rem] text-lg font-semibold leading-snug text-navy">
+                    {t.label}
                   </span>
-                </button>
+                  <span className="mb-4 mt-2 block text-sm text-muted-foreground">{t.blurb}</span>
+                  <button
+                    type="button"
+                    aria-pressed={active}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleCard(t.slug);
+                    }}
+                    className={`mt-auto w-full rounded-lg border-2 px-4 py-2 text-sm font-semibold transition ${
+                      active
+                        ? "border-accent bg-accent text-navy"
+                        : "border-navy/30 bg-white text-navy hover:border-navy"
+                    }`}
+                  >
+                    {active ? "✓ Added" : "Add to my request"}
+                  </button>
+                </div>
               );
             })}
           </div>
@@ -576,7 +598,12 @@ const KristinMartinConnect = () => {
             <p>
               {KRISTIN.name} · {KRISTIN.license} · The Financial Architects
             </p>
-            <p>{SMS_CONSENT_TEXT_EN}</p>
+            <p>
+              By submitting a form on this page you agree to be contacted by The Financial
+              Architects by phone or email. SMS messages are sent only if you opt in via the
+              consent checkbox. Message frequency varies. Message and data rates may apply. Reply
+              STOP to opt out or HELP for help.
+            </p>
             <p className="flex flex-wrap justify-center gap-x-4 gap-y-1">
               <Link to="/privacy-policy" className="underline">
                 Privacy Policy
