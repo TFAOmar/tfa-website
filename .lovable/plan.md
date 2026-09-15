@@ -2,6 +2,8 @@
 
 A standalone, shareable page (QR-code friendly) where someone can meet Kristin, choose a path, and submit a short request.
 
+Tapping a service card sets the path to Clarity, checks that interest, and scrolls to the form. Tag values are prefixed so they never collide with existing Pipedrive labels: `path:join` / `path:clarity` and `interest:<slug>`. The Path and Interests rows appear in the notification email only when those values are present, so no other form's email changes.
+
 ## Page address
 - `/kristin` — the canonical page
 - `/advisors/kristin-martin/connect` — redirects to `/kristin`
