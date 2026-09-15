@@ -83,6 +83,7 @@ const formSubmitSchema = z.object({
   sms_consent_text_version: z.string().max(100).optional(),
   path_label: z.string().max(100).optional(), // Which path the visitor chose (advisor landing pages)
   interests_label: z.string().max(500).optional(), // Human-readable interest topics
+  join_interest: z.string().max(40).optional(), // "recruit" | "partner" on advisor connect pages
   preferred_follow_up: z.string().max(20).optional(),
   preferred_date: z.string().max(40).optional(),
   preferred_time: z.string().max(40).optional(),

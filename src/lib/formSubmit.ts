@@ -27,6 +27,7 @@ export interface FormSubmitPayload {
   sms_consent_text_version?: string; // Version of the disclosure wording shown
   path_label?: string; // Which path the visitor chose on an advisor landing page
   interests_label?: string; // Human-readable list of selected interest topics
+  join_interest?: string; // "recruit" | "partner" on advisor connect pages
   preferred_follow_up?: string; // "Email" | "Text"
   preferred_date?: string;
   preferred_time?: string;
