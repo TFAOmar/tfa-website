@@ -230,13 +230,11 @@ const KristinMartinConnect = () => {
         sms_consent: smsConsent,
         sms_consent_text_version: SMS_CONSENT_TEXT_VERSION,
         honeypot: honeypotValue,
-        ...(({
-          path_label: pathLabel,
-          interests_label: interestLabels.join(", "),
-          preferred_follow_up: follow === "text" ? "Text" : "Email",
-          preferred_date: path === "clarity" ? preferredDate : "",
-          preferred_time: path === "clarity" ? preferredTime : "",
-        } as unknown) as Record<string, never>),
+        path_label: pathLabel,
+        interests_label: interestLabels.join(", ") || undefined,
+        preferred_follow_up: follow === "text" ? "Text" : "Email",
+        preferred_date: (path === "clarity" && preferredDate) || undefined,
+        preferred_time: (path === "clarity" && preferredTime) || undefined,
       });
 
       if (!result.ok) throw new Error(result.error || "Submission failed");
