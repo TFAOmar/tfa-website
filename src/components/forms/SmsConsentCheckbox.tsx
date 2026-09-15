@@ -35,6 +35,7 @@ const SmsConsentCheckbox = ({
   variant = "light",
   id = "sms-consent",
   className = "",
+  required = false,
 }: SmsConsentCheckboxProps) => {
   const es = lang === "es";
   const isDark = variant === "dark";
