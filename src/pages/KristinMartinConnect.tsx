@@ -578,7 +578,7 @@ const KristinMartinConnect = () => {
                       e.stopPropagation();
                       toggleCard(t.slug);
                     }}
-                    className={`mt-auto w-full rounded-lg border-2 px-4 py-2 text-sm font-semibold transition [margin-top:auto] ${
+                    className={`mt-auto w-full rounded-lg border-2 px-4 py-2 text-sm font-semibold transition ${
                       active
                         ? "border-accent bg-accent text-navy"
                         : "border-navy/30 bg-white text-navy hover:border-navy"
