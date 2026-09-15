@@ -25,6 +25,11 @@ export interface FormSubmitPayload {
   partner_slug?: string; // Attributes the submission to a referral partner account
   sms_consent?: boolean; // Optional TCPA/10DLC SMS opt-in
   sms_consent_text_version?: string; // Version of the disclosure wording shown
+  path_label?: string; // Which path the visitor chose on an advisor landing page
+  interests_label?: string; // Human-readable list of selected interest topics
+  preferred_follow_up?: string; // "Email" | "Text"
+  preferred_date?: string;
+  preferred_time?: string;
 }
 
 export interface FormSubmitResponse {

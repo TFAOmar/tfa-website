@@ -81,6 +81,11 @@ const formSubmitSchema = z.object({
   partner_slug: z.string().max(100).optional(), // Referral partner slug for attribution
   sms_consent: z.boolean().optional(), // Optional TCPA/10DLC SMS opt-in
   sms_consent_text_version: z.string().max(100).optional(),
+  path_label: z.string().max(100).optional(), // Which path the visitor chose (advisor landing pages)
+  interests_label: z.string().max(500).optional(), // Human-readable interest topics
+  preferred_follow_up: z.string().max(20).optional(),
+  preferred_date: z.string().max(40).optional(),
+  preferred_time: z.string().max(40).optional(),
 });
 
 type FormSubmitData = z.infer<typeof formSubmitSchema>;
@@ -386,6 +391,11 @@ const generateTeamNotificationHtml = (
     formData.state && { label: "State", value: formData.state },
     formData.preferred_language && { label: "Language", value: formData.preferred_language },
     formData.company_name && { label: "Company", value: formData.company_name },
+    formData.path_label && { label: "Path", value: formData.path_label },
+    formData.interests_label && { label: "Interests", value: formData.interests_label },
+    formData.preferred_follow_up && { label: "Preferred Follow-Up", value: formData.preferred_follow_up },
+    formData.preferred_date && { label: "Preferred Date", value: formData.preferred_date },
+    formData.preferred_time && { label: "Preferred Time", value: formData.preferred_time },
     formData.notes && { label: "Message/Notes", value: formData.notes },
     advisorName && { label: "Assigned Advisor", value: advisorName },
     formData.source_url && { label: "Source URL", value: formData.source_url },

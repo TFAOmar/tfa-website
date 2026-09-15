@@ -20,6 +20,8 @@ interface SmsConsentCheckboxProps {
   variant?: "light" | "dark";
   id?: string;
   className?: string;
+  /** Only true when the visitor asked to be contacted by text */
+  required?: boolean;
 }
 
 /**
@@ -33,6 +35,7 @@ const SmsConsentCheckbox = ({
   variant = "light",
   id = "sms-consent",
   className = "",
+  required = false,
 }: SmsConsentCheckboxProps) => {
   const es = lang === "es";
   const isDark = variant === "dark";
@@ -65,7 +68,13 @@ const SmsConsentCheckbox = ({
         </Link>
         {". "}
         <span className="opacity-90">
-          {es ? "(Opcional)" : "(Optional — not required to submit.)"}
+          {required
+            ? es
+              ? "(Requerido para recibir seguimiento por texto.)"
+              : "(Required because you chose text as your follow-up method.)"
+            : es
+              ? "(Opcional)"
+              : "(Optional — not required to submit.)"}
         </span>
       </label>
     </div>
