@@ -169,6 +169,14 @@ const KristinMartinConnect = () => {
     );
   };
 
+  const toggleCard = (slug: string) => {
+    if (interests.includes(slug)) {
+      setInterests((prev) => prev.filter((s) => s !== slug));
+      return;
+    }
+    tapCard(slug);
+  };
+
   const tapCard = (slug: string) => {
     setPath("clarity");
     setInterests((prev) => (prev.includes(slug) ? prev : [...prev, slug]));
