@@ -20,6 +20,8 @@ interface SmsConsentCheckboxProps {
   variant?: "light" | "dark";
   id?: string;
   className?: string;
+  /** Only true when the visitor asked to be contacted by text */
+  required?: boolean;
 }
 
 /**
