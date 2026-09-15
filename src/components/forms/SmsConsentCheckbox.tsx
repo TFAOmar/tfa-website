@@ -68,7 +68,13 @@ const SmsConsentCheckbox = ({
         </Link>
         {". "}
         <span className="opacity-90">
-          {es ? "(Opcional)" : "(Optional — not required to submit.)"}
+          {required
+            ? es
+              ? "(Requerido para recibir seguimiento por texto.)"
+              : "(Required because you chose text as your follow-up method.)"
+            : es
+              ? "(Opcional)"
+              : "(Optional — not required to submit.)"}
         </span>
       </label>
     </div>
