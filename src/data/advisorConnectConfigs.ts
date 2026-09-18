@@ -1,4 +1,5 @@
 import kristinFull from "@/assets/advisors/kristin-martin-full.png.asset.json";
+import aimeeFull from "@/assets/advisors/aimee-johnson-full.jpg.asset.json";
 
 export interface JoinInterestOption {
   value: string;
@@ -51,9 +52,11 @@ export const aimeeJohnsonConnectConfig: AdvisorConnectConfig = {
   name: "Aimee Johnson",
   // Placeholder until her business card details arrive
   title: "Financial Strategist",
+  license: "CA Lic# [PENDING]",
   address: "13890 Peyton Dr. #A, Chino Hills, CA 91709",
-  call: "(888) 305-5396",
-  text: "(888) 305-5396",
+  photo: aimeeFull.url,
+  call: "(909) 300-7475",
+  text: "(909) 300-7475",
   office: "(888) 305-5396",
   email: "ajohnson@tfainsuranceadvisors.com",
   advisorSlug: "aimee-johnson",
