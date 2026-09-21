@@ -53,7 +53,7 @@ const Rise = () => {
           <button
             type="button"
             onClick={() => scrollTo("rise-intake")}
-            className="inline-flex min-h-[44px] items-center rounded-full bg-navy px-5 text-sm font-semibold text-primary-foreground transition hover:bg-navy-light motion-reduce:transition-none"
+            className="inline-flex min-h-[44px] items-center whitespace-nowrap rounded-full bg-navy px-5 text-sm font-semibold text-primary-foreground transition hover:bg-navy-light motion-reduce:transition-none"
           >
             Talk with us
           </button>

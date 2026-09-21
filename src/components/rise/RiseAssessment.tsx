@@ -20,7 +20,7 @@ const RiseAssessment = ({ answers, setAnswers, interests, setInterests, onFinish
   );
 
   const q = visible[Math.min(step, visible.length - 1)];
-  const progress = Math.round(((step + (done ? 1 : 0)) / visible.length) * 100);
+  const progress = Math.round(((step + 1) / visible.length) * 100);
 
   const advance = () => {
     if (step + 1 < visible.length) setStep(step + 1);
