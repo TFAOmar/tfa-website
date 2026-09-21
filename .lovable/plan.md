@@ -34,7 +34,7 @@ One Rise config module holds: accent color, logo paths, video URL, advisor names
 
 ## SEO and motion
 
-- `noindex` robots meta added on mount and removed on unmount, no new dependency, no effect on other routes.
+- Use the project's existing `SEOHead` component as-is (import only, no edits) with `noIndex`, title "Rise × The Financial Architects | Planning for New Homeowners", a one-sentence description, and canonical `https://tfawealthplanning.com/rise`. No hand-written robots meta effect. The report will confirm the noindex tag does not persist after navigating to another route.
 - Restrained motion: subtle fade/translate on section entry, smooth step transitions, `prefers-reduced-motion` respected. No pinned scroll, parallax, or gradient text.
 
 ## Technical notes
@@ -42,13 +42,15 @@ One Rise config module holds: accent color, logo paths, video URL, advisor names
 New files (all Rise-scoped):
 
 - `src/config/rise.config.ts` — the single swappable content/config file.
-- `src/pages/rise/RisePage.tsx` — page shell, accent variable, noindex effect, section composition.
+- `src/pages/rise/RisePage.tsx` — page shell, accent variable, SEOHead usage, section composition.
 - `src/components/rise/RiseHeader.tsx`, `RiseHero.tsx`, `RiseVideo.tsx`, `RiseWhyNow.tsx`, `RiseQuestionnaire.tsx`, `RiseSummaryContact.tsx`, `RiseAdvisors.tsx`, `RiseTestimonials.tsx`, `RiseFooter.tsx`.
 - `src/lib/rise/questions.ts` (questions + branching), `src/lib/rise/summary.ts` (summary rules), `src/lib/rise/submitRiseLead.ts` (mock/live submit).
+
+Existing files imported unchanged: `SEOHead` and the `useHoneypot` hook.
 
 Existing files touched:
 
 - `src/App.tsx` — only the import line, to point the already-registered `/rise` route at the new page component. The route entry and standalone-page entry already exist and stay as they are.
-- Old concept files `src/pages/Rise.tsx`, `src/components/rise/RiseAssessment.tsx`, `src/components/rise/RiseIntakeForm.tsx`, `src/data/riseLandingContent.ts`, `src/lib/rise/submitLead.ts` are removed since they are used only by `/rise`.
+- Old concept files `src/pages/Rise.tsx`, `src/components/rise/RiseAssessment.tsx`, `src/components/rise/RiseIntakeForm.tsx`, `src/data/riseLandingContent.ts`, `src/lib/rise/submitLead.ts` are removed. An import search confirms the only reference outside the Rise files is the `src/App.tsx` import line above.
 
 No global CSS, Tailwind config, design token, shared header/footer, shared advisor page, form, CRM, Supabase, or dependency changes. Verification at 390px plus desktop, including branching, summary rules, mock submit, and the noindex tag not persisting after navigation.
