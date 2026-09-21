@@ -85,7 +85,7 @@ const RiseQuestionnaire = () => {
           >
             <div
               className="h-full rounded-full transition-all duration-300 motion-reduce:transition-none"
-              style={{ width: `${progress}%`, backgroundColor: "var(--rise-accent)" }}
+              style={{ width: `${Math.max(progress, 4)}%`, backgroundColor: "var(--rise-accent)" }}
             />
           </div>
 
