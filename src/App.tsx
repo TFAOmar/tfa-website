@@ -92,7 +92,7 @@ import AdvisorRosieNuno from "./pages/AdvisorRosieNuno";
 import AdvisorAileenGutierrez from "./pages/AdvisorAileenGutierrez";
 import AdvisorKristinMartin from "./pages/AdvisorKristinMartin";
 import KristinMartinConnect from "./pages/KristinMartinConnect";
-import Rise from "./pages/Rise";
+import Rise from "./pages/rise/RisePage";
 import AimeeJohnsonConnect from "./pages/AimeeJohnsonConnect";
 import AdvisorAnitaVega from "./pages/AdvisorAnitaVega";
 import RuthPachecoTaxStrategy from "./pages/RuthPachecoTaxStrategy";
