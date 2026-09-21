@@ -50,9 +50,8 @@ export const kristinMartinConnectConfig: AdvisorConnectConfig = {
 
 export const aimeeJohnsonConnectConfig: AdvisorConnectConfig = {
   name: "Aimee Johnson",
-  // Placeholder until her business card details arrive
-  title: "Financial Strategist",
-  license: "CA Lic# [PENDING]",
+  title: "Business Development Agent",
+  license: "CA Lic# 4270102",
   address: "13890 Peyton Dr. #A, Chino Hills, CA 91709",
   photo: aimeeFull.url,
   call: "(909) 300-7475",
@@ -70,5 +69,5 @@ export const aimeeJohnsonConnectConfig: AdvisorConnectConfig = {
     { value: "partner", label: "Partnering", tag: "interest:partner" },
   ],
   personDescription:
-    "Financial Strategist at The Financial Architects, serving clients, future agents, and referral partners across Southern California.",
+    "Business Development Agent at The Financial Architects, serving clients, future agents, and referral partners across Southern California.",
 };
