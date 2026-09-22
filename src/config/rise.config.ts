@@ -6,6 +6,8 @@
  * this is the only file that needs editing.
  */
 
+import tfaLogo from "@/assets/tfa-logo.png";
+
 export type RiseFormMode = "mock" | "live";
 
 /** Controls how the contact step submits. "mock" logs to console only. */
@@ -14,6 +16,8 @@ export const RISE_FORM_MODE: RiseFormMode = "mock";
 export interface RiseAdvisor {
   name: string;
   title: string;
+  /** Optional. Rendered under the title when present. */
+  licenseNumber?: string;
   /** Two-sentence placeholder bio. */
   bio: string;
   /** Optional photo URL — initials placeholder renders while empty. */
@@ -38,7 +42,8 @@ export const riseConfig = {
   riseLogoSrc: "",
   riseWordmark: "RISE",
   tfaName: "The Financial Architects",
-  tfaLogoSrc: "",
+  /** Same logo file the main site header uses. */
+  tfaLogoSrc: tfaLogo,
 
   partnershipLine:
     "Estate and financial planning for Rise homeowners, provided by The Financial Architects.",
@@ -54,6 +59,7 @@ export const riseConfig = {
     {
       name: "Joshua",
       title: "Financial Professional, The Financial Architects",
+      licenseNumber: "",
       bio: "Placeholder bio — Joshua works with new homeowners to organize what comes after closing. He walks families through their options and connects them with the right professionals.",
       initials: "J",
       phone: "(888) 305-5396",
@@ -62,6 +68,7 @@ export const riseConfig = {
     {
       name: "Makenzie",
       title: "Financial Professional, The Financial Architects",
+      licenseNumber: "",
       bio: "Placeholder bio — Makenzie keeps every conversation unhurried and in plain language. She helps households see what they already have in place and what is still open.",
       initials: "M",
       phone: "(888) 305-5396",
