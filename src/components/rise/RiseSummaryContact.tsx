@@ -5,6 +5,8 @@ import { riseConfig, RISE_FORM_MODE } from "@/config/rise.config";
 import type { RiseAnswers } from "@/lib/rise/questions";
 import type { RiseSummaryItem } from "@/lib/rise/summary";
 import { submitRiseLead } from "@/lib/rise/submitRiseLead";
+import RiseReveal from "./RiseReveal";
+
 
 interface Props {
   answers: RiseAnswers;
@@ -57,7 +59,7 @@ const RiseSummaryContact = ({ answers, summary, onRestart }: Props) => {
   };
 
   return (
-    <div className="rounded-2xl border border-navy/10 bg-card p-6 shadow-sm sm:p-8">
+    <RiseReveal className="rounded-2xl border border-navy/10 bg-card p-6 shadow-sm sm:p-8">
       <h2 className="font-serif text-2xl font-bold text-navy sm:text-3xl">
         Areas worth a conversation
       </h2>
@@ -205,7 +207,8 @@ const RiseSummaryContact = ({ answers, summary, onRestart }: Props) => {
           </button>
         </form>
       )}
-    </div>
+    </RiseReveal>
+
   );
 };
 
