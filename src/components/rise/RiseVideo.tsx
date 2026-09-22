@@ -71,10 +71,6 @@ const RiseVideo = () => {
             )}
           </div>
         </div>
-
-        <p className="mt-3 text-xs text-muted-foreground">
-          {riseConfig.disclosures.educational}
-        </p>
       </RiseReveal>
     </section>
   );

@@ -20,11 +20,6 @@ const RiseWhyNow = () => (
           </RiseReveal>
         ))}
       </div>
-      <RiseReveal delay={90 * 4}>
-        <p className="mt-6 text-xs text-muted-foreground">
-          Educational information only — not legal advice.
-        </p>
-      </RiseReveal>
     </div>
   </section>
 );
