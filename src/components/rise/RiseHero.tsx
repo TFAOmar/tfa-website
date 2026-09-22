@@ -1,36 +1,59 @@
-import { useLayoutEffect, useState, type CSSProperties } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import { Play } from "lucide-react";
 import { riseConfig } from "@/config/rise.config";
 
 /**
- * Staged entrance on mount (no scroll observer, no delay before it begins).
+ * Cold-load opening sequence: the hero starts as solid navy, the text steps in,
+ * then the photo (with its gradient overlay) wipes down from the top.
  * Hidden starting states apply only once the script confirms it is running,
- * so with scripts off the hero renders fully visible.
+ * so with scripts off the hero renders fully visible. Reduced motion skips it.
  */
 const RiseHero = () => {
   const [armed, setArmed] = useState(false);
   const [shown, setShown] = useState(false);
   const [mobile, setMobile] = useState(false);
+  const [photoIn, setPhotoIn] = useState(false);
+  const [imgReady, setImgReady] = useState(false);
+  const cueDone = useRef(false);
 
   useLayoutEffect(() => {
     setMobile(!window.matchMedia?.("(min-width: 768px)").matches);
     const reduce =
       typeof window !== "undefined" &&
       window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-    if (reduce) return;
+    if (reduce) {
+      setPhotoIn(true);
+      return;
+    }
     setArmed(true);
     const raf = requestAnimationFrame(() => requestAnimationFrame(() => setShown(true)));
     return () => cancelAnimationFrame(raf);
   }, []);
 
-  const hidden = armed && !shown;
+  // Photo cue at 1200ms — but never before the image has decoded.
+  useEffect(() => {
+    if (!armed) return;
+    const t = window.setTimeout(() => {
+      cueDone.current = true;
+      if (imgReady) setPhotoIn(true);
+    }, 1200);
+    return () => window.clearTimeout(t);
+  }, [armed, imgReady]);
 
-  /** Fade + rise step. */
-  const step = (order: number, rise = 0): CSSProperties => ({
+  useEffect(() => {
+    if (imgReady && cueDone.current) setPhotoIn(true);
+  }, [imgReady]);
+
+  const hidden = armed && !shown;
+  const scale = mobile ? 0.75 : 1;
+  const ms = (n: number) => Math.round(n * scale);
+
+  /** Fade + rise step with an absolute start offset. */
+  const step = (delay: number, duration: number, rise = 0): CSSProperties => ({
     opacity: hidden ? 0 : 1,
     transform: hidden ? `translateY(${rise}px)` : "translateY(0)",
     transition: armed
-      ? `opacity 900ms ease-out ${order * 200}ms, transform 900ms ease-out ${order * 200}ms`
+      ? `opacity ${ms(duration)}ms ease-out ${ms(delay)}ms, transform ${ms(duration)}ms ease-out ${ms(delay)}ms`
       : undefined,
   });
 
@@ -38,22 +61,42 @@ const RiseHero = () => {
     ? "linear-gradient(to right, rgba(17,24,39,0.70) 0%, rgba(17,24,39,0.70) 100%)"
     : "linear-gradient(to right, rgba(17,24,39,0.78) 0%, rgba(17,24,39,0.15) 100%)";
 
+  const photoHidden = armed && !photoIn;
+
   return (
-    <section className="relative isolate flex min-h-[80vh] items-center overflow-hidden px-5 py-16 md:min-h-[88vh]">
-      <img
-        src={riseConfig.heroImage}
-        alt=""
+    <section
+      className="relative isolate flex min-h-[80vh] items-center overflow-hidden px-5 py-16 md:min-h-[88vh]"
+      style={{ backgroundColor: riseConfig.videoBandColor }}
+    >
+      {/* Photo + overlay travel together so the text keeps its contrast. */}
+      <div
         aria-hidden
-        className="absolute inset-0 -z-20 h-full w-full object-cover"
-        style={{ objectPosition: mobile ? "72% center" : "65% center" }}
-        fetchPriority="high"
-      />
-      <div aria-hidden className="absolute inset-0 -z-10" style={{ backgroundImage: overlay }} />
+        className="absolute inset-0 -z-10 motion-reduce:!transition-none"
+        style={{
+          clipPath: photoHidden ? "inset(0 0 100% 0)" : "inset(0)",
+          transition: armed
+            ? `clip-path ${mobile ? 1000 : 1400}ms cubic-bezier(0.22, 1, 0.36, 1)`
+            : undefined,
+        }}
+      >
+        <img
+          src={riseConfig.heroImage}
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover"
+          style={{ objectPosition: mobile ? "72% center" : "65% center" }}
+          fetchPriority="high"
+          onLoad={() => setImgReady(true)}
+          ref={(el) => {
+            if (el?.complete) setImgReady(true);
+          }}
+        />
+        <div className="absolute inset-0" style={{ backgroundImage: overlay }} />
+      </div>
 
       <div className="mx-auto w-full max-w-3xl">
         <p
           className="text-sm leading-relaxed motion-reduce:!transition-none"
-          style={{ ...step(0), color: "rgba(247,243,236,0.92)" }}
+          style={{ ...step(300, 700), color: "rgba(247,243,236,0.92)" }}
         >
           {riseConfig.partnershipLine}
         </p>
@@ -63,25 +106,25 @@ const RiseHero = () => {
           style={{
             backgroundColor: "var(--rise-accent)",
             transform: hidden ? "scaleX(0)" : "scaleX(1)",
-            transition: armed ? "transform 900ms ease-out 200ms" : undefined,
+            transition: armed ? `transform ${ms(700)}ms ease-out ${ms(500)}ms` : undefined,
           }}
         />
         <h1
           className="mt-5 font-serif text-[2rem] font-bold leading-[1.15] motion-reduce:!transition-none sm:text-5xl"
-          style={{ ...step(2, 32), color: "#F7F3EC" }}
+          style={{ ...step(700, 900, 32), color: "#F7F3EC" }}
         >
           You bought the home. Now protect what you're building.
         </h1>
         <p
           className="mt-4 text-base leading-relaxed motion-reduce:!transition-none sm:text-lg"
-          style={{ ...step(3), color: "rgba(247,243,236,0.92)" }}
+          style={{ ...step(900, 700), color: "rgba(247,243,236,0.92)" }}
         >
           A short, unhurried way to make sure the home — and the people in it — are actually covered.
         </p>
 
         <div
           className="mt-8 flex flex-col items-start gap-3 motion-reduce:!transition-none sm:flex-row sm:items-center sm:gap-6"
-          style={step(4)}
+          style={step(1100, 700)}
         >
           <a
             href="#rise-questionnaire"
