@@ -30,30 +30,34 @@ const RiseHero = () => {
     return () => cancelAnimationFrame(raf);
   }, []);
 
-  // Photo cue at 1200ms — but never before the image has decoded.
+  const hidden = armed && !shown;
+  // Mobile holds 600ms instead of 700ms and shortens each duration by ~15%.
+  const scale = mobile ? 0.85 : 1;
+  const hold = mobile ? 600 : 700;
+  const ms = (n: number) => Math.round(n * scale);
+  /** Absolute desktop offset mapped onto the current hold + speed. */
+  const at = (delay: number) => Math.round(hold + (delay - 700) * scale);
+
+  // Photo cue at 2100ms (1790ms mobile) — but never before the image has decoded.
   useEffect(() => {
     if (!armed) return;
     const t = window.setTimeout(() => {
       cueDone.current = true;
       if (imgReady) setPhotoIn(true);
-    }, 1200);
+    }, at(2100));
     return () => window.clearTimeout(t);
-  }, [armed, imgReady]);
+  }, [armed, imgReady, mobile]);
 
   useEffect(() => {
     if (imgReady && cueDone.current) setPhotoIn(true);
   }, [imgReady]);
-
-  const hidden = armed && !shown;
-  const scale = mobile ? 0.75 : 1;
-  const ms = (n: number) => Math.round(n * scale);
 
   /** Fade + rise step with an absolute start offset. */
   const step = (delay: number, duration: number, rise = 0): CSSProperties => ({
     opacity: hidden ? 0 : 1,
     transform: hidden ? `translateY(${rise}px)` : "translateY(0)",
     transition: armed
-      ? `opacity ${ms(duration)}ms ease-out ${ms(delay)}ms, transform ${ms(duration)}ms ease-out ${ms(delay)}ms`
+      ? `opacity ${ms(duration)}ms ease-out ${at(delay)}ms, transform ${ms(duration)}ms ease-out ${at(delay)}ms`
       : undefined,
   });
 
@@ -75,7 +79,7 @@ const RiseHero = () => {
         style={{
           clipPath: photoHidden ? "inset(0 0 100% 0)" : "inset(0)",
           transition: armed
-            ? `clip-path ${mobile ? 1000 : 1400}ms cubic-bezier(0.22, 1, 0.36, 1)`
+            ? `clip-path ${mobile ? 1300 : 1600}ms cubic-bezier(0.22, 1, 0.36, 1)`
             : undefined,
         }}
       >
@@ -96,7 +100,7 @@ const RiseHero = () => {
       <div className="mx-auto w-full max-w-3xl">
         <p
           className="text-sm leading-relaxed motion-reduce:!transition-none"
-          style={{ ...step(300, 700), color: "rgba(247,243,236,0.92)" }}
+          style={{ ...step(700, 800), color: "rgba(247,243,236,0.92)" }}
         >
           {riseConfig.partnershipLine}
         </p>
@@ -106,25 +110,25 @@ const RiseHero = () => {
           style={{
             backgroundColor: "var(--rise-accent)",
             transform: hidden ? "scaleX(0)" : "scaleX(1)",
-            transition: armed ? `transform ${ms(700)}ms ease-out ${ms(500)}ms` : undefined,
+            transition: armed ? `transform ${ms(800)}ms ease-out ${at(950)}ms` : undefined,
           }}
         />
         <h1
           className="mt-5 font-serif text-[2rem] font-bold leading-[1.15] motion-reduce:!transition-none sm:text-5xl"
-          style={{ ...step(700, 900, 32), color: "#F7F3EC" }}
+          style={{ ...step(1200, 1000, 32), color: "#F7F3EC" }}
         >
           You bought the home. Now protect what you're building.
         </h1>
         <p
           className="mt-4 text-base leading-relaxed motion-reduce:!transition-none sm:text-lg"
-          style={{ ...step(900, 700), color: "rgba(247,243,236,0.92)" }}
+          style={{ ...step(1450, 800), color: "rgba(247,243,236,0.92)" }}
         >
           A short, unhurried way to make sure the home — and the people in it — are actually covered.
         </p>
 
         <div
           className="mt-8 flex flex-col items-start gap-3 motion-reduce:!transition-none sm:flex-row sm:items-center sm:gap-6"
-          style={step(1100, 700)}
+          style={step(1700, 800)}
         >
           <a
             href="#rise-questionnaire"
