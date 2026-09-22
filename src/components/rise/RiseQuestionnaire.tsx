@@ -3,6 +3,7 @@ import { ArrowLeft, Check } from "lucide-react";
 import { visibleQuestions, type RiseAnswers } from "@/lib/rise/questions";
 import { buildRiseSummary } from "@/lib/rise/summary";
 import RiseSummaryContact from "./RiseSummaryContact";
+import RiseReveal from "./RiseReveal";
 
 const RiseQuestionnaire = () => {
   const [answers, setAnswers] = useState<RiseAnswers>({});
@@ -51,7 +52,7 @@ const RiseQuestionnaire = () => {
   if (done) {
     return (
       <section id="rise-questionnaire" className="scroll-mt-20 px-5 py-12 sm:py-16">
-        <div className="mx-auto max-w-2xl">
+        <RiseReveal className="mx-auto max-w-2xl">
           <RiseSummaryContact
             answers={answers}
             summary={summary}
@@ -61,14 +62,14 @@ const RiseQuestionnaire = () => {
               setDone(false);
             }}
           />
-        </div>
+        </RiseReveal>
       </section>
     );
   }
 
   return (
     <section id="rise-questionnaire" className="scroll-mt-20 px-5 py-12 sm:py-16">
-      <div className="mx-auto max-w-2xl">
+      <RiseReveal className="mx-auto max-w-2xl">
         <div className="rounded-2xl border border-navy/10 bg-card p-6 shadow-sm sm:p-8">
           <div className="flex items-center justify-between text-xs font-medium text-muted-foreground">
             <span>Question {step + 1}</span>
@@ -147,7 +148,7 @@ const RiseQuestionnaire = () => {
             </button>
           </div>
         </div>
-      </div>
+      </RiseReveal>
     </section>
   );
 };
