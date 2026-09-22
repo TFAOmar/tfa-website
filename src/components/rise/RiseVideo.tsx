@@ -1,16 +1,50 @@
-import { useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Play } from "lucide-react";
 import { riseConfig, youTubeIdFrom } from "@/config/rise.config";
-import RiseReveal from "./RiseReveal";
 
 /** Click-to-load YouTube facade (youtube-nocookie, no autoplay on page load). */
 const RiseVideo = () => {
   const [loaded, setLoaded] = useState(false);
+  const [fallbackThumb, setFallbackThumb] = useState(false);
   const id = youTubeIdFrom(riseConfig.videoUrl);
+
+  // Entrance: clip-path wipe for the thumbnail, delayed fade/scale for the pill.
+  const ref = useRef<HTMLDivElement>(null);
+  const [armed, setArmed] = useState(false);
+  const [shown, setShown] = useState(false);
+
+  useLayoutEffect(() => {
+    const reduce =
+      typeof window !== "undefined" &&
+      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    if (reduce || typeof IntersectionObserver === "undefined") return;
+    setArmed(true);
+  }, []);
+
+  useEffect(() => {
+    if (!armed || shown || !ref.current) return;
+    const el = ref.current;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          io.disconnect();
+          setShown(true);
+        }
+      },
+      { rootMargin: "0px 0px -8% 0px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [armed, shown]);
+
+  const hidden = armed && !shown;
+  const thumbSrc = id
+    ? `https://i.ytimg.com/vi/${id}/${fallbackThumb ? "hqdefault" : "maxresdefault"}.jpg`
+    : "";
 
   return (
     <section id="rise-video" className="scroll-mt-20 bg-secondary/40 px-5 py-12 sm:py-16">
-      <RiseReveal className="mx-auto max-w-3xl lg:max-w-[960px]">
+      <div ref={ref} className="mx-auto max-w-3xl lg:max-w-[960px]">
         <h2 className="font-serif text-2xl font-bold text-navy sm:text-3xl">
           {riseConfig.videoTitle}
         </h2>
@@ -18,7 +52,7 @@ const RiseVideo = () => {
           {riseConfig.videoReason}
         </p>
 
-        <div className="mt-6 overflow-hidden rounded-2xl border border-navy/10 bg-navy shadow-sm">
+        <div className="mt-6 overflow-hidden rounded-2xl bg-navy shadow-sm">
           <div className="relative aspect-video w-full">
             {id && loaded ? (
               <iframe
@@ -36,21 +70,27 @@ const RiseVideo = () => {
                 aria-label={`Play video: ${riseConfig.videoTitle}`}
               >
                 <img
-                  src={`https://i.ytimg.com/vi/${id}/hqdefault.jpg`}
+                  src={thumbSrc}
+                  onError={() => setFallbackThumb(true)}
                   alt=""
-                  className="h-full w-full object-cover opacity-80"
+                  className="h-full w-full object-cover transition-[clip-path] duration-[450ms] ease-out md:duration-700 motion-reduce:transition-none"
+                  style={{
+                    clipPath: hidden ? "inset(0 100% 0 0)" : "inset(0 0 0 0)",
+                  }}
                   loading="lazy"
                 />
-                <span className="absolute inset-0 flex items-center justify-center">
-                  <span
-                    className="flex h-16 w-16 items-center justify-center rounded-full shadow-lg transition group-hover:scale-105 motion-reduce:transition-none"
-                    style={{
-                      backgroundColor: "var(--rise-accent)",
-                      color: "var(--rise-accent-contrast)",
-                    }}
-                  >
-                    <Play className="ml-0.5 h-7 w-7" aria-hidden />
-                  </span>
+                <span
+                  className="absolute bottom-4 left-4 inline-flex min-h-[44px] items-center gap-2 rounded-full px-4 text-sm font-semibold shadow-lg transition duration-300 ease-out group-hover:scale-105 group-hover:duration-150 motion-reduce:transition-none sm:bottom-5 sm:left-5"
+                  style={{
+                    backgroundColor: "var(--rise-accent)",
+                    color: "var(--rise-accent-contrast)",
+                    opacity: hidden ? 0 : 1,
+                    transform: hidden ? "scale(0.9)" : "scale(1)",
+                    transitionDelay: hidden ? "0ms" : "300ms",
+                  }}
+                >
+                  <Play className="h-4 w-4" aria-hidden />
+                  Play · {riseConfig.videoLengthLabel === "5 minutes" ? "5 min" : riseConfig.videoLengthLabel}
                 </span>
               </button>
             ) : (
@@ -71,7 +111,7 @@ const RiseVideo = () => {
             )}
           </div>
         </div>
-      </RiseReveal>
+      </div>
     </section>
   );
 };
