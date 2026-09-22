@@ -30,30 +30,34 @@ const RiseHero = () => {
     return () => cancelAnimationFrame(raf);
   }, []);
 
-  // Photo cue at 1200ms — but never before the image has decoded.
+  const hidden = armed && !shown;
+  // Mobile holds 600ms instead of 700ms and shortens each duration by ~15%.
+  const scale = mobile ? 0.85 : 1;
+  const hold = mobile ? 600 : 700;
+  const ms = (n: number) => Math.round(n * scale);
+  /** Absolute desktop offset mapped onto the current hold + speed. */
+  const at = (delay: number) => Math.round(hold + (delay - 700) * scale);
+
+  // Photo cue at 2100ms (1790ms mobile) — but never before the image has decoded.
   useEffect(() => {
     if (!armed) return;
     const t = window.setTimeout(() => {
       cueDone.current = true;
       if (imgReady) setPhotoIn(true);
-    }, 1200);
+    }, at(2100));
     return () => window.clearTimeout(t);
-  }, [armed, imgReady]);
+  }, [armed, imgReady, mobile]);
 
   useEffect(() => {
     if (imgReady && cueDone.current) setPhotoIn(true);
   }, [imgReady]);
-
-  const hidden = armed && !shown;
-  const scale = mobile ? 0.75 : 1;
-  const ms = (n: number) => Math.round(n * scale);
 
   /** Fade + rise step with an absolute start offset. */
   const step = (delay: number, duration: number, rise = 0): CSSProperties => ({
     opacity: hidden ? 0 : 1,
     transform: hidden ? `translateY(${rise}px)` : "translateY(0)",
     transition: armed
-      ? `opacity ${ms(duration)}ms ease-out ${ms(delay)}ms, transform ${ms(duration)}ms ease-out ${ms(delay)}ms`
+      ? `opacity ${ms(duration)}ms ease-out ${at(delay)}ms, transform ${ms(duration)}ms ease-out ${at(delay)}ms`
       : undefined,
   });
 
