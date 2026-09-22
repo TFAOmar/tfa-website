@@ -6,9 +6,17 @@ const RiseFooter = () => (
   <footer className="border-t border-[var(--rise-card-border)] bg-[var(--rise-bg-alt)] px-5 py-10">
     <RiseReveal className="mx-auto max-w-3xl space-y-4 text-center">
       <div className="flex items-center justify-center gap-3">
-        <span className="flex h-10 items-center text-[15px] font-semibold leading-none tracking-[0.22em] text-navy sm:h-12 sm:text-[18px]">
-          {riseConfig.riseWordmark}
-        </span>
+        {riseConfig.riseLogoLight || riseConfig.riseLogoSrc ? (
+          <img
+            src={riseConfig.riseLogoLight || riseConfig.riseLogoSrc}
+            alt={riseConfig.riseLogoAlt}
+            className="h-10 w-auto sm:h-12"
+          />
+        ) : (
+          <span className="flex h-10 items-center text-[15px] font-semibold leading-none tracking-[0.22em] text-navy sm:h-12 sm:text-[18px]">
+            {riseConfig.riseWordmark}
+          </span>
+        )}
         <span aria-hidden className="h-8 w-px bg-navy/20 sm:h-10" />
         <img src={riseConfig.tfaLogoSrc} alt={riseConfig.tfaName} className="h-10 w-auto sm:h-12" />
       </div>
