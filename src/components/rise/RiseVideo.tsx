@@ -102,13 +102,14 @@ const RiseVideo = () => {
                   loading="lazy"
                 />
                 <span
-                  className="absolute bottom-4 left-4 inline-flex min-h-[44px] items-center gap-2 rounded-full px-4 text-sm font-semibold shadow-lg transition duration-300 ease-out group-hover:scale-105 group-hover:duration-150 motion-reduce:transition-none sm:bottom-5 sm:left-5"
+                  className={`absolute bottom-4 left-4 inline-flex min-h-[44px] items-center gap-2 rounded-full px-4 text-sm font-semibold shadow-lg transition duration-300 ease-out group-hover:scale-105 group-hover:delay-0 group-hover:duration-150 motion-reduce:transition-none sm:bottom-5 sm:left-5 ${
+                    hidden ? "delay-0" : "delay-[1000ms] md:delay-[1200ms]"
+                  }`}
                   style={{
                     backgroundColor: "var(--rise-accent)",
                     color: "var(--rise-accent-contrast)",
                     opacity: hidden ? 0 : 1,
                     transform: hidden ? "scale(0.9)" : "scale(1)",
-                    transitionDelay: hidden ? "0ms" : "740ms",
                   }}
                 >
                   <Play className="h-4 w-4" aria-hidden />
