@@ -10,7 +10,7 @@ const RiseVideo = () => {
 
   return (
     <section id="rise-video" className="scroll-mt-20 bg-secondary/40 px-5 py-12 sm:py-16">
-      <RiseReveal className="mx-auto max-w-3xl">
+      <RiseReveal className="mx-auto max-w-3xl lg:max-w-[960px]">
         <h2 className="font-serif text-2xl font-bold text-navy sm:text-3xl">
           {riseConfig.videoTitle}
         </h2>
@@ -73,7 +73,7 @@ const RiseVideo = () => {
         </div>
 
         <p className="mt-3 text-xs text-muted-foreground">
-          {riseConfig.videoLengthLabel} · {riseConfig.disclosures.educational}
+          {riseConfig.disclosures.educational}
         </p>
       </RiseReveal>
     </section>

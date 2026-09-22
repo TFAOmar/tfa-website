@@ -71,9 +71,7 @@ const RiseQuestionnaire = () => {
       <div className="mx-auto max-w-2xl">
         <div className="rounded-2xl border border-navy/10 bg-card p-6 shadow-sm sm:p-8">
           <div className="flex items-center justify-between text-xs font-medium text-muted-foreground">
-            <span>
-              Question {step + 1} of {visible.length}
-            </span>
+            <span>Question {step + 1}</span>
             <span>{Math.max(progress, 0)}%</span>
           </div>
           <div
@@ -138,7 +136,7 @@ const RiseQuestionnaire = () => {
             )}
           </div>
 
-          <div className="mt-6 flex items-center justify-between">
+          <div className="mt-6 flex items-center">
             <button
               type="button"
               onClick={() => step > 0 && transition(() => setStep(step - 1))}
@@ -146,13 +144,6 @@ const RiseQuestionnaire = () => {
               className="inline-flex min-h-[44px] items-center gap-1.5 rounded-lg px-2 text-sm font-medium text-navy disabled:opacity-40"
             >
               <ArrowLeft className="h-4 w-4" aria-hidden /> Back
-            </button>
-            <button
-              type="button"
-              onClick={advance}
-              className="min-h-[44px] rounded-lg px-2 text-sm font-medium text-muted-foreground underline underline-offset-4 hover:text-navy"
-            >
-              Skip
             </button>
           </div>
         </div>

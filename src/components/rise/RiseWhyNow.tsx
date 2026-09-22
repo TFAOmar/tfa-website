@@ -9,19 +9,23 @@ const POINTS = [
 
 const RiseWhyNow = () => (
   <section className="px-5 py-12 sm:py-16">
-    <RiseReveal className="mx-auto max-w-3xl">
-      <h2 className="font-serif text-2xl font-bold text-navy sm:text-3xl">Why now</h2>
+    <div className="mx-auto max-w-3xl">
+      <RiseReveal>
+        <h2 className="font-serif text-2xl font-bold text-navy sm:text-3xl">Why now</h2>
+      </RiseReveal>
       <div className="mt-6 space-y-6 border-l border-navy/15 pl-5 sm:pl-6">
-        {POINTS.map((p) => (
-          <p key={p} className="text-base leading-relaxed text-foreground/85 sm:text-lg">
-            {p}
-          </p>
+        {POINTS.map((p, i) => (
+          <RiseReveal key={p} delay={90 * (i + 1)}>
+            <p className="text-base leading-relaxed text-foreground/85 sm:text-lg">{p}</p>
+          </RiseReveal>
         ))}
       </div>
-      <p className="mt-6 text-xs text-muted-foreground">
-        Educational information only — not legal advice.
-      </p>
-    </RiseReveal>
+      <RiseReveal delay={90 * 4}>
+        <p className="mt-6 text-xs text-muted-foreground">
+          Educational information only — not legal advice.
+        </p>
+      </RiseReveal>
+    </div>
   </section>
 );
 
