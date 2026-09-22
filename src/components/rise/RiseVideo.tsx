@@ -47,7 +47,7 @@ const RiseVideo = () => {
     : "";
 
   return (
-    <section id="rise-video" className="scroll-mt-20 bg-secondary/40 px-5 py-12 sm:py-16">
+    <section id="rise-video" className="scroll-mt-20 bg-[var(--rise-bg-alt)] px-5 py-12 sm:py-16">
       <div className="mx-auto max-w-3xl lg:max-w-[960px]">
         <div
           className="transition-[opacity,transform] duration-700 ease-out motion-reduce:transition-none"
