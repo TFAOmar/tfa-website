@@ -28,7 +28,7 @@ const RiseHero = () => {
     opacity: hidden ? 0 : 1,
     transform: hidden ? `translateY(${rise}px)` : "translateY(0)",
     transition: armed
-      ? `opacity 500ms ease-out ${order * 120}ms, transform 500ms ease-out ${order * 120}ms`
+      ? `opacity 900ms ease-out ${order * 200}ms, transform 900ms ease-out ${order * 200}ms`
       : undefined,
   });
 
