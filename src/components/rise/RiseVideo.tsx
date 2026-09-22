@@ -69,13 +69,32 @@ const RiseVideo = () => {
                 className="group absolute inset-0 h-full w-full"
                 aria-label={`Play video: ${riseConfig.videoTitle}`}
               >
+                {/* Color pass: navy, then accent, then the thumbnail — each wiping left to right. */}
+                <span
+                  aria-hidden
+                  className="absolute inset-0 bg-navy transition-[clip-path] duration-[350ms] ease-out md:duration-500 motion-reduce:transition-none"
+                  style={{
+                    clipPath: hidden ? "inset(0 100% 0 0)" : "inset(0 0 0 0)",
+                    transitionDelay: "0ms",
+                  }}
+                />
+                <span
+                  aria-hidden
+                  className="absolute inset-0 transition-[clip-path] duration-[350ms] ease-out md:duration-500 motion-reduce:transition-none"
+                  style={{
+                    backgroundColor: "var(--rise-accent)",
+                    clipPath: hidden ? "inset(0 100% 0 0)" : "inset(0 0 0 0)",
+                    transitionDelay: hidden ? "0ms" : "120ms",
+                  }}
+                />
                 <img
                   src={thumbSrc}
                   onError={() => setFallbackThumb(true)}
                   alt=""
-                  className="h-full w-full object-cover transition-[clip-path] duration-[450ms] ease-out md:duration-700 motion-reduce:transition-none"
+                  className="absolute inset-0 h-full w-full object-cover transition-[clip-path] duration-[350ms] ease-out md:duration-500 motion-reduce:transition-none"
                   style={{
                     clipPath: hidden ? "inset(0 100% 0 0)" : "inset(0 0 0 0)",
+                    transitionDelay: hidden ? "0ms" : "240ms",
                   }}
                   loading="lazy"
                 />
@@ -86,7 +105,7 @@ const RiseVideo = () => {
                     color: "var(--rise-accent-contrast)",
                     opacity: hidden ? 0 : 1,
                     transform: hidden ? "scale(0.9)" : "scale(1)",
-                    transitionDelay: hidden ? "0ms" : "300ms",
+                    transitionDelay: hidden ? "0ms" : "740ms",
                   }}
                 >
                   <Play className="h-4 w-4" aria-hidden />
