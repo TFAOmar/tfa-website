@@ -3,7 +3,7 @@ import RiseReveal from "./RiseReveal";
 
 /** Rise-only footer. Not the shared site footer. */
 const RiseFooter = () => (
-  <footer className="border-t border-navy/10 bg-background px-5 py-10">
+  <footer className="border-t border-[var(--rise-card-border)] bg-[var(--rise-bg-alt)] px-5 py-10">
     <RiseReveal className="mx-auto max-w-3xl space-y-4 text-center">
       <div className="flex items-center justify-center gap-3">
         <span className="flex h-10 items-center text-[15px] font-semibold leading-none tracking-[0.22em] text-navy sm:h-12 sm:text-[18px]">
