@@ -75,7 +75,7 @@ const RiseVideo = () => {
                 {/* Color pass: navy, then accent, then the thumbnail — each wiping left to right. */}
                 <span
                   aria-hidden
-                  className="absolute inset-0 bg-navy transition-[clip-path] duration-[350ms] ease-out md:duration-500 motion-reduce:transition-none"
+                  className="absolute inset-0 bg-navy transition-[clip-path] duration-[600ms] ease-out md:duration-[800ms] motion-reduce:transition-none"
                   style={{
                     clipPath: hidden ? "inset(0 100% 0 0)" : "inset(0 0 0 0)",
                     transitionDelay: "0ms",
@@ -83,21 +83,21 @@ const RiseVideo = () => {
                 />
                 <span
                   aria-hidden
-                  className="absolute inset-0 transition-[clip-path] duration-[350ms] ease-out md:duration-500 motion-reduce:transition-none"
+                  className="absolute inset-0 transition-[clip-path] duration-[600ms] ease-out md:duration-[800ms] motion-reduce:transition-none"
                   style={{
                     backgroundColor: "var(--rise-accent)",
                     clipPath: hidden ? "inset(0 100% 0 0)" : "inset(0 0 0 0)",
-                    transitionDelay: hidden ? "0ms" : "120ms",
+                    transitionDelay: hidden ? "0ms" : "200ms",
                   }}
                 />
                 <img
                   src={thumbSrc}
                   onError={() => setFallbackThumb(true)}
                   alt=""
-                  className="absolute inset-0 h-full w-full object-cover transition-[clip-path] duration-[350ms] ease-out md:duration-500 motion-reduce:transition-none"
+                  className="absolute inset-0 h-full w-full object-cover transition-[clip-path] duration-[600ms] ease-out md:duration-[800ms] motion-reduce:transition-none"
                   style={{
                     clipPath: hidden ? "inset(0 100% 0 0)" : "inset(0 0 0 0)",
-                    transitionDelay: hidden ? "0ms" : "240ms",
+                    transitionDelay: hidden ? "0ms" : "400ms",
                   }}
                   loading="lazy"
                 />
