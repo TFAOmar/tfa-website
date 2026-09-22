@@ -110,7 +110,7 @@ const RiseHero = () => {
           style={{
             backgroundColor: "var(--rise-accent)",
             transform: hidden ? "scaleX(0)" : "scaleX(1)",
-            transition: armed ? `transform ${ms(700)}ms ease-out ${ms(500)}ms` : undefined,
+            transition: armed ? `transform ${ms(800)}ms ease-out ${at(950)}ms` : undefined,
           }}
         />
         <h1
