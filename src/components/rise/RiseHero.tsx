@@ -28,7 +28,7 @@ const RiseHero = () => {
     opacity: hidden ? 0 : 1,
     transform: hidden ? `translateY(${rise}px)` : "translateY(0)",
     transition: armed
-      ? `opacity 500ms ease-out ${order * 120}ms, transform 500ms ease-out ${order * 120}ms`
+      ? `opacity 900ms ease-out ${order * 200}ms, transform 900ms ease-out ${order * 200}ms`
       : undefined,
   });
 
@@ -47,12 +47,12 @@ const RiseHero = () => {
           style={{
             backgroundColor: "var(--rise-accent)",
             transform: hidden ? "scaleX(0)" : "scaleX(1)",
-            transition: armed ? "transform 500ms ease-out 120ms" : undefined,
+            transition: armed ? "transform 900ms ease-out 200ms" : undefined,
           }}
         />
         <h1
           className="mt-5 font-serif text-[2rem] font-bold leading-[1.15] text-navy motion-reduce:!transition-none sm:text-5xl"
-          style={step(2, 24)}
+          style={step(2, 32)}
         >
           You bought the home. Now protect what you're building.
         </h1>

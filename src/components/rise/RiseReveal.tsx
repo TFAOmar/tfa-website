@@ -31,12 +31,21 @@ const RiseReveal = ({ children, className = "", delay = 0 }: Props) => {
     const el = ref.current;
     const io = new IntersectionObserver(
       (entries) => {
-        if (entries.some((e) => e.isIntersecting)) {
+        // 25% of the block in view — or, for blocks taller than the viewport,
+        // once the top third has scrolled into view.
+        const fire = entries.some(
+          (e) =>
+            e.intersectionRatio >= 0.25 ||
+            (e.isIntersecting &&
+              e.boundingClientRect.height > window.innerHeight * 0.9 &&
+              e.boundingClientRect.top < window.innerHeight * 0.6),
+        );
+        if (fire) {
           io.disconnect();
           window.setTimeout(() => setShown(true), delay);
         }
       },
-      { rootMargin: "0px 0px -8% 0px" },
+      { threshold: [0, 0.25] },
     );
     io.observe(el);
     return () => io.disconnect();
