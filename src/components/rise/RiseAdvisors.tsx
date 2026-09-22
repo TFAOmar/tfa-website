@@ -6,7 +6,7 @@ const telHref = (n: string) => `tel:+1${n.replace(/\D/g, "")}`;
 const smsHref = (n: string) => `sms:+1${n.replace(/\D/g, "")}`;
 
 const RiseAdvisors = () => (
-  <section className="bg-secondary/40 px-5 py-12 sm:py-16">
+  <section className="bg-[var(--rise-bg)] px-5 py-12 sm:py-16">
     <RiseReveal className="mx-auto max-w-3xl">
       <h2 className="font-serif text-2xl font-bold text-navy sm:text-3xl">
         Joshua &amp; Makenzie
