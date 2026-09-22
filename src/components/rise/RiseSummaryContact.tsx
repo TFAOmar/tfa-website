@@ -26,6 +26,19 @@ const RiseSummaryContact = ({ answers, summary, onRestart }: Props) => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
+  const successRef = useRef<HTMLDivElement>(null);
+  const successHeadingRef = useRef<HTMLHeadingElement>(null);
+
+  // The thank-you card is shorter than the form, so bring it back into view.
+  useEffect(() => {
+    if (!success) return;
+    const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    successRef.current?.scrollIntoView({
+      behavior: reduce ? "auto" : "smooth",
+      block: "start",
+    });
+    successHeadingRef.current?.focus({ preventScroll: true });
+  }, [success]);
 
   const set = (k: keyof typeof form, v: string) => setForm((f) => ({ ...f, [k]: v }));
 
