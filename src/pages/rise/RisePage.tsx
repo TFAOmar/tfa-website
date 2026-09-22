@@ -33,6 +33,12 @@ const RisePage = () => {
 
           "--rise-accent-contrast": riseConfig.accentContrastColor,
           "--rise-accent-soft": `${riseConfig.accentColor}1A`,
+          "--rise-btn": riseConfig.buttonBg,
+          "--rise-btn-text": riseConfig.buttonText,
+          "--rise-btn-hover": riseConfig.buttonBgHover,
+          "--rise-btn-dark": riseConfig.buttonOnDarkBg,
+          "--rise-btn-dark-text": riseConfig.buttonOnDarkText,
+          "--rise-btn-dark-hover": riseConfig.buttonOnDarkHover,
           "--rise-bg": riseConfig.bgColor,
           "--rise-bg-alt": riseConfig.bgAltColor,
           "--rise-card": riseConfig.cardColor,
