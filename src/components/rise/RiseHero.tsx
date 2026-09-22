@@ -115,7 +115,7 @@ const RiseHero = () => {
         />
         <h1
           className="mt-5 font-serif text-[2rem] font-bold leading-[1.15] motion-reduce:!transition-none sm:text-5xl"
-          style={{ ...step(700, 900, 32), color: "#F7F3EC" }}
+          style={{ ...step(1200, 1000, 32), color: "#F7F3EC" }}
         >
           You bought the home. Now protect what you're building.
         </h1>
