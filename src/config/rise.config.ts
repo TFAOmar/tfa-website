@@ -49,7 +49,7 @@ export const riseConfig = {
     "Estate and financial planning for Rise homeowners, provided by The Financial Architects.",
 
   /** Paste the final YouTube URL (watch, youtu.be, or embed form). */
-  videoUrl: "",
+  videoUrl: "https://www.youtube.com/watch?v=8QPqvnU_fWM",
   videoTitle: "Why a living trust matters once you own a home",
   videoLengthLabel: "5 minutes",
   videoReason:
@@ -88,9 +88,9 @@ export const riseConfig = {
       "Joshua and Makenzie are not attorneys and do not draft legal documents. We'll walk you through your options and connect you with the right professionals.",
     /* TFA LEGAL / DISCLOSURE SLOT — replace with approved TFA footer language. */
     tfaLegalSlot:
-      "[TFA legal and disclosure language goes here — pending compliance review.] The Financial Architects and Rise are separate companies working together on client education.",
+      "This page is for educational and informational purposes only. It does not provide legal, tax, investment, or financial advice. Estate-planning and legal services are provided only by appropriately licensed legal professionals. Insurance and financial products are subject to eligibility, underwriting, suitability, availability, and applicable laws and regulations. No particular outcome is guaranteed. The Financial Architects and Rise are separate companies working together on client education.",
     contactConsent:
-      "By submitting this form you agree that The Financial Architects may contact you by phone, text, or email about your request. Message frequency varies. Message and data rates may apply. Reply STOP to opt out or HELP for help.",
+      "By submitting, you agree that The Financial Architects and its authorized partners may contact you by phone, text, or email about the information you requested. Consent is not a condition of purchasing any product or service. Message and data rates may apply.",
   },
 } as const;
 
