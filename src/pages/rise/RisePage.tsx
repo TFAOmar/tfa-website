@@ -37,6 +37,9 @@ const RisePage = () => {
           "--rise-bg-alt": riseConfig.bgAltColor,
           "--rise-card": riseConfig.cardColor,
           "--rise-card-border": riseConfig.cardBorderColor,
+          "--rise-video-bg": riseConfig.videoBandColor,
+          "--rise-video-text": riseConfig.videoTextColor,
+          "--rise-video-muted": riseConfig.videoMutedTextColor,
           "--muted-foreground": riseConfig.mutedTextHsl,
         } as React.CSSProperties
       }
