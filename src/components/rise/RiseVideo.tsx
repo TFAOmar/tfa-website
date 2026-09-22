@@ -24,14 +24,17 @@ const RiseVideo = () => {
   useEffect(() => {
     if (!armed || shown || !ref.current) return;
     const el = ref.current;
+    // Fire only once the block is genuinely in view: 45% mobile, 55% desktop.
+    const isDesktop = window.matchMedia?.("(min-width: 768px)").matches;
+    const threshold = isDesktop ? 0.55 : 0.45;
     const io = new IntersectionObserver(
       (entries) => {
-        if (entries.some((e) => e.isIntersecting)) {
+        if (entries.some((e) => e.intersectionRatio >= threshold)) {
           io.disconnect();
           setShown(true);
         }
       },
-      { rootMargin: "0px 0px -8% 0px" },
+      { threshold: [threshold] },
     );
     io.observe(el);
     return () => io.disconnect();
