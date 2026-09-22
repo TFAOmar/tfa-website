@@ -3,8 +3,8 @@
  *
  * Controlled by RISE_FORM_MODE in src/config/rise.config.ts.
  *  - "mock": validates, logs the payload, returns success. Nothing is sent.
- *  - "live": TODO — POST the same payload to Joshua + Makenzie's GoHighLevel
- *    inbound webhook (and email notification to Makenzie). No other TFA form
+ *  - "live": TODO — POST the same payload to Joshua + Mackenzie's GoHighLevel
+ *    inbound webhook (and email notification to Mackenzie). No other TFA form
  *    handler, Supabase table, or external service is involved.
  */
 
