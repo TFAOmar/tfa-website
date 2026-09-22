@@ -148,7 +148,7 @@ const RiseQuestionnaire = () => {
             </button>
           </div>
         </div>
-      </div>
+      </RiseReveal>
     </section>
   );
 };
