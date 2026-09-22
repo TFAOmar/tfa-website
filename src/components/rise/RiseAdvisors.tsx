@@ -17,7 +17,7 @@ const RiseAdvisors = () => (
 
       <div className="mt-7 grid gap-5 sm:grid-cols-2">
         {riseConfig.advisors.map((a) => (
-          <div key={a.name} className="rounded-2xl border border-navy/10 bg-card p-5 shadow-sm">
+          <div key={a.name} className="rounded-2xl border border-[var(--rise-card-border)] bg-[var(--rise-card)] p-5 shadow-[0_8px_24px_-12px_rgba(28,43,69,0.25)]">
             <div className="flex items-center gap-4">
               {a.photo ? (
                 <img
