@@ -29,6 +29,8 @@ const RisePage = () => {
       style={
         {
           "--rise-accent": riseConfig.accentColor,
+          "--rise-accent-strong": riseConfig.accentStrongColor,
+
           "--rise-accent-contrast": riseConfig.accentContrastColor,
           "--rise-accent-soft": `${riseConfig.accentColor}1A`,
           "--rise-bg": riseConfig.bgColor,
