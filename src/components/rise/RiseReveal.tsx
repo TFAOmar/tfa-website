@@ -31,12 +31,12 @@ const RiseReveal = ({ children, className = "", delay = 0 }: Props) => {
     const el = ref.current;
     const io = new IntersectionObserver(
       (entries) => {
-        if (entries.some((e) => e.isIntersecting)) {
+        if (entries.some((e) => e.intersectionRatio >= 0.25)) {
           io.disconnect();
           window.setTimeout(() => setShown(true), delay);
         }
       },
-      { rootMargin: "0px 0px -8% 0px" },
+      { threshold: [0.25] },
     );
     io.observe(el);
     return () => io.disconnect();
