@@ -1,3 +1,4 @@
+import { Play } from "lucide-react";
 import { riseConfig } from "@/config/rise.config";
 
 /** No entrance animation — the hero is complete at first paint. */
@@ -19,7 +20,7 @@ const RiseHero = () => (
         A short, unhurried way to make sure the home — and the people in it — are actually covered.
       </p>
 
-      <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+      <div className="mt-8 flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:gap-6">
         <a
           href="#rise-questionnaire"
           className="inline-flex min-h-[52px] items-center justify-center rounded-xl px-6 text-base font-semibold transition hover:opacity-90 motion-reduce:transition-none"
@@ -29,8 +30,9 @@ const RiseHero = () => (
         </a>
         <a
           href="#rise-video"
-          className="inline-flex min-h-[52px] items-center justify-center rounded-xl border border-navy/20 px-6 text-base font-medium text-navy transition hover:border-navy/40 motion-reduce:transition-none"
+          className="inline-flex min-h-[44px] items-center gap-2 text-base text-muted-foreground hover:underline"
         >
+          <Play className="h-4 w-4" aria-hidden />
           Watch the 5-minute video
         </a>
       </div>
