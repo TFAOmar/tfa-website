@@ -6,17 +6,17 @@ const RiseHeader = () => (
     <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-5 py-3">
       <div className="flex items-center gap-3">
         {riseConfig.riseLogoSrc ? (
-          <img src={riseConfig.riseLogoSrc} alt="Rise" className="h-7 w-auto" />
+          <img src={riseConfig.riseLogoSrc} alt="Rise" className="h-10 w-auto sm:h-12" />
         ) : (
-          <span className="text-[19px] font-semibold leading-none tracking-[0.22em] text-navy">
+          <span className="flex h-10 items-center text-[15px] font-semibold leading-none tracking-[0.22em] text-navy sm:h-12 sm:text-[18px]">
             {riseConfig.riseWordmark}
           </span>
         )}
-        <span aria-hidden className="h-6 w-px bg-navy/20" />
+        <span aria-hidden className="h-8 w-px bg-navy/20 sm:h-10" />
         <img
           src={riseConfig.tfaLogoSrc}
           alt={riseConfig.tfaName}
-          className="h-7 w-auto"
+          className="h-10 w-auto sm:h-12"
         />
       </div>
       <a
