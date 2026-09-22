@@ -8,9 +8,11 @@ const RiseVideo = () => {
   const [fallbackThumb, setFallbackThumb] = useState(false);
   const id = youTubeIdFrom(riseConfig.videoUrl);
 
-  // Entrance: heading/intro fade-rise, then the whole video block rises into place.
+  // Entrance: heading/intro fade-rise on their own observer, then the video block.
+  const sectionRef = useRef<HTMLElement>(null);
   const ref = useRef<HTMLDivElement>(null);
   const [armed, setArmed] = useState(false);
+  const [headShown, setHeadShown] = useState(false);
   const [shown, setShown] = useState(false);
   const [mobile, setMobile] = useState(false);
 
@@ -23,6 +25,26 @@ const RiseVideo = () => {
     setArmed(true);
   }, []);
 
+  // Heading + intro: fires at 20% of the section.
+  useEffect(() => {
+    if (!armed || headShown || !sectionRef.current) return;
+    const el = sectionRef.current;
+    // Guard against sections taller than the viewport never reaching 20%.
+    const threshold = Math.min(0.2, (window.innerHeight * 0.5) / Math.max(el.offsetHeight, 1));
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.intersectionRatio >= threshold)) {
+          io.disconnect();
+          setHeadShown(true);
+        }
+      },
+      { threshold: [threshold] },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [armed, headShown]);
+
+  // Video block: separate observer at 35% of the static wrapper.
   useEffect(() => {
     if (!armed || shown || !ref.current) return;
     const el = ref.current;
@@ -39,6 +61,7 @@ const RiseVideo = () => {
     return () => io.disconnect();
   }, [armed, shown]);
 
+  const headHidden = armed && !headShown;
   const hidden = armed && !shown;
   const rise = mobile ? 60 : 80;
   const blockDuration = mobile ? 1100 : 1400;
@@ -47,15 +70,20 @@ const RiseVideo = () => {
     : "";
 
   return (
-    <section id="rise-video" className="scroll-mt-20 bg-[var(--rise-bg-alt)] px-5 py-12 sm:py-16">
+    <section
+      id="rise-video"
+      ref={sectionRef}
+      className="scroll-mt-20 bg-[var(--rise-bg-alt)] px-5 py-12 sm:py-16"
+    >
       <div className="mx-auto max-w-3xl lg:max-w-[960px]">
         <div
           className="transition-[opacity,transform] duration-700 ease-out motion-reduce:transition-none"
           style={{
-            opacity: hidden ? 0 : 1,
-            transform: hidden ? "translateY(24px)" : "none",
+            opacity: headHidden ? 0 : 1,
+            transform: headHidden ? "translateY(24px)" : "none",
           }}
         >
+
           <h2 className="font-serif text-2xl font-bold text-navy sm:text-3xl">
             {riseConfig.videoTitle}
           </h2>
