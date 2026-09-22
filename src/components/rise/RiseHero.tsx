@@ -100,7 +100,7 @@ const RiseHero = () => {
       <div className="mx-auto w-full max-w-3xl">
         <p
           className="text-sm leading-relaxed motion-reduce:!transition-none"
-          style={{ ...step(300, 700), color: "rgba(247,243,236,0.92)" }}
+          style={{ ...step(700, 800), color: "rgba(247,243,236,0.92)" }}
         >
           {riseConfig.partnershipLine}
         </p>
