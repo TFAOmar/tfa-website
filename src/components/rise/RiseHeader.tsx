@@ -6,16 +6,18 @@ const RiseHeader = () => (
     <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-5 py-3">
       <div className="flex items-center gap-3">
         {riseConfig.riseLogoSrc ? (
-          <img src={riseConfig.riseLogoSrc} alt="Rise" className="h-6 w-auto" />
+          <img src={riseConfig.riseLogoSrc} alt="Rise" className="h-7 w-auto" />
         ) : (
-          <span className="text-base font-semibold tracking-[0.22em] text-navy">
+          <span className="text-[19px] font-semibold leading-none tracking-[0.22em] text-navy">
             {riseConfig.riseWordmark}
           </span>
         )}
-        <span aria-hidden className="h-5 w-px bg-navy/20" />
-        <span className="text-[13px] font-medium leading-tight text-navy sm:text-sm">
-          {riseConfig.tfaName}
-        </span>
+        <span aria-hidden className="h-6 w-px bg-navy/20" />
+        <img
+          src={riseConfig.tfaLogoSrc}
+          alt={riseConfig.tfaName}
+          className="h-7 w-auto"
+        />
       </div>
       <a
         href="#rise-questionnaire"

@@ -38,6 +38,9 @@ const RiseAdvisors = () => (
               <div>
                 <p className="font-serif text-lg font-bold text-navy">{a.name}</p>
                 <p className="text-sm text-muted-foreground">{a.title}</p>
+                {a.licenseNumber && (
+                  <p className="mt-0.5 text-xs text-muted-foreground">CA Lic# {a.licenseNumber}</p>
+                )}
               </div>
             </div>
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{a.bio}</p>
