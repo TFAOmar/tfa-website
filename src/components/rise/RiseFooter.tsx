@@ -1,9 +1,10 @@
 import { riseConfig } from "@/config/rise.config";
+import RiseReveal from "./RiseReveal";
 
 /** Rise-only footer. Not the shared site footer. */
 const RiseFooter = () => (
   <footer className="border-t border-navy/10 bg-background px-5 py-10">
-    <div className="mx-auto max-w-3xl space-y-4 text-center">
+    <RiseReveal className="mx-auto max-w-3xl space-y-4 text-center">
       <div className="flex items-center justify-center gap-3">
         <span className="flex h-10 items-center text-[15px] font-semibold leading-none tracking-[0.22em] text-navy sm:h-12 sm:text-[18px]">
           {riseConfig.riseWordmark}
@@ -32,7 +33,7 @@ const RiseFooter = () => (
       <p className="text-xs leading-relaxed text-muted-foreground">
         {riseConfig.disclosures.educational} {riseConfig.disclosures.attorney}
       </p>
-    </div>
+    </RiseReveal>
   </footer>
 );
 
