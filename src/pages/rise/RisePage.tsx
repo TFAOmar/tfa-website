@@ -14,7 +14,17 @@ import RiseFooter from "@/components/rise/RiseFooter";
 const RisePage = () => {
   // Marks that scripts are running; reveal states only apply once set.
   const [jsReady, setJsReady] = useState(false);
-  useLayoutEffect(() => setJsReady(true), []);
+  useLayoutEffect(() => {
+    setJsReady(true);
+    // Preload the hero photo so its reveal isn't waiting on the network.
+    const link = document.createElement("link");
+    link.rel = "preload";
+    link.as = "image";
+    link.href = riseConfig.heroImage;
+    link.setAttribute("fetchpriority", "high");
+    document.head.appendChild(link);
+    return () => link.remove();
+  }, []);
 
   return (
   <>
