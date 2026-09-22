@@ -59,7 +59,7 @@ const RiseSummaryContact = ({ answers, summary, onRestart }: Props) => {
   };
 
   return (
-    <RiseReveal className="rounded-2xl border border-navy/10 bg-card p-6 shadow-sm sm:p-8">
+    <RiseReveal className="rounded-2xl border border-[var(--rise-card-border)] bg-[var(--rise-card)] p-6 shadow-[0_8px_24px_-12px_rgba(28,43,69,0.25)] sm:p-8">
       <h2 className="font-serif text-2xl font-bold text-navy sm:text-3xl">
         Areas worth a conversation
       </h2>
