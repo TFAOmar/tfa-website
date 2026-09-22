@@ -128,7 +128,7 @@ const RiseHero = () => {
 
         <div
           className="mt-8 flex flex-col items-start gap-3 motion-reduce:!transition-none sm:flex-row sm:items-center sm:gap-6"
-          style={step(1100, 700)}
+          style={step(1700, 800)}
         >
           <a
             href="#rise-questionnaire"
