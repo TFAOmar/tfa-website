@@ -24,13 +24,13 @@ Scope: Rise-only files plus new Rise asset pointers. No global CSS, shared compo
 - Joshua Patrick — Estate Planning Specialist, Rise Real Estate, (949) 377-7731 call and text, Josh@theFPgroup.com, uploaded headshot.
 - Mackenzie Alexander — Financial Strategist, The Financial Architects, (714) 292-5488 call and text, MAlexander@tfainsuranceadvisors.com, uploaded headshot.
 - Headshots render `object-fit: cover` in the existing round slot, face-focused; initials fallback stays for empty photos.
-- Note: the male headshot (`ChatGPT_Image_...png`) is used as Joshua's; flag if that is the wrong person.
+- Headshot mapping confirmed: `ChatGPT_Image_...png` is Joshua, `Mackenzie_-_Large_File_Size.jpg` is Mackenzie.
 
 ## 6. Names, bios, companies
 - Every "Makenzie" across Rise files becomes "Mackenzie", including the contact-step button and summary/follow-up copy.
 - Company shown under each title.
 - Config gains `shortBio` and `fullBio` per advisor. The card shows `shortBio` with a "More about Joshua" / "More about Mackenzie" text toggle that expands `fullBio` inline (accessible button, aria-expanded). Supplied bio text used verbatim.
-- Email added to the config and shown/linked on each card alongside Call and Text.
+- Email addresses stored in config only — not displayed or linked on the cards. Call and Text remain the only two actions.
 
 ## 7. Prior review fixes
 Already in place and kept: `accentStrong` on white-text surfaces, "Just me" exclusive selection, hidden-branch answers pruned from state, header CTA at 44px.
