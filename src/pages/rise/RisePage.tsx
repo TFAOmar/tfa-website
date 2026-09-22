@@ -1,3 +1,4 @@
+import { useLayoutEffect, useState } from "react";
 import SEOHead from "@/components/seo/SEOHead";
 import { riseConfig } from "@/config/rise.config";
 import RiseHeader from "@/components/rise/RiseHeader";
@@ -10,7 +11,12 @@ import RiseTestimonials from "@/components/rise/RiseTestimonials";
 import RiseFooter from "@/components/rise/RiseFooter";
 
 /** DRAFT COPY — pending compliance review. Standalone /rise landing page. */
-const RisePage = () => (
+const RisePage = () => {
+  // Marks that scripts are running; reveal states only apply once set.
+  const [jsReady, setJsReady] = useState(false);
+  useLayoutEffect(() => setJsReady(true), []);
+
+  return (
   <>
     <SEOHead
       title="Rise × The Financial Architects | Planning for New Homeowners"
@@ -19,7 +25,7 @@ const RisePage = () => (
       noIndex
     />
     <div
-      className="min-h-screen bg-background"
+      className={`min-h-screen bg-background ${jsReady ? "rise-js" : ""}`}
       style={
         {
           "--rise-accent": riseConfig.accentColor,
@@ -40,6 +46,7 @@ const RisePage = () => (
       <RiseFooter />
     </div>
   </>
-);
+  );
+};
 
 export default RisePage;
