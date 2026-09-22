@@ -79,7 +79,7 @@ const RiseHero = () => {
         style={{
           clipPath: photoHidden ? "inset(0 0 100% 0)" : "inset(0)",
           transition: armed
-            ? `clip-path ${mobile ? 1000 : 1400}ms cubic-bezier(0.22, 1, 0.36, 1)`
+            ? `clip-path ${mobile ? 1300 : 1600}ms cubic-bezier(0.22, 1, 0.36, 1)`
             : undefined,
         }}
       >
