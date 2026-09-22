@@ -25,15 +25,21 @@ const RisePage = () => {
       noIndex
     />
     <div
-      className={`min-h-screen bg-background ${jsReady ? "rise-js" : ""}`}
+      className={`min-h-screen bg-[var(--rise-bg)] ${jsReady ? "rise-js" : ""}`}
       style={
         {
           "--rise-accent": riseConfig.accentColor,
           "--rise-accent-contrast": riseConfig.accentContrastColor,
           "--rise-accent-soft": `${riseConfig.accentColor}1A`,
+          "--rise-bg": riseConfig.bgColor,
+          "--rise-bg-alt": riseConfig.bgAltColor,
+          "--rise-card": riseConfig.cardColor,
+          "--rise-card-border": riseConfig.cardBorderColor,
+          "--muted-foreground": riseConfig.mutedTextHsl,
         } as React.CSSProperties
       }
     >
+
       <RiseHeader />
       <main>
         <RiseHero />
