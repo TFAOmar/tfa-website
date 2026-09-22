@@ -1,9 +1,9 @@
 import { riseConfig } from "@/config/rise.config";
-import RiseReveal from "./RiseReveal";
 
+/** No entrance animation — the hero is complete at first paint. */
 const RiseHero = () => (
   <section className="px-5 pb-12 pt-10 sm:pt-16">
-    <RiseReveal className="mx-auto max-w-3xl">
+    <div className="mx-auto max-w-3xl">
       <p className="text-sm leading-relaxed text-muted-foreground">
         {riseConfig.partnershipLine}
       </p>
@@ -34,7 +34,7 @@ const RiseHero = () => (
           Watch the 5-minute video
         </a>
       </div>
-    </RiseReveal>
+    </div>
   </section>
 );
 
