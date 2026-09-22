@@ -87,9 +87,16 @@ const RiseSummaryContact = ({ answers, summary, onRestart }: Props) => {
       <p className="mt-5 text-xs text-muted-foreground">{riseConfig.disclosures.attorney}</p>
 
       {success ? (
-        <div className="mt-8 rounded-xl border border-[var(--rise-card-border)] bg-[var(--rise-bg)] p-6 text-center">
+        <div
+          ref={successRef}
+          className="mt-8 scroll-mt-24 rounded-xl border border-[var(--rise-card-border)] bg-[var(--rise-bg)] p-6 text-center"
+        >
           <CheckCircle2 className="mx-auto h-11 w-11" style={{ color: "var(--rise-accent)" }} aria-hidden />
-          <h3 className="mt-3 font-serif text-xl font-bold text-navy">
+          <h3
+            ref={successHeadingRef}
+            tabIndex={-1}
+            className="mt-3 font-serif text-xl font-bold text-navy outline-none"
+          >
             Thank you, {form.firstName}.
           </h3>
           <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-muted-foreground">
