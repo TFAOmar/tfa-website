@@ -73,7 +73,8 @@ const RiseVideo = () => {
     <section
       id="rise-video"
       ref={sectionRef}
-      className="scroll-mt-20 bg-[var(--rise-bg-alt)] px-5 py-12 sm:py-16"
+      className="scroll-mt-20 px-5 py-12 sm:py-16"
+      style={{ backgroundColor: "var(--rise-video-bg)" }}
     >
       <div className="mx-auto max-w-3xl lg:max-w-[960px]">
         <div
@@ -84,10 +85,16 @@ const RiseVideo = () => {
           }}
         >
 
-          <h2 className="font-serif text-2xl font-bold text-navy sm:text-3xl">
+          <h2
+            className="font-serif text-2xl font-bold sm:text-3xl"
+            style={{ color: "var(--rise-video-text)" }}
+          >
             {riseConfig.videoTitle}
           </h2>
-          <p className="mt-3 text-base leading-relaxed text-muted-foreground">
+          <p
+            className="mt-3 text-base leading-relaxed"
+            style={{ color: "var(--rise-video-muted)" }}
+          >
             {riseConfig.videoReason}
           </p>
         </div>

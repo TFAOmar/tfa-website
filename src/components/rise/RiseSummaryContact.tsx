@@ -191,7 +191,7 @@ const RiseSummaryContact = ({ answers, summary, onRestart }: Props) => {
             style={{ backgroundColor: "var(--rise-accent-strong)", color: "var(--rise-accent-contrast)" }}
           >
             {submitting && <Loader2 className="h-4 w-4 animate-spin motion-reduce:animate-none" aria-hidden />}
-            {submitting ? "Sending…" : "Have Joshua or Makenzie reach out."}
+            {submitting ? "Sending…" : "Have Joshua or Mackenzie reach out."}
           </button>
 
           <p className="mt-4 text-xs leading-relaxed text-muted-foreground">

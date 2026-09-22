@@ -10,8 +10,10 @@ import { riseConfig } from "@/config/rise.config";
 const RiseHero = () => {
   const [armed, setArmed] = useState(false);
   const [shown, setShown] = useState(false);
+  const [mobile, setMobile] = useState(false);
 
   useLayoutEffect(() => {
+    setMobile(!window.matchMedia?.("(min-width: 768px)").matches);
     const reduce =
       typeof window !== "undefined" &&
       window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
@@ -32,12 +34,26 @@ const RiseHero = () => {
       : undefined,
   });
 
+  const overlay = mobile
+    ? "linear-gradient(to right, rgba(17,24,39,0.70) 0%, rgba(17,24,39,0.70) 100%)"
+    : "linear-gradient(to right, rgba(17,24,39,0.78) 0%, rgba(17,24,39,0.15) 100%)";
+
   return (
-    <section className="px-5 pb-12 pt-10 sm:pt-16">
-      <div className="mx-auto max-w-3xl">
+    <section className="relative isolate flex min-h-[80vh] items-center overflow-hidden px-5 py-16 md:min-h-[88vh]">
+      <img
+        src={riseConfig.heroImage}
+        alt=""
+        aria-hidden
+        className="absolute inset-0 -z-20 h-full w-full object-cover"
+        style={{ objectPosition: mobile ? "72% center" : "65% center" }}
+        fetchPriority="high"
+      />
+      <div aria-hidden className="absolute inset-0 -z-10" style={{ backgroundImage: overlay }} />
+
+      <div className="mx-auto w-full max-w-3xl">
         <p
-          className="text-sm leading-relaxed text-muted-foreground motion-reduce:!transition-none"
-          style={step(0)}
+          className="text-sm leading-relaxed motion-reduce:!transition-none"
+          style={{ ...step(0), color: "rgba(247,243,236,0.92)" }}
         >
           {riseConfig.partnershipLine}
         </p>
@@ -51,14 +67,14 @@ const RiseHero = () => {
           }}
         />
         <h1
-          className="mt-5 font-serif text-[2rem] font-bold leading-[1.15] text-navy motion-reduce:!transition-none sm:text-5xl"
-          style={step(2, 32)}
+          className="mt-5 font-serif text-[2rem] font-bold leading-[1.15] motion-reduce:!transition-none sm:text-5xl"
+          style={{ ...step(2, 32), color: "#F7F3EC" }}
         >
           You bought the home. Now protect what you're building.
         </h1>
         <p
-          className="mt-4 text-base leading-relaxed text-muted-foreground motion-reduce:!transition-none sm:text-lg"
-          style={step(3)}
+          className="mt-4 text-base leading-relaxed motion-reduce:!transition-none sm:text-lg"
+          style={{ ...step(3), color: "rgba(247,243,236,0.92)" }}
         >
           A short, unhurried way to make sure the home — and the people in it — are actually covered.
         </p>
@@ -76,7 +92,8 @@ const RiseHero = () => {
           </a>
           <a
             href="#rise-video"
-            className="inline-flex min-h-[44px] items-center gap-2 text-base text-muted-foreground hover:underline"
+            className="inline-flex min-h-[44px] items-center gap-2 text-base hover:underline"
+            style={{ color: "rgba(247,243,236,0.92)" }}
           >
             <Play className="h-4 w-4" aria-hidden />
             Watch the 5-minute video
