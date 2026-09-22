@@ -17,7 +17,7 @@ interface Props {
 type Contact = "call" | "text" | "email";
 
 const inputClass =
-  "min-h-[48px] w-full rounded-xl border border-input bg-background px-4 text-base text-foreground outline-none transition focus:border-navy focus:ring-2 focus:ring-navy/20";
+  "min-h-[48px] w-full rounded-xl border border-[var(--rise-card-border)] bg-[var(--rise-card)] px-4 text-base text-foreground outline-none transition focus:border-navy focus:ring-2 focus:ring-navy/20";
 
 const RiseSummaryContact = ({ answers, summary, onRestart }: Props) => {
   const { honeypotProps, isBot } = useHoneypot();
