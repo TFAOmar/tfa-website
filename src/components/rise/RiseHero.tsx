@@ -70,7 +70,7 @@ const RiseHero = () => {
           <a
             href="#rise-questionnaire"
             className="inline-flex min-h-[52px] items-center justify-center rounded-xl px-6 text-base font-semibold transition hover:opacity-90 motion-reduce:transition-none"
-            style={{ backgroundColor: "var(--rise-accent)", color: "var(--rise-accent-contrast)" }}
+            style={{ backgroundColor: "var(--rise-accent-strong)", color: "var(--rise-accent-contrast)" }}
           >
             See where you stand
           </a>

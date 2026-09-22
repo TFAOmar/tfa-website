@@ -49,7 +49,7 @@ const RiseAdvisors = () => (
                 href={telHref(a.phone)}
                 className="inline-flex min-h-[48px] flex-1 items-center justify-center gap-2 rounded-xl text-sm font-semibold transition hover:opacity-90 motion-reduce:transition-none"
                 style={{
-                  backgroundColor: "var(--rise-accent)",
+                  backgroundColor: "var(--rise-accent-strong)",
                   color: "var(--rise-accent-contrast)",
                 }}
               >

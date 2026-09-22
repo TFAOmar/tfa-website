@@ -128,7 +128,7 @@ const RiseQuestionnaire = () => {
                 onClick={advance}
                 className="mt-5 inline-flex min-h-[48px] w-full items-center justify-center rounded-xl px-6 font-semibold transition hover:opacity-90 motion-reduce:transition-none"
                 style={{
-                  backgroundColor: "var(--rise-accent)",
+                  backgroundColor: "var(--rise-accent-strong)",
                   color: "var(--rise-accent-contrast)",
                 }}
               >

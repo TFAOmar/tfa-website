@@ -188,7 +188,7 @@ const RiseSummaryContact = ({ answers, summary, onRestart }: Props) => {
             type="submit"
             disabled={submitting}
             className="mt-6 inline-flex min-h-[52px] w-full items-center justify-center gap-2 rounded-xl px-6 text-base font-semibold transition hover:opacity-90 disabled:opacity-60 motion-reduce:transition-none"
-            style={{ backgroundColor: "var(--rise-accent)", color: "var(--rise-accent-contrast)" }}
+            style={{ backgroundColor: "var(--rise-accent-strong)", color: "var(--rise-accent-contrast)" }}
           >
             {submitting && <Loader2 className="h-4 w-4 animate-spin motion-reduce:animate-none" aria-hidden />}
             {submitting ? "Sending…" : "Have Joshua or Makenzie reach out."}

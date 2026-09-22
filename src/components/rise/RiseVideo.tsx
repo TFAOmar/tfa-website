@@ -128,7 +128,7 @@ const RiseVideo = () => {
                   <span
                     className="absolute bottom-4 left-4 inline-flex min-h-[44px] items-center gap-2 rounded-full px-4 text-sm font-semibold shadow-lg transition-opacity duration-300 ease-out group-hover:scale-105 group-hover:transition-transform group-hover:duration-150 motion-reduce:transition-none sm:bottom-5 sm:left-5"
                     style={{
-                      backgroundColor: "var(--rise-accent)",
+                      backgroundColor: "var(--rise-accent-strong)",
                       color: "var(--rise-accent-contrast)",
                       opacity: hidden ? 0 : 1,
                       transitionDelay: hidden ? "0ms" : `${250 + blockDuration}ms`,
@@ -143,7 +143,7 @@ const RiseVideo = () => {
                   <span
                     className="flex h-14 w-14 items-center justify-center rounded-full"
                     style={{
-                      backgroundColor: "var(--rise-accent)",
+                      backgroundColor: "var(--rise-accent-strong)",
                       color: "var(--rise-accent-contrast)",
                     }}
                   >

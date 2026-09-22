@@ -21,8 +21,8 @@ const RiseHeader = () => (
       </div>
       <a
         href="#rise-questionnaire"
-        className="inline-flex min-h-[40px] items-center rounded-full px-4 text-sm font-semibold"
-        style={{ backgroundColor: "var(--rise-accent)", color: "var(--rise-accent-contrast)" }}
+        className="inline-flex min-h-[44px] items-center rounded-full px-4 text-sm font-semibold"
+        style={{ backgroundColor: "var(--rise-accent-strong)", color: "var(--rise-accent-contrast)" }}
       >
         Get started
       </a>
