@@ -35,8 +35,12 @@ export interface RiseTestimonial {
 
 export const riseConfig = {
   /** Rise brand accent. Placeholder until official Rise colors arrive. */
+  /** When the real Rise brand color arrives, set accent to it and derive accentStrong so white text clears 4.5:1. */
   accentColor: "#B8763E",
+  /** Darker accent for any surface carrying white text. White on this = 5.46:1. */
+  accentStrongColor: "#955C2B",
   accentContrastColor: "#FFFFFF",
+
 
   /** Warm two-tone surfaces, scoped to the /rise wrapper only. */
   bgColor: "#F2ECE0",
