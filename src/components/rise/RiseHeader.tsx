@@ -25,8 +25,8 @@ const RiseHeader = () => (
       </div>
       <a
         href="#rise-questionnaire"
-        className="inline-flex min-h-[44px] items-center rounded-full px-4 text-sm font-semibold"
-        style={{ backgroundColor: "var(--rise-accent-strong)", color: "var(--rise-accent-contrast)" }}
+        className="inline-flex min-h-[44px] items-center rounded-full bg-[var(--rise-btn)] px-4 text-sm font-semibold transition-colors hover:bg-[var(--rise-btn-hover)] motion-reduce:transition-none"
+        style={{ color: "var(--rise-btn-text)" }}
       >
         Get started
       </a>

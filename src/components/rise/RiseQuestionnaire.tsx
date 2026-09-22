@@ -141,11 +141,8 @@ const RiseQuestionnaire = () => {
               <button
                 type="button"
                 onClick={advance}
-                className="mt-5 inline-flex min-h-[48px] w-full items-center justify-center rounded-xl px-6 font-semibold transition hover:opacity-90 motion-reduce:transition-none"
-                style={{
-                  backgroundColor: "var(--rise-accent-strong)",
-                  color: "var(--rise-accent-contrast)",
-                }}
+                className="mt-5 inline-flex min-h-[48px] w-full items-center justify-center rounded-xl bg-[var(--rise-btn)] px-6 font-semibold transition-colors hover:bg-[var(--rise-btn-hover)] motion-reduce:transition-none"
+                style={{ color: "var(--rise-btn-text)" }}
               >
                 Continue
               </button>

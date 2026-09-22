@@ -46,9 +46,18 @@ export interface RiseTestimonial {
 export const riseConfig = {
   /** Rise brand gold. Used for the hero rule, progress bar, and outlines. */
   accentColor: "#CBB26B",
-  /** Darker gold for any surface carrying white text. White on this = 5.29:1. */
+  /** Retained for reference only — no longer used as a button fill. */
   accentStrongColor: "#7A6528",
   accentContrastColor: "#FFFFFF",
+
+  /** Filled buttons on light (ivory) surfaces: navy with white text (14.18:1). */
+  buttonBg: "#1C2B45",
+  buttonText: "#FFFFFF",
+  buttonBgHover: "#2A3F63",
+  /** Filled buttons on the hero photo and dark video band: ivory with navy text (12.05:1). */
+  buttonOnDarkBg: "#F2ECE0",
+  buttonOnDarkText: "#1C2B45",
+  buttonOnDarkHover: "#FFFFFF",
 
 
   /** Warm two-tone surfaces, scoped to the /rise wrapper only. */

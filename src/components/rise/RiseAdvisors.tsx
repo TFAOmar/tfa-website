@@ -51,14 +51,11 @@ const AdvisorCard = ({ a }: { a: RiseAdvisor }) => {
         {expanded ? "Show less" : `More about ${firstName}`}
       </button>
 
-      <div className="mt-5 flex gap-3">
+      <div className="mt-auto flex gap-3 pt-5">
         <a
           href={telHref(a.phone)}
-          className="inline-flex min-h-[48px] flex-1 items-center justify-center gap-2 rounded-xl text-sm font-semibold transition hover:opacity-90 motion-reduce:transition-none"
-          style={{
-            backgroundColor: "var(--rise-accent-strong)",
-            color: "var(--rise-accent-contrast)",
-          }}
+          className="inline-flex min-h-[48px] flex-1 items-center justify-center gap-2 rounded-xl bg-[var(--rise-btn)] text-sm font-semibold transition-colors hover:bg-[var(--rise-btn-hover)] motion-reduce:transition-none"
+          style={{ color: "var(--rise-btn-text)" }}
         >
           <Phone className="h-4 w-4" aria-hidden /> Call
         </a>
@@ -83,7 +80,7 @@ const RiseAdvisors = () => (
         {riseConfig.followUpLine}
       </p>
 
-      <div className="mt-7 grid items-start gap-5 sm:grid-cols-2">
+      <div className="mt-7 grid items-stretch gap-5 sm:grid-cols-2">
         {riseConfig.advisors.map((a) => (
           <AdvisorCard key={a.name} a={a} />
         ))}
