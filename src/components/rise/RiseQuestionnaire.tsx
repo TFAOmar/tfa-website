@@ -29,18 +29,33 @@ const RiseQuestionnaire = () => {
       else setDone(true);
     });
 
+  /** Drop answers whose question is no longer visible (branch no longer applies). */
+  const prune = (next: RiseAnswers): RiseAnswers => {
+    const allowed = new Set(visibleQuestions(next).map((v) => v.id));
+    return Object.fromEntries(
+      Object.entries(next).filter(([id]) => allowed.has(id)),
+    ) as RiseAnswers;
+  };
+
   const choose = (value: string) => {
     if (q.multi) {
       const current = Array.isArray(answers[q.id]) ? (answers[q.id] as string[]) : [];
-      const next = current.includes(value)
-        ? current.filter((v) => v !== value)
-        : [...current, value];
-      setAnswers({ ...answers, [q.id]: next });
+      let next: string[];
+      if (current.includes(value)) {
+        next = current.filter((v) => v !== value);
+      } else if (q.id === "dependents" && value === "just_me") {
+        // "Just me" is mutually exclusive with every other option.
+        next = ["just_me"];
+      } else {
+        next = [...current.filter((v) => !(q.id === "dependents" && v === "just_me")), value];
+      }
+      setAnswers(prune({ ...answers, [q.id]: next }));
       return;
     }
-    setAnswers({ ...answers, [q.id]: value });
+    setAnswers(prune({ ...answers, [q.id]: value }));
     advance();
   };
+
 
   const isSelected = (value: string) => {
     const a = answers[q.id];
@@ -128,7 +143,7 @@ const RiseQuestionnaire = () => {
                 onClick={advance}
                 className="mt-5 inline-flex min-h-[48px] w-full items-center justify-center rounded-xl px-6 font-semibold transition hover:opacity-90 motion-reduce:transition-none"
                 style={{
-                  backgroundColor: "var(--rise-accent)",
+                  backgroundColor: "var(--rise-accent-strong)",
                   color: "var(--rise-accent-contrast)",
                 }}
               >
