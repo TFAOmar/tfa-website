@@ -121,7 +121,7 @@ const RiseHero = () => {
         </h1>
         <p
           className="mt-4 text-base leading-relaxed motion-reduce:!transition-none sm:text-lg"
-          style={{ ...step(900, 700), color: "rgba(247,243,236,0.92)" }}
+          style={{ ...step(1450, 800), color: "rgba(247,243,236,0.92)" }}
         >
           A short, unhurried way to make sure the home — and the people in it — are actually covered.
         </p>
