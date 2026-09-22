@@ -2,7 +2,7 @@ import { riseConfig } from "@/config/rise.config";
 
 /** Standalone minimal header for /rise only. Not the shared site header. */
 const RiseHeader = () => (
-  <header className="sticky top-0 z-40 border-b border-navy/10 bg-background/95 backdrop-blur">
+  <header className="sticky top-0 z-40 border-b border-[var(--rise-card-border)] bg-[var(--rise-bg)]/95 backdrop-blur">
     <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-5 py-3">
       <div className="flex items-center gap-3">
         {riseConfig.riseLogoSrc ? (
