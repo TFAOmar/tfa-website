@@ -38,6 +38,15 @@ export const riseConfig = {
   accentColor: "#B8763E",
   accentContrastColor: "#FFFFFF",
 
+  /** Warm two-tone surfaces, scoped to the /rise wrapper only. */
+  bgColor: "#F7F3EC",
+  bgAltColor: "#EDE7DC",
+  cardColor: "#FFFFFF",
+  cardBorderColor: "rgba(28, 43, 69, 0.08)",
+  /** Muted text, darkened to keep 4.5:1 on both warm surfaces. */
+  mutedTextHsl: "215 15% 40%",
+
+
   /** Logos. Leave empty to render the typographic placeholder wordmark. */
   riseLogoSrc: "",
   riseWordmark: "RISE",

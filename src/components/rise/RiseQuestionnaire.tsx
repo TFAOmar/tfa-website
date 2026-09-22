@@ -70,7 +70,7 @@ const RiseQuestionnaire = () => {
   return (
     <section id="rise-questionnaire" className="scroll-mt-20 px-5 py-12 sm:py-16">
       <RiseReveal className="mx-auto max-w-2xl">
-        <div className="rounded-2xl border border-navy/10 bg-card p-6 shadow-sm sm:p-8">
+        <div className="rounded-2xl border border-[var(--rise-card-border)] bg-[var(--rise-card)] p-6 shadow-[0_8px_24px_-12px_rgba(28,43,69,0.25)] sm:p-8">
           <div className="flex items-center justify-between text-xs font-medium text-muted-foreground">
             <span>Question {step + 1}</span>
             <span>{Math.max(progress, 0)}%</span>

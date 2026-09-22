@@ -17,7 +17,7 @@ interface Props {
 type Contact = "call" | "text" | "email";
 
 const inputClass =
-  "min-h-[48px] w-full rounded-xl border border-input bg-background px-4 text-base text-foreground outline-none transition focus:border-navy focus:ring-2 focus:ring-navy/20";
+  "min-h-[48px] w-full rounded-xl border border-[var(--rise-card-border)] bg-[var(--rise-card)] px-4 text-base text-foreground outline-none transition focus:border-navy focus:ring-2 focus:ring-navy/20";
 
 const RiseSummaryContact = ({ answers, summary, onRestart }: Props) => {
   const { honeypotProps, isBot } = useHoneypot();
@@ -59,7 +59,7 @@ const RiseSummaryContact = ({ answers, summary, onRestart }: Props) => {
   };
 
   return (
-    <RiseReveal className="rounded-2xl border border-navy/10 bg-card p-6 shadow-sm sm:p-8">
+    <RiseReveal className="rounded-2xl border border-[var(--rise-card-border)] bg-[var(--rise-card)] p-6 shadow-[0_8px_24px_-12px_rgba(28,43,69,0.25)] sm:p-8">
       <h2 className="font-serif text-2xl font-bold text-navy sm:text-3xl">
         Areas worth a conversation
       </h2>
@@ -74,7 +74,7 @@ const RiseSummaryContact = ({ answers, summary, onRestart }: Props) => {
       <p className="mt-5 text-xs text-muted-foreground">{riseConfig.disclosures.attorney}</p>
 
       {success ? (
-        <div className="mt-8 rounded-xl border border-navy/10 bg-secondary/50 p-6 text-center">
+        <div className="mt-8 rounded-xl border border-[var(--rise-card-border)] bg-[var(--rise-bg)] p-6 text-center">
           <CheckCircle2 className="mx-auto h-11 w-11" style={{ color: "var(--rise-accent)" }} aria-hidden />
           <h3 className="mt-3 font-serif text-xl font-bold text-navy">
             Thank you, {form.firstName}.
