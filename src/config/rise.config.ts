@@ -102,8 +102,8 @@ export const riseConfig = {
   advisors: [
     {
       name: "Joshua Patrick",
-      title: "Estate Planning Specialist",
-      company: "Rise Real Estate",
+      title: "Financial Strategist",
+      company: "The Financial Architects",
       licenseNumber: "",
       shortBio:
         "Joshua is a U.S. Army veteran and Estate Planning Specialist with Rise Real Estate, with a background in real estate, mortgage lending, and financial services. He helps Rise clients understand their estate planning options and connects them with the right resources to protect their home and the people in it.",
