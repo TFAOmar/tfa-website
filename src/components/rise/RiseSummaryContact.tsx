@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
 import { riseConfig, RISE_FORM_MODE } from "@/config/rise.config";
