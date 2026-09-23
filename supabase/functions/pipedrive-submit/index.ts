@@ -942,6 +942,28 @@ const sendEmails = async (
     }
   }
 
+  // 3b. Zuniga Professional Services landing page: notify both advisors every time
+  if (formData.form_name === "zuniga-connect") {
+    try {
+      const zunigaResult = await resend.emails.send({
+        from: "TFA Insurance Advisors <notifications@tfainsuranceadvisors.com>",
+        to: ["Richardmorales54@gmail.com", "Mariah@tfainsuranceadvisors.com"],
+        subject: `[Zuniga Lead] ${formData.first_name} ${formData.last_name}`,
+        html: teamHtml,
+      });
+      if (zunigaResult.error) {
+        console.error("[Email Error - Zuniga]", zunigaResult.error);
+        errors.push(`Zuniga email: ${zunigaResult.error.message}`);
+      } else {
+        partnerSent = true;
+        console.log("[Email Sent - Zuniga] Richard + Mariah");
+      }
+    } catch (e) {
+      console.error("[Email Exception - Zuniga]", e);
+      errors.push(`Zuniga email exception: ${e instanceof Error ? e.message : "Unknown error"}`);
+    }
+  }
+
   // 4. Send to Escobar Realty partner for their living trust leads
   if (formData.form_name === "Living Trust Inquiry - Escobar Realty Group") {
     try {
