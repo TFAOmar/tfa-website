@@ -50,4 +50,6 @@ Predominantly white with TFA navy and gold. ZPS purple appears only as the heade
 - Form uses `useHoneypot`, `zod` validation, `SmsConsentCheckbox` (imported unchanged), and `submitForm` with `form_name: "zuniga-connect"`, `advisor_slug: "zuniga"`, plus `path_label`/`interests_label` so the preferred advisor and services show in the notification email.
 - `supabase/functions/pipedrive-submit/index.ts`: one added branch, matching the existing Escobar/American Way pattern, that sends the notification to both advisor addresses when `form_name === "zuniga-connect"`. No other form's behavior changes.
 - `SEOHead` with `noIndex`; not added to the sitemap.
-- QA on a 390px viewport: keyboard navigation, contrast, reduced motion, and one test submission verified end to end (tags present, both notifications sent), then the test record removed.
+- QA on a 390px viewport: keyboard navigation, contrast, and reduced motion.
+- End-to-end test submission named "TEST — Zuniga page check, please ignore" so it is obvious in Richard's and Mariah's inboxes; after verifying the tags and both notifications, the test record is deleted from both Supabase and Pipedrive.
+- After the notification change is deployed, confirm the deployment reported no errors and that one other existing form still submits and notifies normally. Both results reported back.
