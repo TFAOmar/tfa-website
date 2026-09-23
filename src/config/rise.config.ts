@@ -122,7 +122,7 @@ export const riseConfig = {
     {
       name: "Mackenzie Alexander",
       title: "Financial Strategist",
-      company: "The Financial Architects",
+      company: "THE FINANCIAL ARCHITECTS",
       licenseNumber: "CA Lic# 22051832",
       shortBio:
         "Mackenzie spent over 11 years in the mortgage industry and saw the same gap again and again: families building equity in their homes with little planning in place to protect it. She now helps families see how their mortgage, retirement, protection, and estate planning fit together.",
@@ -142,7 +142,7 @@ export const riseConfig = {
   /** Credibility line on the thank-you card. */
   credibilityLine: "The Financial Architects · 300+ licensed advisors across 33 locations",
   /** Leave empty to hide the "See our Google reviews" link. */
-  tfaReviewsUrl: "",
+  tfaReviewsUrl: "https://g.page/r/CT9bAvd1ecwCEBM",
 
   /** Empty array hides the testimonials section entirely. Do not add invented quotes. */
   testimonials: [] as RiseTestimonial[],
