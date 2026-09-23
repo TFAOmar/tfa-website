@@ -17,6 +17,8 @@ export interface RiseLeadPayload {
   lastName: string;
   phone: string;
   email: string;
+  /** "Who is your real estate agent?" — required on the contact step. */
+  agentName: string;
   preferredContact: "call" | "text" | "email";
   answers: RiseAnswers;
   summary: { id: string; heading: string }[];

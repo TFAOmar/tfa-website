@@ -18,9 +18,20 @@ const RiseTestimonials = () => {
               <blockquote className="text-base leading-relaxed text-foreground/85">
                 "{t.quote}"
               </blockquote>
-              <figcaption className="mt-2 text-sm text-muted-foreground">
-                {t.name}
-                {t.detail ? ` · ${t.detail}` : ""}
+              <figcaption className="mt-3 flex items-center gap-3 text-sm text-muted-foreground">
+                {t.photo && (
+                  <img
+                    src={t.photo}
+                    alt={t.name}
+                    className="h-10 w-10 rounded-full object-cover object-top"
+                    loading="lazy"
+                  />
+                )}
+                <span>
+                  {t.name}
+                  {t.role ? ` · ${t.role}` : ""}
+                  {t.detail ? ` · ${t.detail}` : ""}
+                </span>
               </figcaption>
             </figure>
           ))}

@@ -34,7 +34,7 @@ const AdvisorCard = ({ a }: { a: RiseAdvisor }) => {
           <p className="text-sm text-muted-foreground">{a.title}</p>
           <p className="text-sm text-muted-foreground">{a.company}</p>
           {a.licenseNumber && (
-            <p className="mt-0.5 text-xs text-muted-foreground">CA Lic# {a.licenseNumber}</p>
+            <p className="mt-0.5 text-xs text-muted-foreground">{a.licenseNumber}</p>
           )}
         </div>
       </div>
