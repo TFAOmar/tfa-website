@@ -40,7 +40,11 @@ export interface RiseAdvisor {
 export interface RiseTestimonial {
   quote: string;
   name: string;
+  /** e.g. "Realtor, Rise Real Estate". */
+  role?: string;
   detail?: string;
+  /** Optional headshot URL. */
+  photo?: string;
 }
 
 export const riseConfig = {
@@ -103,10 +107,10 @@ export const riseConfig = {
     {
       name: "Joshua Patrick",
       title: "Financial Strategist",
-      company: "Rise Estate Planning",
-      licenseNumber: "",
+      company: "RISE ESTATE PLANNING",
+      licenseNumber: "CA Lic# 4510565",
       shortBio:
-        "Joshua is a U.S. Army veteran and Estate Planning Specialist with Rise Real Estate, with a background in real estate, mortgage lending, and financial services. He helps Rise clients understand their estate planning options and connects them with the right resources to protect their home and the people in it.",
+        "Joshua is a U.S. Army veteran and Financial Strategist with Rise Estate Planning, with a background in real estate, mortgage lending, and financial services. He helps Rise clients understand their estate planning options and connects them with the right resources to protect their home and the people in it.",
       fullBio:
         "Joshua Patrick is a U.S. Army veteran and Estate Planning Specialist with Rise Real Estate, bringing a professional background spanning real estate, mortgage lending, and financial services. After more than a decade of service as an Army Combat Medic, Joshua has continued his commitment to serving others by helping individuals and families protect what they've worked hard to build. He works alongside Rise Real Estate clients to help them understand their estate planning options and connect them with the appropriate resources to protect their homes, assets, and legacy. Joshua's approach is centered on education and simplicity—making estate planning easier to understand and helping families take the next step toward having a clear plan in place for the people and property that matter most.",
       photo: joshuaPhoto.url,
@@ -119,7 +123,7 @@ export const riseConfig = {
       name: "Mackenzie Alexander",
       title: "Financial Strategist",
       company: "The Financial Architects",
-      licenseNumber: "",
+      licenseNumber: "CA Lic# 22051832",
       shortBio:
         "Mackenzie spent over 11 years in the mortgage industry and saw the same gap again and again: families building equity in their homes with little planning in place to protect it. She now helps families see how their mortgage, retirement, protection, and estate planning fit together.",
       fullBio:
@@ -134,6 +138,11 @@ export const riseConfig = {
 
   followUpLine:
     "Joshua or Mackenzie will reach out within one business day, at the time and method you choose.",
+
+  /** Credibility line on the thank-you card. */
+  credibilityLine: "The Financial Architects · 300+ licensed advisors across 33 locations",
+  /** Leave empty to hide the "See our Google reviews" link. */
+  tfaReviewsUrl: "",
 
   /** Empty array hides the testimonials section entirely. Do not add invented quotes. */
   testimonials: [] as RiseTestimonial[],
