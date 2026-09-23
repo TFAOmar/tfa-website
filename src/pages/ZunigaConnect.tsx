@@ -101,6 +101,9 @@ const Reveal = ({
 
 const groupIcons = [TrendingUp, ShieldCheck, Landmark];
 
+/** Shared content container so every section's left edge lines up. */
+const SHELL = "mx-auto w-full max-w-[1200px] px-5 sm:px-8";
+
 const ZunigaConnect = () => {
   const { toast } = useToast();
   const { honeypotProps, isBot, honeypotValue } = useHoneypot();
@@ -253,16 +256,17 @@ const ZunigaConnect = () => {
       <div className="min-h-screen bg-white">
         {/* Header */}
         <header className="sticky top-0 z-30 border-b border-border bg-white">
-          <div className="container mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3">
-            <div className="flex items-center gap-3">
+          <div className={`${SHELL} flex items-center justify-between gap-3 py-3`}>
+            <div className="flex items-center gap-3 sm:gap-4">
               <img
                 src={tfaLogo}
                 alt="The Financial Architects"
                 className="h-[26px] w-auto sm:h-[34px]"
               />
-              <span aria-hidden="true" className="text-sm text-muted-foreground">
-                ×
-              </span>
+              <span
+                aria-hidden="true"
+                className="h-[26px] w-px shrink-0 bg-border sm:h-[34px]"
+              />
               <img
                 src={zpsLogoUrl}
                 alt="Zuniga Professional Services, Inc."
@@ -272,7 +276,7 @@ const ZunigaConnect = () => {
             <button
               type="button"
               onClick={() => scrollTo(formRef)}
-              className="min-h-[40px] whitespace-nowrap rounded-full bg-navy px-5 text-sm font-semibold text-white transition hover:opacity-90"
+              className="min-h-[38px] shrink-0 whitespace-nowrap rounded-full bg-navy px-4 text-[13px] font-semibold text-white transition hover:opacity-90 sm:min-h-[40px] sm:px-5 sm:text-sm"
             >
               Get started
             </button>
