@@ -272,7 +272,7 @@ const ZunigaConnect = () => {
             <button
               type="button"
               onClick={() => scrollTo(formRef)}
-              className="min-h-[40px] rounded-full bg-navy px-5 text-sm font-semibold text-white transition hover:opacity-90"
+              className="min-h-[40px] whitespace-nowrap rounded-full bg-navy px-5 text-sm font-semibold text-white transition hover:opacity-90"
             >
               Get started
             </button>
