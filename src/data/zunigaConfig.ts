@@ -105,3 +105,30 @@ export const zunigaServices: ZunigaService[] = [
 ];
 
 export const NOT_SURE_SLUG = "not-sure-yet";
+
+/** Grouped display of the same services, names only. */
+export interface ZunigaServiceGroup {
+  title: string;
+  slugs: string[];
+}
+
+export const zunigaServiceGroups: ZunigaServiceGroup[] = [
+  {
+    title: "Retirement & Income",
+    slugs: [
+      "income-planning",
+      "investment-management",
+      "annuities",
+      "401k-rollovers",
+      "group-retirement-plans",
+    ],
+  },
+  {
+    title: "Protection",
+    slugs: ["insurance", "business-insurance", "health-care-planning"],
+  },
+  {
+    title: "Estate & Tax",
+    slugs: ["living-trusts", "estate-legacy-planning", "tax-planning"],
+  },
+];
