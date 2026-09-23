@@ -21,7 +21,13 @@ const inputClass =
 
 const RiseSummaryContact = ({ answers, summary, onRestart }: Props) => {
   const { honeypotProps, isBot } = useHoneypot();
-  const [form, setForm] = useState({ firstName: "", lastName: "", phone: "", email: "" });
+  const [form, setForm] = useState({
+    firstName: "",
+    lastName: "",
+    phone: "",
+    email: "",
+    agentName: "",
+  });
   const [preferredContact, setPreferredContact] = useState<Contact>("call");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
@@ -48,6 +54,7 @@ const RiseSummaryContact = ({ answers, summary, onRestart }: Props) => {
     if (!form.lastName.trim()) e.lastName = "Last name is required.";
     if (form.phone.replace(/\D/g, "").length < 10) e.phone = "Enter a 10-digit phone number.";
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = "Enter a valid email address.";
+    if (!form.agentName.trim()) e.agentName = "Let us know who your real estate agent is.";
     setErrors(e);
     return Object.keys(e).length === 0;
   };
@@ -102,6 +109,19 @@ const RiseSummaryContact = ({ answers, summary, onRestart }: Props) => {
           <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-muted-foreground">
             {riseConfig.followUpLine}
           </p>
+          <p className="mx-auto mt-4 max-w-md text-xs leading-relaxed text-muted-foreground">
+            {riseConfig.credibilityLine}
+          </p>
+          {riseConfig.tfaReviewsUrl && (
+            <a
+              href={riseConfig.tfaReviewsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-2 inline-block text-sm font-semibold text-navy underline underline-offset-4 hover:opacity-80"
+            >
+              See our Google reviews
+            </a>
+          )}
           {RISE_FORM_MODE === "mock" && (
             <p className="mt-3 text-xs text-muted-foreground">
               Preview — submissions are not sent.
@@ -177,6 +197,21 @@ const RiseSummaryContact = ({ answers, summary, onRestart }: Props) => {
                 onChange={(e) => set("email", e.target.value)}
               />
               {errors.email && <p className="mt-1 text-sm text-destructive">{errors.email}</p>}
+            </div>
+            <div className="sm:col-span-2">
+              <label htmlFor="rise-agent" className="mb-1.5 block text-sm font-medium text-navy">
+                Who is your real estate agent?
+              </label>
+              <input
+                id="rise-agent"
+                className={inputClass}
+                placeholder="Agent's name"
+                value={form.agentName}
+                onChange={(e) => set("agentName", e.target.value)}
+              />
+              {errors.agentName && (
+                <p className="mt-1 text-sm text-destructive">{errors.agentName}</p>
+              )}
             </div>
           </div>
 
