@@ -29,8 +29,8 @@ TFA navy, white, warm gray, muted gold. No gradients. Hero headline ~52px deskto
 - Only `src/pages/ZunigaConnect.tsx` is restructured. `src/data/zunigaConfig.ts` gains a service-group mapping and drops nothing the form relies on; `ZPS_PURPLE` is no longer used for fills.
 - Form state, zod schema, `useHoneypot`, `submitForm` payload (`form_name: "zuniga-connect"`, advisor slug, tags, `path_label`/`interests_label`, sms consent version), `?src` capture, and `SmsConsentCheckbox` are carried over verbatim — markup only is reworked.
 - No changes to `src/App.tsx`, `supabase/functions/pipedrive-submit`, or any shared component.
-- New hero image generated into `src/assets/zuniga/` and imported directly.
-- Headshots: tight square crops with a consistent light neutral backdrop so both read as one set; done as new image assets under `src/assets/zuniga/` so the originals stay untouched.
+- New hero image generated into `src/assets/zuniga/`, converted to WebP at two widths (about 800px and 1600px), kept under ~250KB, served via `srcset`/`sizes` with explicit `width`/`height` attributes.
+- Headshots: existing photos used as-is, displayed with CSS cover cropping and face-positioned framing in a fixed square with a shared light neutral background. No new headshot files, no image editing.
 - A small local reveal helper inside the page (same pattern as /rise: hidden state applied only once the script confirms it runs).
 - Smooth scrolling via element refs with `scrollIntoView`, honoring reduced motion.
 
