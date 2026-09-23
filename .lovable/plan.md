@@ -8,8 +8,8 @@ Rebuild the look of the Zuniga page to the polish level of /rise, with its own d
 
 **Hero** — split, full width, about 80vh on desktop.
 - Left: solid TFA navy panel. Gold eyebrow "For Zuniga Professional Services clients"; headline "Your taxes are in good hands. Now let's plan what comes next."; supporting line naming Richard and Mariah with "Free, no obligation."; gold button "Request a Free Consultation" scrolling to the form; white text link "Or call us directly ↓" scrolling to the call band.
-- Right: a new warm, photorealistic lifestyle image — a couple in their 40s–50s at a kitchen table in a Southern California home reviewing paperwork with a laptop, late-afternoon light, no text or logos. Cover-cropped.
-- Signature element: a white "Your advisors" card overlapping the bottom seam of the two halves, with both headshots as 72px squares cropped tight to head and shoulders on a matching light neutral background, names, and "Advisor · CA Lic# …".
+- Right: a new warm, photorealistic lifestyle image — a couple in their 40s–50s at a kitchen table in a Southern California home reviewing paperwork with a laptop, late-afternoon light, no text or logos. Delivered as WebP under ~250KB with a mobile-width variant in a srcset, explicit width and height so nothing shifts while it loads, cover-cropped.
+- Signature element: a white "Your advisors" card overlapping the bottom seam of the two halves, with both headshots as 72px squares, names, and "Advisor · CA Lic# …". The photos themselves are untouched — no regeneration, retouching, or AI editing; consistency comes from a tight head-and-shoulders crop positioned on the face inside a matching square frame with the same light neutral background color behind both.
 - Mobile order: navy text panel, then the image at ~220px tall, then the advisor card overlapping the image bottom.
 
 **What we help with** — warm light-gray band, three grouped columns with small line icons, names only, no descriptions: Retirement & Income; Protection; Estate & Tax. Single column on mobile. The old 11-item list with descriptions is removed.
@@ -29,8 +29,8 @@ TFA navy, white, warm gray, muted gold. No gradients. Hero headline ~52px deskto
 - Only `src/pages/ZunigaConnect.tsx` is restructured. `src/data/zunigaConfig.ts` gains a service-group mapping and drops nothing the form relies on; `ZPS_PURPLE` is no longer used for fills.
 - Form state, zod schema, `useHoneypot`, `submitForm` payload (`form_name: "zuniga-connect"`, advisor slug, tags, `path_label`/`interests_label`, sms consent version), `?src` capture, and `SmsConsentCheckbox` are carried over verbatim — markup only is reworked.
 - No changes to `src/App.tsx`, `supabase/functions/pipedrive-submit`, or any shared component.
-- New hero image generated into `src/assets/zuniga/` and imported directly.
-- Headshots: tight square crops with a consistent light neutral backdrop so both read as one set; done as new image assets under `src/assets/zuniga/` so the originals stay untouched.
+- New hero image generated into `src/assets/zuniga/`, converted to WebP at two widths (about 800px and 1600px), kept under ~250KB, served via `srcset`/`sizes` with explicit `width`/`height` attributes.
+- Headshots: existing photos used as-is, displayed with CSS cover cropping and face-positioned framing in a fixed square with a shared light neutral background. No new headshot files, no image editing.
 - A small local reveal helper inside the page (same pattern as /rise: hidden state applied only once the script confirms it runs).
 - Smooth scrolling via element refs with `scrollIntoView`, honoring reduced motion.
 
