@@ -8,8 +8,8 @@ Rebuild the look of the Zuniga page to the polish level of /rise, with its own d
 
 **Hero** — split, full width, about 80vh on desktop.
 - Left: solid TFA navy panel. Gold eyebrow "For Zuniga Professional Services clients"; headline "Your taxes are in good hands. Now let's plan what comes next."; supporting line naming Richard and Mariah with "Free, no obligation."; gold button "Request a Free Consultation" scrolling to the form; white text link "Or call us directly ↓" scrolling to the call band.
-- Right: a new warm, photorealistic lifestyle image — a couple in their 40s–50s at a kitchen table in a Southern California home reviewing paperwork with a laptop, late-afternoon light, no text or logos. Cover-cropped.
-- Signature element: a white "Your advisors" card overlapping the bottom seam of the two halves, with both headshots as 72px squares cropped tight to head and shoulders on a matching light neutral background, names, and "Advisor · CA Lic# …".
+- Right: a new warm, photorealistic lifestyle image — a couple in their 40s–50s at a kitchen table in a Southern California home reviewing paperwork with a laptop, late-afternoon light, no text or logos. Delivered as WebP under ~250KB with a mobile-width variant in a srcset, explicit width and height so nothing shifts while it loads, cover-cropped.
+- Signature element: a white "Your advisors" card overlapping the bottom seam of the two halves, with both headshots as 72px squares, names, and "Advisor · CA Lic# …". The photos themselves are untouched — no regeneration, retouching, or AI editing; consistency comes from a tight head-and-shoulders crop positioned on the face inside a matching square frame with the same light neutral background color behind both.
 - Mobile order: navy text panel, then the image at ~220px tall, then the advisor card overlapping the image bottom.
 
 **What we help with** — warm light-gray band, three grouped columns with small line icons, names only, no descriptions: Retirement & Income; Protection; Estate & Tax. Single column on mobile. The old 11-item list with descriptions is removed.
