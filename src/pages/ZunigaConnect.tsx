@@ -1,7 +1,15 @@
-import { useMemo, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { z } from "zod";
-import { Phone, Mail, Loader2, Check } from "lucide-react";
+import {
+  Phone,
+  Mail,
+  Loader2,
+  Check,
+  TrendingUp,
+  ShieldCheck,
+  Landmark,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,11 +21,13 @@ import SmsConsentCheckbox, {
   SMS_CONSENT_TEXT_VERSION,
 } from "@/components/forms/SmsConsentCheckbox";
 import tfaLogo from "@/assets/tfa-logo.png";
+import heroLarge from "@/assets/zuniga/hero-1600.webp";
+import heroSmall from "@/assets/zuniga/hero-800.webp";
 import {
   NOT_SURE_SLUG,
-  ZPS_PURPLE,
   zpsLogoUrl,
   zunigaAdvisors,
+  zunigaServiceGroups,
   zunigaServices,
 } from "@/data/zunigaConfig";
 
@@ -49,11 +59,62 @@ const schema = z.object({
 type Follow = "call" | "text";
 type Errors = Partial<Record<"fullName" | "phone" | "email" | "services" | "sms", string>>;
 
+const prefersReducedMotion = () =>
+  typeof window !== "undefined" &&
+  !!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+
+/** Brief fade + rise. Content is visible by default and with reduced motion. */
+const Reveal = ({
+  children,
+  delay = 0,
+  className = "",
+}: {
+  children: ReactNode;
+  delay?: number;
+  className?: string;
+}) => {
+  const [armed, setArmed] = useState(false);
+  const [shown, setShown] = useState(false);
+
+  useLayoutEffect(() => {
+    if (prefersReducedMotion()) return;
+    setArmed(true);
+  }, []);
+
+  useEffect(() => {
+    if (!armed) return;
+    const t = window.setTimeout(() => setShown(true), 60 + delay);
+    return () => window.clearTimeout(t);
+  }, [armed, delay]);
+
+  const hidden = armed && !shown;
+  return (
+    <div
+      className={`transition-[opacity,transform] duration-500 ease-out motion-reduce:transition-none ${
+        hidden ? "translate-y-2 opacity-0" : "translate-y-0 opacity-100"
+      } ${className}`}
+    >
+      {children}
+    </div>
+  );
+};
+
+const groupIcons = [TrendingUp, ShieldCheck, Landmark];
+
 const ZunigaConnect = () => {
   const { toast } = useToast();
   const { honeypotProps, isBot, honeypotValue } = useHoneypot();
   const [searchParams] = useSearchParams();
   const srcParam = searchParams.get("src") || "";
+
+  const formRef = useRef<HTMLDivElement>(null);
+  const callBandRef = useRef<HTMLDivElement>(null);
+
+  const scrollTo = (ref: React.RefObject<HTMLElement>) =>
+    ref.current?.scrollIntoView({
+      behavior: prefersReducedMotion() ? "auto" : "smooth",
+      block: "start",
+    });
 
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
@@ -73,6 +134,9 @@ const ZunigaConnect = () => {
     ],
     [],
   );
+
+  const labelFor = (slug: string) =>
+    zunigaServices.find((s) => s.slug === slug)?.label ?? slug;
 
   const toggleService = (slug: string) =>
     setServices((prev) =>
@@ -139,7 +203,7 @@ const ZunigaConnect = () => {
       });
       if (!result.ok) throw new Error(result.error || "Submission failed");
       setSubmittedName(firstName);
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      scrollTo(formRef);
     } catch {
       toast({
         title: "Something went wrong",
@@ -151,6 +215,33 @@ const ZunigaConnect = () => {
     }
   };
 
+  const advisorCard = (
+    <div className="rounded-2xl border border-border bg-white p-5 shadow-[0_18px_40px_-20px_rgba(20,35,60,0.45)]">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+        Your advisors
+      </p>
+      <div className="mt-4 grid gap-4 sm:grid-cols-2">
+        {zunigaAdvisors.map((a) => (
+          <div key={a.slug} className="flex items-center gap-3">
+            <img
+              src={a.photo}
+              alt={a.name}
+              width={72}
+              height={72}
+              className="h-[72px] w-[72px] shrink-0 rounded-xl bg-[#EFEBE4] object-cover object-[50%_18%]"
+            />
+            <div className="min-w-0">
+              <p className="truncate font-semibold text-navy">{a.name}</p>
+              <p className="text-xs text-muted-foreground">
+                {a.title} · {a.license}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
   return (
     <>
       <SEOHead
@@ -160,294 +251,349 @@ const ZunigaConnect = () => {
       />
 
       <div className="min-h-screen bg-white">
-        {/* Co-branded header */}
-        <header className="border-b border-border bg-white">
-          <div className="container mx-auto flex max-w-4xl items-center justify-between gap-4 px-5 py-5">
-            <img
-              src={tfaLogo}
-              alt="The Financial Architects"
-              className="h-10 w-auto sm:h-12"
-            />
-            <span
-              aria-hidden="true"
-              className="h-10 w-px shrink-0 sm:h-12"
-              style={{ backgroundColor: ZPS_PURPLE }}
-            />
-            <img
-              src={zpsLogoUrl}
-              alt="Zuniga Professional Services, Inc."
-              className="h-10 w-auto sm:h-12"
-            />
+        {/* Header */}
+        <header className="sticky top-0 z-30 border-b border-border bg-white">
+          <div className="container mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3">
+            <div className="flex items-center gap-3">
+              <img
+                src={tfaLogo}
+                alt="The Financial Architects"
+                className="h-[26px] w-auto sm:h-[34px]"
+              />
+              <span aria-hidden="true" className="text-sm text-muted-foreground">
+                ×
+              </span>
+              <img
+                src={zpsLogoUrl}
+                alt="Zuniga Professional Services, Inc."
+                className="h-[26px] w-auto sm:h-[34px]"
+              />
+            </div>
+            <button
+              type="button"
+              onClick={() => scrollTo(formRef)}
+              className="min-h-[40px] whitespace-nowrap rounded-full bg-navy px-5 text-sm font-semibold text-white transition hover:opacity-90"
+            >
+              Get started
+            </button>
           </div>
-          <p className="container mx-auto max-w-4xl px-5 pb-5 text-center text-sm text-muted-foreground">
-            Financial planning and insurance services for Zuniga Professional Services clients.
-          </p>
         </header>
 
-        {/* Intro + form */}
-        <section className="container mx-auto max-w-2xl px-5 py-8">
-          {submittedName ? (
-            <div className="rounded-xl border border-border bg-white p-8 text-center shadow-sm">
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-accent/20">
-                <Check className="h-6 w-6 text-navy" aria-hidden="true" />
-              </div>
-              <h1 className="mt-4 text-2xl font-bold text-navy">
-                Thanks, {submittedName} — Richard or Mariah will reach out within one
-                business day.
-              </h1>
-              <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                {zunigaAdvisors.map((a) => (
-                  <a
-                    key={a.slug}
-                    href={`tel:+1${digits(a.phone)}`}
-                    className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-lg bg-navy px-5 py-3 font-semibold text-white"
+        {/* Hero */}
+        <section className="relative">
+          <div className="grid lg:min-h-[80vh] lg:grid-cols-2">
+            <div className="flex items-center bg-navy px-5 py-12 sm:px-10 lg:py-20">
+              <div className="mx-auto w-full max-w-xl lg:pb-16">
+                <Reveal>
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
+                    For Zuniga Professional Services clients
+                  </p>
+                  <h1 className="mt-4 text-[32px] font-bold leading-[1.08] text-white sm:text-[42px] lg:text-[52px]">
+                    Your taxes are in good hands. Now let's plan what comes next.
+                  </h1>
+                </Reveal>
+                <p className="mt-5 text-base leading-relaxed text-white/80 sm:text-lg">
+                  Retirement, insurance, and estate planning from TFA advisors Richard
+                  Morales and Mariah Lorenzen. Free, no obligation.
+                </p>
+                <div className="mt-8 flex flex-col items-start gap-4">
+                  <button
+                    type="button"
+                    onClick={() => scrollTo(formRef)}
+                    className="min-h-[52px] w-full rounded-lg bg-accent px-7 text-base font-semibold text-navy transition hover:opacity-90 sm:w-auto"
                   >
-                    <Phone className="h-4 w-4" aria-hidden="true" />
-                    Call {a.name.split(" ")[0]}
-                  </a>
-                ))}
+                    Request a Free Consultation
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => scrollTo(callBandRef)}
+                    className="text-sm font-medium text-white underline underline-offset-4 hover:text-accent"
+                  >
+                    Or call us directly ↓
+                  </button>
+                </div>
               </div>
             </div>
-          ) : (
-            <>
-              <h1 className="text-3xl font-bold leading-tight text-navy sm:text-4xl">
-                A second set of eyes on your financial picture.
-              </h1>
-              <p className="mt-3 text-lg text-muted-foreground">
-                Tell us what you'd like to talk about and a licensed TFA advisor will follow
-                up — no cost, no obligation.
-              </p>
 
-              <form
-                onSubmit={handleSubmit}
-                noValidate
-                className="mt-7 rounded-xl border border-border bg-white p-6 shadow-sm sm:p-7"
-              >
-                <div className={honeypotClassName}>
-                  <input type="text" name="website" {...honeypotProps} />
-                </div>
+            <div className="relative h-[220px] lg:h-auto">
+              <img
+                src={heroLarge}
+                srcSet={`${heroSmall} 800w, ${heroLarge} 1600w`}
+                sizes="(min-width: 1024px) 50vw, 100vw"
+                width={1600}
+                height={1200}
+                alt="A couple reviewing their financial paperwork at home"
+                className="h-full w-full object-cover"
+              />
+            </div>
+          </div>
 
-                <div className="grid gap-4">
-                  <div>
-                    <Label htmlFor="fullName">Full name</Label>
-                    <Input
-                      id="fullName"
-                      autoComplete="name"
-                      className="mt-1"
-                      value={fullName}
-                      onChange={(e) => setFullName(e.target.value)}
-                      aria-invalid={!!errors.fullName}
-                      aria-describedby={errors.fullName ? "fullName-error" : undefined}
-                    />
-                    {errors.fullName && (
-                      <p id="fullName-error" className="mt-1 text-sm text-destructive">
-                        {errors.fullName}
-                      </p>
-                    )}
-                  </div>
-
-                  <div>
-                    <Label htmlFor="phone">Mobile phone</Label>
-                    <Input
-                      id="phone"
-                      type="tel"
-                      inputMode="tel"
-                      autoComplete="tel"
-                      placeholder="(555) 555-5555"
-                      className="mt-1"
-                      value={phone}
-                      onChange={(e) => setPhone(formatUsPhone(e.target.value))}
-                      aria-invalid={!!errors.phone}
-                      aria-describedby={errors.phone ? "phone-error" : undefined}
-                    />
-                    {errors.phone && (
-                      <p id="phone-error" className="mt-1 text-sm text-destructive">
-                        {errors.phone}
-                      </p>
-                    )}
-                  </div>
-
-                  <div>
-                    <Label htmlFor="email">Email (optional)</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      autoComplete="email"
-                      className="mt-1"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      aria-invalid={!!errors.email}
-                      aria-describedby={errors.email ? "email-error" : undefined}
-                    />
-                    {errors.email && (
-                      <p id="email-error" className="mt-1 text-sm text-destructive">
-                        {errors.email}
-                      </p>
-                    )}
-                  </div>
-                </div>
-
-                <fieldset className="mt-6">
-                  <legend className="font-semibold text-navy">I'm interested in</legend>
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {chips.map((c) => {
-                      const active = services.includes(c.slug);
-                      return (
-                        <button
-                          key={c.slug}
-                          type="button"
-                          aria-pressed={active}
-                          onClick={() => toggleService(c.slug)}
-                          className={`min-h-[44px] rounded-full border-2 px-4 text-sm font-medium transition ${
-                            active
-                              ? "text-white"
-                              : "border-border bg-white text-navy hover:border-navy/50"
-                          }`}
-                          style={
-                            active
-                              ? { backgroundColor: ZPS_PURPLE, borderColor: ZPS_PURPLE }
-                              : undefined
-                          }
-                        >
-                          {active ? "✓ " : ""}
-                          {c.label}
-                        </button>
-                      );
-                    })}
-                  </div>
-                  {errors.services && (
-                    <p className="mt-2 text-sm text-destructive">{errors.services}</p>
-                  )}
-                </fieldset>
-
-                <div className="mt-6">
-                  <Label htmlFor="preferredAdvisor">Preferred advisor (optional)</Label>
-                  <select
-                    id="preferredAdvisor"
-                    value={preferredAdvisor}
-                    onChange={(e) => setPreferredAdvisor(e.target.value)}
-                    className="mt-1 h-11 w-full rounded-md border border-input bg-background px-3 text-sm"
-                  >
-                    <option value="none">No preference</option>
-                    {zunigaAdvisors.map((a) => (
-                      <option key={a.slug} value={a.slug}>
-                        {a.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="mt-6">
-                  <span className="font-semibold text-navy">Preferred follow-up</span>
-                  <div className="mt-2 flex gap-3">
-                    {(["call", "text"] as Follow[]).map((f) => (
-                      <button
-                        key={f}
-                        type="button"
-                        aria-pressed={follow === f}
-                        onClick={() => setFollow(f)}
-                        className={`min-h-[44px] flex-1 rounded-lg border-2 px-4 font-medium capitalize transition ${
-                          follow === f
-                            ? "border-navy bg-navy/5 text-navy"
-                            : "border-border text-muted-foreground"
-                        }`}
-                      >
-                        {f}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {follow === "text" && (
-                  <div className="mt-6">
-                    <SmsConsentCheckbox
-                      checked={smsConsent}
-                      onChange={setSmsConsent}
-                      required
-                    />
-                    {errors.sms && (
-                      <p className="mt-2 text-sm text-destructive">{errors.sms}</p>
-                    )}
-                  </div>
-                )}
-
-                <Button
-                  type="submit"
-                  disabled={submitting}
-                  className="mt-7 w-full py-6 text-base font-semibold text-white hover:opacity-90"
-                  style={{ backgroundColor: ZPS_PURPLE }}
-                >
-                  {submitting ? (
-                    <>
-                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                      Sending...
-                    </>
-                  ) : (
-                    "Request a Free Consultation"
-                  )}
-                </Button>
-                <p className="mt-3 text-center text-sm text-muted-foreground">
-                  Free consultation. No obligations.
-                </p>
-              </form>
-            </>
-          )}
-        </section>
-
-        {/* Services */}
-        <section className="border-t border-border bg-secondary/30 py-10">
-          <div className="container mx-auto max-w-4xl px-5">
-            <h2 className="text-2xl font-bold text-navy animate-fade-in motion-reduce:animate-none">
-              How we can help
-            </h2>
-            <ul className="mt-6 grid gap-x-10 gap-y-5 sm:grid-cols-2">
-              {zunigaServices.map((s) => (
-                <li key={s.slug} className="border-b border-border/60 pb-4">
-                  <p className="font-semibold text-navy">{s.label}</p>
-                  <p className="mt-1 text-sm text-muted-foreground">{s.blurb}</p>
-                </li>
-              ))}
-            </ul>
+          {/* Advisor card overlapping the seam */}
+          <div className="container mx-auto max-w-6xl px-5">
+            <Reveal delay={140} className="-mt-10 lg:-mt-16">
+              <div className="lg:max-w-2xl">{advisorCard}</div>
+            </Reveal>
           </div>
         </section>
 
-        {/* Advisors */}
-        <section className="container mx-auto max-w-4xl px-5 py-12">
-          <h2 className="text-2xl font-bold text-navy animate-fade-in motion-reduce:animate-none">
-            Your TFA advisors
-          </h2>
-          <div className="mt-6 grid gap-6 sm:grid-cols-2">
-            {zunigaAdvisors.map((a) => (
-              <div
-                key={a.slug}
-                className="flex flex-col rounded-xl border border-border bg-white p-6 shadow-sm"
-              >
-                <img
-                  src={a.photo}
-                  alt={a.name}
-                  className="h-40 w-40 self-center rounded-full object-cover object-top"
-                />
-                <p className="mt-4 text-center text-lg font-bold text-navy">{a.name}</p>
-                <p className="text-center text-sm text-muted-foreground">{a.title}</p>
-                <p className="text-center text-sm text-muted-foreground">{a.license}</p>
-                <div className="mt-5 grid gap-2">
-                  <a
-                    href={`tel:+1${digits(a.phone)}`}
-                    className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-lg bg-navy px-4 py-2 font-semibold text-white"
-                  >
-                    <Phone className="h-4 w-4" aria-hidden="true" />
-                    Call {a.phone}
-                  </a>
-                  <a
-                    href={`mailto:${a.email}`}
-                    className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-lg border-2 border-navy/30 px-4 py-2 font-semibold text-navy hover:border-navy"
-                  >
-                    <Mail className="h-4 w-4" aria-hidden="true" />
-                    Email
-                  </a>
+        {/* What we help with */}
+        <section className="mt-12 bg-[#F6F4F0] py-14">
+          <div className="container mx-auto max-w-6xl px-5">
+            <h2 className="text-2xl font-bold text-navy sm:text-3xl">What we help with</h2>
+            <div className="mt-8 grid gap-8 sm:grid-cols-3">
+              {zunigaServiceGroups.map((group, i) => {
+                const Icon = groupIcons[i % groupIcons.length];
+                return (
+                  <div key={group.title}>
+                    <div className="flex items-center gap-2">
+                      <Icon className="h-5 w-5 text-accent" aria-hidden="true" strokeWidth={1.75} />
+                      <h3 className="font-semibold text-navy">{group.title}</h3>
+                    </div>
+                    <ul className="mt-4 space-y-2 border-t border-border pt-4">
+                      {group.slugs.map((slug) => (
+                        <li key={slug} className="text-sm text-foreground/80">
+                          {labelFor(slug)}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* Form */}
+        <section ref={formRef} id="zuniga-form" className="scroll-mt-20 bg-white py-16">
+          <div className="container mx-auto max-w-2xl px-5">
+            {submittedName ? (
+              <div className="mx-auto max-w-[520px] rounded-2xl border border-border bg-white p-8 text-center shadow-sm">
+                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-accent/20">
+                  <Check className="h-6 w-6 text-navy" aria-hidden="true" />
+                </div>
+                <h2 className="mt-4 text-2xl font-bold text-navy">
+                  Thanks, {submittedName} — Richard or Mariah will reach out within one
+                  business day.
+                </h2>
+                <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                  {zunigaAdvisors.map((a) => (
+                    <a
+                      key={a.slug}
+                      href={`tel:+1${digits(a.phone)}`}
+                      className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-lg bg-navy px-5 py-3 font-semibold text-white"
+                    >
+                      <Phone className="h-4 w-4" aria-hidden="true" />
+                      Call {a.name.split(" ")[0]}
+                    </a>
+                  ))}
                 </div>
               </div>
-            ))}
+            ) : (
+              <>
+                <div className="text-center">
+                  <h2 className="text-2xl font-bold text-navy sm:text-3xl">
+                    Tell us what you'd like to talk about.
+                  </h2>
+                  <p className="mt-2 text-muted-foreground">
+                    Richard or Mariah will reach out within one business day.
+                  </p>
+                </div>
+
+                <form
+                  onSubmit={handleSubmit}
+                  noValidate
+                  className="mx-auto mt-8 max-w-[520px] rounded-2xl border border-border bg-white p-6 shadow-[0_18px_40px_-28px_rgba(20,35,60,0.5)] sm:p-7"
+                >
+                  <div className={honeypotClassName}>
+                    <input type="text" name="website" {...honeypotProps} />
+                  </div>
+
+                  <div className="grid gap-4">
+                    <div>
+                      <Label htmlFor="fullName">Full name</Label>
+                      <Input
+                        id="fullName"
+                        autoComplete="name"
+                        className="mt-1"
+                        value={fullName}
+                        onChange={(e) => setFullName(e.target.value)}
+                        aria-invalid={!!errors.fullName}
+                        aria-describedby={errors.fullName ? "fullName-error" : undefined}
+                      />
+                      {errors.fullName && (
+                        <p id="fullName-error" className="mt-1 text-sm text-destructive">
+                          {errors.fullName}
+                        </p>
+                      )}
+                    </div>
+
+                    <div>
+                      <Label htmlFor="phone">Mobile phone</Label>
+                      <Input
+                        id="phone"
+                        type="tel"
+                        inputMode="tel"
+                        autoComplete="tel"
+                        placeholder="(555) 555-5555"
+                        className="mt-1"
+                        value={phone}
+                        onChange={(e) => setPhone(formatUsPhone(e.target.value))}
+                        aria-invalid={!!errors.phone}
+                        aria-describedby={errors.phone ? "phone-error" : undefined}
+                      />
+                      {errors.phone && (
+                        <p id="phone-error" className="mt-1 text-sm text-destructive">
+                          {errors.phone}
+                        </p>
+                      )}
+                    </div>
+
+                    <div>
+                      <Label htmlFor="email">Email (optional)</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        autoComplete="email"
+                        className="mt-1"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        aria-invalid={!!errors.email}
+                        aria-describedby={errors.email ? "email-error" : undefined}
+                      />
+                      {errors.email && (
+                        <p id="email-error" className="mt-1 text-sm text-destructive">
+                          {errors.email}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  <fieldset className="mt-6">
+                    <legend className="text-sm font-semibold text-navy">
+                      I'm interested in
+                    </legend>
+                    <div className="mt-3 flex flex-wrap gap-1.5">
+                      {chips.map((c) => {
+                        const active = services.includes(c.slug);
+                        return (
+                          <button
+                            key={c.slug}
+                            type="button"
+                            aria-pressed={active}
+                            onClick={() => toggleService(c.slug)}
+                            className={`min-h-[34px] rounded-full border px-3 text-[13px] font-medium transition ${
+                              active
+                                ? "border-navy bg-navy text-white"
+                                : "border-border bg-white text-navy hover:border-navy/50"
+                            }`}
+                          >
+                            {c.label}
+                          </button>
+                        );
+                      })}
+                    </div>
+                    {errors.services && (
+                      <p className="mt-2 text-sm text-destructive">{errors.services}</p>
+                    )}
+                  </fieldset>
+
+                  <div className="mt-6">
+                    <Label htmlFor="preferredAdvisor">Preferred advisor (optional)</Label>
+                    <select
+                      id="preferredAdvisor"
+                      value={preferredAdvisor}
+                      onChange={(e) => setPreferredAdvisor(e.target.value)}
+                      className="mt-1 h-11 w-full rounded-md border border-input bg-background px-3 text-sm"
+                    >
+                      <option value="none">No preference</option>
+                      {zunigaAdvisors.map((a) => (
+                        <option key={a.slug} value={a.slug}>
+                          {a.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="mt-6">
+                    <span className="text-sm font-semibold text-navy">Preferred follow-up</span>
+                    <div className="mt-2 grid grid-cols-2 gap-1 rounded-lg border border-border bg-secondary p-1">
+                      {(["call", "text"] as Follow[]).map((f) => (
+                        <button
+                          key={f}
+                          type="button"
+                          aria-pressed={follow === f}
+                          onClick={() => setFollow(f)}
+                          className={`min-h-[40px] rounded-md text-sm font-semibold capitalize transition ${
+                            follow === f
+                              ? "bg-white text-navy shadow-sm"
+                              : "text-muted-foreground hover:text-navy"
+                          }`}
+                        >
+                          {f}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {follow === "text" && (
+                    <div className="mt-6">
+                      <SmsConsentCheckbox
+                        checked={smsConsent}
+                        onChange={setSmsConsent}
+                        required
+                      />
+                      {errors.sms && (
+                        <p className="mt-2 text-sm text-destructive">{errors.sms}</p>
+                      )}
+                    </div>
+                  )}
+
+                  <Button
+                    type="submit"
+                    disabled={submitting}
+                    className="mt-7 w-full bg-navy py-6 text-base font-semibold text-white hover:bg-navy/90"
+                  >
+                    {submitting ? (
+                      <>
+                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                        Sending...
+                      </>
+                    ) : (
+                      "Request a Free Consultation"
+                    )}
+                  </Button>
+                  <p className="mt-3 text-center text-sm text-muted-foreground">
+                    Free consultation. No obligations.
+                  </p>
+                </form>
+              </>
+            )}
+          </div>
+        </section>
+
+        {/* Closing call band */}
+        <section ref={callBandRef} className="scroll-mt-20 bg-navy py-12">
+          <div className="container mx-auto flex max-w-4xl flex-col items-center gap-6 px-5 text-center">
+            <h2 className="text-2xl font-bold text-white">Prefer to talk now?</h2>
+            <div className="grid w-full gap-3 sm:w-auto sm:grid-cols-2">
+              {zunigaAdvisors.map((a) => (
+                <a
+                  key={a.slug}
+                  href={`tel:+1${digits(a.phone)}`}
+                  className="inline-flex min-h-[52px] items-center justify-center gap-2 rounded-lg bg-accent px-6 font-semibold text-navy transition hover:opacity-90"
+                >
+                  <Phone className="h-4 w-4" aria-hidden="true" />
+                  Call {a.name.split(" ")[0]} · {a.phone}
+                </a>
+              ))}
+            </div>
+            <a
+              href={`mailto:${zunigaAdvisors[0].email}`}
+              className="inline-flex items-center gap-2 text-sm text-white/80 underline underline-offset-4 hover:text-white"
+            >
+              <Mail className="h-4 w-4" aria-hidden="true" />
+              Or email us
+            </a>
           </div>
         </section>
 
