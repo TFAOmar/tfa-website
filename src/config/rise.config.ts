@@ -15,7 +15,10 @@ import mackenziePhoto from "@/assets/rise/mackenzie-alexander.jpg.asset.json";
 export type RiseFormMode = "mock" | "live";
 
 /** Controls how the contact step submits. "mock" logs to console only. */
-export const RISE_FORM_MODE: RiseFormMode = "mock";
+export const RISE_FORM_MODE: RiseFormMode = "live";
+
+/** GoHighLevel inbound webhook: workflow "Rise Landing Page — Inbound Lead", Rise Estate Planning sub-account. */
+export const RISE_GHL_WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/9JRLPvdhuVD9QhWZU7oC/webhook-trigger/7163d275-0070-4493-b6eb-ff5c73c9d86c";
 
 export interface RiseAdvisor {
   name: string;

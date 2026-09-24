@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { CheckCircle2, Loader2 } from "lucide-react";
+import { CheckCircle2, Loader2, Phone, MessageSquare } from "lucide-react";
 import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
 import { riseConfig, RISE_FORM_MODE } from "@/config/rise.config";
 import type { RiseAnswers } from "@/lib/rise/questions";
@@ -15,6 +15,9 @@ interface Props {
 }
 
 type Contact = "call" | "text" | "email";
+
+const telHref = (n: string) => `tel:+1${n.replace(/\D/g, "")}`;
+const smsHref = (n: string) => `sms:+1${n.replace(/\D/g, "")}`;
 
 const inputClass =
   "min-h-[48px] w-full rounded-xl border border-[var(--rise-card-border)] bg-[var(--rise-card)] px-4 text-base text-foreground outline-none transition focus:border-navy focus:ring-2 focus:ring-navy/20";
@@ -32,8 +35,10 @@ const RiseSummaryContact = ({ answers, summary, onRestart }: Props) => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [failed, setFailed] = useState(false);
   const successRef = useRef<HTMLDivElement>(null);
   const successHeadingRef = useRef<HTMLHeadingElement>(null);
+  const errorRef = useRef<HTMLDivElement>(null);
 
   // The thank-you card is shorter than the form, so bring it back into view.
   useEffect(() => {
@@ -45,6 +50,10 @@ const RiseSummaryContact = ({ answers, summary, onRestart }: Props) => {
     });
     successHeadingRef.current?.focus({ preventScroll: true });
   }, [success]);
+
+  useEffect(() => {
+    if (failed) errorRef.current?.focus();
+  }, [failed]);
 
   const set = (k: keyof typeof form, v: string) => setForm((f) => ({ ...f, [k]: v }));
 
@@ -62,20 +71,27 @@ const RiseSummaryContact = ({ answers, summary, onRestart }: Props) => {
   const handleSubmit = async (ev: React.FormEvent) => {
     ev.preventDefault();
     if (isBot()) return;
+    setFailed(false);
     if (!validate()) return;
     setSubmitting(true);
-    const ref = new URLSearchParams(window.location.search).get("ref");
-    await submitRiseLead({
-      ...form,
-      preferredContact,
-      answers,
-      summary: summary.map((s) => ({ id: s.id, heading: s.heading })),
-      ref,
-      source: "/rise",
-      submittedAt: new Date().toISOString(),
-    });
-    setSubmitting(false);
-    setSuccess(true);
+    try {
+      const ref = new URLSearchParams(window.location.search).get("ref");
+      const result = await submitRiseLead({
+        ...form,
+        preferredContact,
+        answers,
+        summary: summary.map((s) => ({ id: s.id, heading: s.heading })),
+        ref,
+        source: "/rise",
+        submittedAt: new Date().toISOString(),
+      });
+      if (result.ok) setSuccess(true);
+      else setFailed(true);
+    } catch {
+      setFailed(true);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -238,6 +254,37 @@ const RiseSummaryContact = ({ answers, summary, onRestart }: Props) => {
               })}
             </div>
           </fieldset>
+
+          {failed && (
+            <div ref={errorRef} role="alert" tabIndex={-1} className="mt-6 outline-none">
+              <p className="text-sm text-destructive">We couldn't send your information just now.</p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                You can try again, or reach Joshua or Mackenzie directly:
+              </p>
+              <div className="mt-3 space-y-3">
+                {riseConfig.advisors.map((a) => (
+                  <div key={a.name}>
+                    <p className="text-sm font-semibold text-navy">{a.name}</p>
+                    <div className="mt-2 flex gap-3">
+                      <a
+                        href={telHref(a.phone)}
+                        className="inline-flex min-h-[48px] flex-1 items-center justify-center gap-2 rounded-xl bg-[var(--rise-btn)] text-sm font-semibold transition-colors hover:bg-[var(--rise-btn-hover)] motion-reduce:transition-none"
+                        style={{ color: "var(--rise-btn-text)" }}
+                      >
+                        <Phone className="h-4 w-4" aria-hidden /> Call
+                      </a>
+                      <a
+                        href={smsHref(a.textPhone)}
+                        className="inline-flex min-h-[48px] flex-1 items-center justify-center gap-2 rounded-xl border border-navy/20 text-sm font-semibold text-navy transition hover:border-navy/40 motion-reduce:transition-none"
+                      >
+                        <MessageSquare className="h-4 w-4" aria-hidden /> Text
+                      </a>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           <button
             type="submit"
