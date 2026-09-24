@@ -226,13 +226,20 @@ const ZunigaConnect = () => {
       <div className="mt-4 grid gap-4 sm:grid-cols-2">
         {zunigaAdvisors.map((a) => (
           <div key={a.slug} className="flex items-center gap-3">
-            <img
-              src={a.photo}
-              alt={a.name}
-              width={72}
-              height={72}
-              className="h-[72px] w-[72px] shrink-0 rounded-xl bg-[#EFEBE4] object-cover object-[50%_18%]"
-            />
+            <div className="h-[72px] w-[72px] shrink-0 overflow-hidden rounded-xl bg-[#EFEBE4]">
+              <img
+                src={a.photo}
+                alt={a.name}
+                width={72}
+                height={72}
+                className="h-full w-full object-cover object-[50%_18%]"
+                style={
+                  a.slug === "richard-morales"
+                    ? { transform: "scale(1.4)", transformOrigin: "50% 30%" }
+                    : undefined
+                }
+              />
+            </div>
             <div className="min-w-0">
               <p className="truncate font-semibold text-navy">{a.name}</p>
               <p className="text-xs text-muted-foreground">
@@ -278,7 +285,7 @@ const ZunigaConnect = () => {
               onClick={() => scrollTo(formRef)}
               className="min-h-[38px] shrink-0 whitespace-nowrap rounded-full bg-navy px-4 text-[13px] font-semibold text-white transition hover:opacity-90 sm:min-h-[40px] sm:px-5 sm:text-sm"
             >
-              Get started
+              Free Consultation
             </button>
           </div>
         </header>
@@ -300,8 +307,8 @@ const ZunigaConnect = () => {
                   </h1>
                 </Reveal>
                 <p className="mt-5 text-base leading-relaxed text-white/80 sm:text-lg">
-                  Retirement, insurance, and estate planning from TFA advisors Richard
-                  Morales and Mariah Lorenzen. Free, no obligation.
+                  Retirement, insurance, and estate planning from Richard Morales and
+                  Mariah Lorenzen of The Financial Architects. Free, no obligation.
                 </p>
                 <div className="mt-8 flex flex-col items-start gap-4">
                   <button
