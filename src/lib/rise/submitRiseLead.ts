@@ -10,7 +10,6 @@
 
 import { RISE_FORM_MODE, RISE_GHL_WEBHOOK_URL } from "@/config/rise.config";
 import { RISE_QUESTIONS, type RiseAnswers } from "./questions";
-import type { RiseSummaryItem } from "./summary";
 
 export interface RiseLeadPayload {
   firstName: string;
@@ -32,9 +31,6 @@ export interface RiseSubmitResult {
   ok: boolean;
   id: string;
 }
-
-// Keep the type import referenced for consumers.
-export type { RiseSummaryItem };
 
 const ANSWER_KEYS: Record<string, string> = {
   plan: "q1",
