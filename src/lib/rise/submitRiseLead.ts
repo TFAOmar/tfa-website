@@ -19,6 +19,7 @@ export interface RiseLeadPayload {
   /** "Who is your real estate agent?" — required on the contact step. */
   agentName: string;
   preferredContact: "call" | "text" | "email";
+  contactConsent: boolean;
   answers: RiseAnswers;
   summary: { id: string; heading: string }[];
   /** Referring Rise agent from ?ref= — captured silently. */
@@ -73,6 +74,7 @@ export function buildGhlBody(payload: RiseLeadPayload) {
     answers,
     summaryItems: payload.summary.map((s) => s.heading).join("; "),
     source: "tfawealthplanning.com/rise",
+    contactConsent: payload.contactConsent ? "Yes" : "No",
   };
 }
 

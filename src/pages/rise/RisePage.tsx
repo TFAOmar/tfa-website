@@ -32,7 +32,6 @@ const RisePage = () => {
       title="Rise × The Financial Architects | Planning for New Homeowners"
       description="A short, plain-language guide for new Rise homeowners on living trusts, estate planning, and protecting the people in the home."
       canonical="https://tfawealthplanning.com/rise"
-      noIndex
     />
     <div
       className={`min-h-screen bg-[var(--rise-bg)] ${jsReady ? "rise-js" : ""}`}

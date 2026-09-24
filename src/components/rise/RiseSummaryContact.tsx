@@ -32,6 +32,7 @@ const RiseSummaryContact = ({ answers, summary, onRestart }: Props) => {
     agentName: "",
   });
   const [preferredContact, setPreferredContact] = useState<Contact>("call");
+  const [contactConsent, setContactConsent] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -79,6 +80,7 @@ const RiseSummaryContact = ({ answers, summary, onRestart }: Props) => {
       const result = await submitRiseLead({
         ...form,
         preferredContact,
+        contactConsent,
         answers,
         summary: summary.map((s) => ({ id: s.id, heading: s.heading })),
         ref,
@@ -255,6 +257,19 @@ const RiseSummaryContact = ({ answers, summary, onRestart }: Props) => {
             </div>
           </fieldset>
 
+          <label className="mt-6 flex cursor-pointer items-start gap-3">
+            <input
+              type="checkbox"
+              checked={contactConsent}
+              onChange={(e) => setContactConsent(e.target.checked)}
+              className="mt-0.5 h-5 w-5 shrink-0"
+              style={{ accentColor: "var(--rise-btn)" }}
+            />
+            <span className="text-xs leading-relaxed text-muted-foreground">
+              {riseConfig.disclosures.contactConsent}
+            </span>
+          </label>
+
           {failed && (
             <div ref={errorRef} role="alert" tabIndex={-1} className="mt-6 outline-none">
               <p className="text-sm text-destructive">We couldn't send your information just now.</p>
@@ -295,10 +310,6 @@ const RiseSummaryContact = ({ answers, summary, onRestart }: Props) => {
             {submitting && <Loader2 className="h-4 w-4 animate-spin motion-reduce:animate-none" aria-hidden />}
             {submitting ? "Sending…" : "Have Joshua or Mackenzie reach out."}
           </button>
-
-          <p className="mt-4 text-xs leading-relaxed text-muted-foreground">
-            {riseConfig.disclosures.contactConsent}
-          </p>
 
           <button
             type="button"
