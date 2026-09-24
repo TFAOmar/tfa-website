@@ -69,7 +69,7 @@ export const zunigaServices: ZunigaService[] = [
   },
   {
     slug: "tax-planning",
-    label: "Tax Planning",
+    label: "Tax-Efficient Retirement Planning",
     blurb: "Strategies that work alongside the tax work Zuniga already does for you.",
   },
   {
