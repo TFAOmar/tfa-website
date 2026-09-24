@@ -158,7 +158,7 @@ export const riseConfig = {
     tfaLegalSlot:
       "This page is for educational and informational purposes only. It does not provide legal, tax, investment, or financial advice. Estate-planning and legal services are provided only by appropriately licensed legal professionals. Insurance and financial products are subject to eligibility, underwriting, suitability, availability, and applicable laws and regulations. No particular outcome is guaranteed. The Financial Architects and Rise are separate companies working together on client education.",
     contactConsent:
-      "By submitting, you agree that The Financial Architects and its authorized partners may contact you by phone, text, or email about the information you requested. Consent is not a condition of purchasing any product or service. Message and data rates may apply.",
+      "By checking this box, you agree that The Financial Architects and its authorized partners may contact you by phone, text, or email about the information you requested. Consent is not a condition of purchasing any product or service. Message and data rates may apply.",
   },
 } as const;
 
