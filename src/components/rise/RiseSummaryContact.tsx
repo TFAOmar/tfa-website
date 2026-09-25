@@ -37,6 +37,7 @@ const RiseSummaryContact = ({ answers, summary, onRestart }: Props) => {
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [failed, setFailed] = useState(false);
+  const [showFixHint, setShowFixHint] = useState(false);
   const successRef = useRef<HTMLDivElement>(null);
   const successHeadingRef = useRef<HTMLHeadingElement>(null);
   const errorRef = useRef<HTMLDivElement>(null);
@@ -58,6 +59,14 @@ const RiseSummaryContact = ({ answers, summary, onRestart }: Props) => {
 
   const set = (k: keyof typeof form, v: string) => setForm((f) => ({ ...f, [k]: v }));
 
+  const fieldIds: [keyof typeof form, string][] = [
+    ["firstName", "rise-first"],
+    ["lastName", "rise-last"],
+    ["phone", "rise-phone"],
+    ["email", "rise-email"],
+    ["agentName", "rise-agent"],
+  ];
+
   const validate = () => {
     const e: Record<string, string> = {};
     if (!form.firstName.trim()) e.firstName = "First name is required.";
@@ -66,14 +75,26 @@ const RiseSummaryContact = ({ answers, summary, onRestart }: Props) => {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = "Enter a valid email address.";
     if (!form.agentName.trim()) e.agentName = "Let us know who your real estate agent is.";
     setErrors(e);
-    return Object.keys(e).length === 0;
+    return e;
   };
 
   const handleSubmit = async (ev: React.FormEvent) => {
     ev.preventDefault();
     if (isBot()) return;
     setFailed(false);
-    if (!validate()) return;
+    setShowFixHint(false);
+    const found = validate();
+    if (Object.keys(found).length > 0) {
+      setShowFixHint(true);
+      const first = fieldIds.find(([k]) => found[k]);
+      const el = first ? document.getElementById(first[1]) : null;
+      if (el) {
+        const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+        el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "center" });
+        el.focus({ preventScroll: true });
+      }
+      return;
+    }
     setSubmitting(true);
     try {
       const ref = new URLSearchParams(window.location.search).get("ref");
@@ -148,7 +169,16 @@ const RiseSummaryContact = ({ answers, summary, onRestart }: Props) => {
         </div>
       ) : (
         <form onSubmit={handleSubmit} noValidate className="mt-8 border-t border-navy/10 pt-6">
-          <input type="text" name="company_website" className={honeypotClassName} {...honeypotProps} />
+          <input
+            type="text"
+            name="rise_hp_ref2"
+            className={honeypotClassName}
+            {...honeypotProps}
+            autoComplete="new-password"
+            data-lpignore="true"
+            data-1p-ignore="true"
+            data-form-type="other"
+          />
 
           <h3 className="font-serif text-xl font-bold text-navy">
             Want to talk any of this through?
@@ -299,6 +329,10 @@ const RiseSummaryContact = ({ answers, summary, onRestart }: Props) => {
                 ))}
               </div>
             </div>
+          )}
+
+          {showFixHint && (
+            <p className="mt-6 text-sm text-destructive">Please check the highlighted fields above.</p>
           )}
 
           <button
