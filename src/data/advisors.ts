@@ -496,7 +496,7 @@ export const advisors: Advisor[] = [
     specialties: ["Bilingual • Bilingüe", "Life Insurance", "Annuities", "Retirement Planning", "Estate Planning"],
     licenses: ["Life & Health"],
     image: fabianSerranoImg,
-    email: "fabian@shftinsurance.com",
+    email: "fserrano@tfainsuranceadvisors.com",
     phone: "(909) 323-7601",
     yearsOfExperience: 20,
     landingPage: "/advisors/fabian-serrano"
