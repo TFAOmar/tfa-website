@@ -176,9 +176,9 @@ const AdvisorFabianSerrano = () => {
                   <Phone className="h-5 w-5 mr-2" />
                   (909) 323-7601
                 </a>
-                <a href="mailto:fabian@shftinsurance.com" className="flex items-center hover:text-accent transition-colors">
+                <a href="mailto:fserrano@tfainsuranceadvisors.com" className="flex items-center hover:text-accent transition-colors">
                   <Mail className="h-5 w-5 mr-2" />
-                  fabian@shftinsurance.com
+                  fserrano@tfainsuranceadvisors.com
                 </a>
               </div>
             </div>
@@ -349,7 +349,7 @@ const AdvisorFabianSerrano = () => {
         open={scheduleModalOpen}
         onOpenChange={setScheduleModalOpen}
         advisorName="Fabian Serrano"
-        advisorEmail="fabian@shftinsurance.com"
+        advisorEmail="fserrano@tfainsuranceadvisors.com"
         advisorImage={fabianSerranoImg}
         advisorSlug="fabian-serrano"
       />
@@ -357,7 +357,7 @@ const AdvisorFabianSerrano = () => {
         open={contactModalOpen}
         onOpenChange={setContactModalOpen}
         advisorName="Fabian Serrano"
-        advisorEmail="fabian@shftinsurance.com"
+        advisorEmail="fserrano@tfainsuranceadvisors.com"
         advisorImage={fabianSerranoImg}
         advisorSlug="fabian-serrano"
       />
