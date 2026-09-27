@@ -6,7 +6,7 @@ import { generateUUID } from "@/lib/uuid";
 import tfaLogo from "@/assets/tfa-logo.png";
 import { getGiveaway, isGiveawayOpen } from "@/config/giveaways";
 import { EMAIL_RE, suggestEmail, phoneDigits, formatPhone } from "./giveawayValidation";
-import { enqueue, flushQueue, readQueue, sendEntry, type GiveawayEntry } from "./giveawayQueue";
+import { enqueue, flushQueue, readQueue, type GiveawayEntry } from "./giveawayQueue";
 
 const CONSENT_TEXT =
   "I agree to be contacted by The Financial Architects by phone, text, and email. Consent is not a condition of entry. Msg & data rates may apply. Reply STOP to opt out.";
@@ -19,6 +19,15 @@ const pacificStamp = (d: Date) =>
 
 const inputCls =
   "w-full h-11 rounded-md border border-input bg-background px-3 text-base text-foreground focus:outline-none focus:ring-2 focus:ring-primary";
+
+function Shell({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <main className="min-h-[100dvh] bg-background flex items-center justify-center px-4 py-4">
+      <SEOHead title={title} noIndex />
+      <div className="w-full max-w-md">{children}</div>
+    </main>
+  );
+}
 
 export default function GiveawayPage() {
   const { slug } = useParams();
@@ -112,24 +121,12 @@ export default function GiveawayPage() {
     // Save first so nothing is lost if the tab closes mid-send.
     enqueue(giveaway.slug, entry);
     showSuccess();
-    const ok = await sendEntry(giveaway.webhookUrl, entry);
-    if (ok) {
-      // remove via flush-safe path
-      await flushQueue(giveaway.slug, giveaway.webhookUrl);
-    }
-    setPending(readQueue(giveaway.slug).length);
+    await flush();
   };
-
-  const Shell = ({ children }: { children: React.ReactNode }) => (
-    <main className="min-h-[100dvh] bg-background flex items-center justify-center px-4 py-4">
-      <SEOHead title={giveaway?.headline ?? "Giveaway"} noIndex />
-      <div className="w-full max-w-md">{children}</div>
-    </main>
-  );
 
   if (!giveaway || !open) {
     return (
-      <Shell>
+      <Shell title={giveaway?.headline ?? "Giveaway"}>
         <div className="text-center space-y-4">
           <img src={tfaLogo} alt="The Financial Architects" className="h-12 mx-auto" />
           <p className="text-xl font-semibold text-foreground">This giveaway has ended. Thanks for stopping by!</p>
@@ -157,7 +154,7 @@ export default function GiveawayPage() {
     errors[k] ? <p className="text-xs text-destructive mt-1">{errors[k]}</p> : null;
 
   return (
-    <Shell>
+    <Shell title={giveaway?.headline ?? "Giveaway"}>
       <form onSubmit={submit} noValidate autoComplete={booth ? "off" : "on"} className="space-y-3">
         <div className="text-center space-y-1.5">
           <img src={tfaLogo} alt="The Financial Architects" className="h-10 md:h-12 mx-auto" />
