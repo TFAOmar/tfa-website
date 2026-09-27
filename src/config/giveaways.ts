@@ -25,7 +25,7 @@ export const giveaways: Giveaway[] = [
     headline: "Enter to Win a YETI Cooler",
     subline: "Winner drawn at the end of the show. You don't need to be present to win.",
     sponsor: "The Financial Architects",
-    webhookUrl: "",
+    webhookUrl: "https://hook.us2.make.com/81dqh4xaxhrir93fc4xd04bw9lmb3qv4",
     rules: {
       eligibility: "Open to California Trucking Show attendees 18 or older.",
       entryDeadline: "Entries accepted through the close of the show on October 4, 2026.",
