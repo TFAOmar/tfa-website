@@ -93,6 +93,7 @@ import AdvisorAileenGutierrez from "./pages/AdvisorAileenGutierrez";
 import AdvisorKristinMartin from "./pages/AdvisorKristinMartin";
 import KristinMartinConnect from "./pages/KristinMartinConnect";
 import EntrepreneurStory from "./pages/EntrepreneurStory";
+import GiveawayPage from "./pages/giveaway/GiveawayPage";
 import ZunigaConnect from "./pages/ZunigaConnect";
 import Rise from "./pages/rise/RisePage";
 import AimeeJohnsonConnect from "./pages/AimeeJohnsonConnect";
@@ -165,7 +166,8 @@ const AppLayout = () => {
     /^\/advisors\/[^/]+\/life-insurance\/?$/.test(location.pathname) ||
     /^\/advisors\/[^/]+\/non-medical-life\/?$/.test(location.pathname) ||
     /^\/advisors\/[^/]+\/living-trust-questionnaire\/?$/.test(location.pathname) ||
-    /^\/advisors\/[^/]+\/prequalification\/?$/.test(location.pathname);
+    /^\/advisors\/[^/]+\/prequalification\/?$/.test(location.pathname) ||
+    /^\/giveaway\/[^/]+\/?$/.test(location.pathname);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -325,6 +327,7 @@ const AppLayout = () => {
           <Route path="/advisors/kristin-romo" element={<Navigate to="/advisors/kristin-martin" replace />} />
           <Route path="/kristin" element={<KristinMartinConnect />} />
           <Route path="/entrepreneur-story" element={<EntrepreneurStory />} />
+          <Route path="/giveaway/:slug" element={<GiveawayPage />} />
           <Route path="/zuniga" element={<ZunigaConnect />} />
           <Route path="/rise" element={<Rise />} />
           <Route path="/aimee" element={<AimeeJohnsonConnect />} />
