@@ -44,7 +44,7 @@ export default function GiveawayPage() {
   const [success, setSuccess] = useState(false);
   const [rulesOpen, setRulesOpen] = useState(false);
   const [pending, setPending] = useState(0);
-  const resetTimer = useRef<number>();
+  const resetTimer = useRef<number | undefined>(undefined);
 
   const ac = (v: string) => (booth ? "off" : v);
 
