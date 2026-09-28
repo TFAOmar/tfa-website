@@ -15,7 +15,7 @@ const empty = { first: "", last: "", email: "", phone: "" };
 type Errors = Partial<Record<keyof typeof empty, string>>;
 
 const pacificStamp = (d: Date) =>
-  d.toLocaleString("en-US", { timeZone: "America/Los_Angeles", hour12: false }) + " PT";
+  d.toLocaleString("en-US", { timeZone: "America/Los_Angeles", hour12: true });
 
 const inputCls =
   "w-full h-11 rounded-md border border-input bg-background px-3 text-base text-foreground focus:outline-none focus:ring-2 focus:ring-primary";
