@@ -262,7 +262,7 @@ const SummitFeedback = () => {
 
               {/* 1. Stars */}
               <fieldset aria-invalid={showErr("rating") || undefined} aria-describedby={showErr("rating") ? "rating-error" : undefined}>
-                <legend ref={(el) => (legendRefs.current.rating = el)} className="mb-3 text-base font-semibold text-foreground">
+                <legend ref={(el) => { legendRefs.current.rating = el; }} className="mb-3 text-base font-semibold text-foreground">
                   Overall, how would you rate today's Leadership Summit?
                 </legend>
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
@@ -275,7 +275,7 @@ const SummitFeedback = () => {
                           className="relative flex h-12 w-12 cursor-pointer items-center justify-center rounded-lg focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2"
                         >
                           <input
-                            ref={(el) => (starRefs.current[n - 1] = el)}
+                            ref={(el) => { starRefs.current[n - 1] = el; }}
                             type="radio"
                             name="rating"
                             value={n}
@@ -307,13 +307,13 @@ const SummitFeedback = () => {
 
               <ChoiceGroup name="value" legend="How valuable was today's content to you and your business?"
                 options={VALUE_OPTIONS} value={value} onChange={setValue} error={showErr("value")}
-                legendRef={(el) => (legendRefs.current.value = el)} />
+                legendRef={(el) => { legendRefs.current.value = el; }} />
               <ChoiceGroup name="most_valuable" legend="What did you find MOST valuable today?"
                 options={MOST_OPTIONS} value={mostValuable} onChange={setMostValuable} error={showErr("most_valuable")}
-                legendRef={(el) => (legendRefs.current.most_valuable = el)} />
+                legendRef={(el) => { legendRefs.current.most_valuable = el; }} />
               <ChoiceGroup name="attend_again" legend="Would you attend another TFA Leadership Summit?"
                 options={ATTEND_OPTIONS} value={attendAgain} onChange={setAttendAgain} error={showErr("attend_again")}
-                legendRef={(el) => (legendRefs.current.attend_again = el)} />
+                legendRef={(el) => { legendRefs.current.attend_again = el; }} />
 
               <div>
                 <label htmlFor="more_of" className="mb-3 block text-base font-semibold text-foreground">
