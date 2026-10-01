@@ -94,6 +94,7 @@ import AdvisorKristinMartin from "./pages/AdvisorKristinMartin";
 import KristinMartinConnect from "./pages/KristinMartinConnect";
 import EntrepreneurStory from "./pages/EntrepreneurStory";
 import GiveawayPage from "./pages/giveaway/GiveawayPage";
+import SummitFeedback from "./pages/SummitFeedback";
 import ZunigaConnect from "./pages/ZunigaConnect";
 import Rise from "./pages/rise/RisePage";
 import AimeeJohnsonConnect from "./pages/AimeeJohnsonConnect";
@@ -328,6 +329,7 @@ const AppLayout = () => {
           <Route path="/kristin" element={<KristinMartinConnect />} />
           <Route path="/entrepreneur-story" element={<EntrepreneurStory />} />
           <Route path="/giveaway/:slug" element={<GiveawayPage />} />
+          <Route path="/summit-feedback" element={<SummitFeedback />} />
           <Route path="/zuniga" element={<ZunigaConnect />} />
           <Route path="/rise" element={<Rise />} />
           <Route path="/aimee" element={<AimeeJohnsonConnect />} />
