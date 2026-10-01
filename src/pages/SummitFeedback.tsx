@@ -219,7 +219,6 @@ const SummitFeedback = () => {
         canonical="https://tfawealthplanning.com/summit-feedback"
         noIndex
       />
-      <title>Summit Feedback | The Financial Architects</title>
 
       <header className="bg-primary px-4 pb-14 pt-8 text-primary-foreground">
         <div className="mx-auto max-w-[560px]">
