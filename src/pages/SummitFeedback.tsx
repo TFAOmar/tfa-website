@@ -102,7 +102,7 @@ function ChoiceGroup({
         );
       })}
       {error && (
-        <p id={errId} className="pt-1 text-sm text-destructive">
+        <p id={errId} className="pt-1 text-sm text-[hsl(0_70%_40%)]">
           Please choose an answer
         </p>
       )}
@@ -301,7 +301,7 @@ const SummitFeedback = () => {
                   </span>
                 </div>
                 {showErr("rating") && (
-                  <p id="rating-error" className="pt-2 text-sm text-destructive">Please choose an answer</p>
+                  <p id="rating-error" className="pt-2 text-sm text-[hsl(0_70%_40%)]">Please choose an answer</p>
                 )}
               </fieldset>
 
@@ -336,7 +336,7 @@ const SummitFeedback = () => {
 
               <div>
                 {failed && (
-                  <p className="mb-3 text-sm text-destructive">
+                  <p className="mb-3 text-sm text-[hsl(0_70%_40%)]">
                     We couldn't send your feedback. Check your connection and tap Submit again.
                   </p>
                 )}
