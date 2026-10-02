@@ -62,7 +62,7 @@ export async function notifyLda(sb: Sb, id: string) {
     ["Submitted by", r.submitter_role === "agent" ? "Agent" : "Client"],
     ["Agent", [r.agent_name, r.agent_email, r.agent_phone].filter(Boolean).join(" · ") || "—"],
     ["Client", [r.client_name, r.client_email, r.client_phone].filter(Boolean).join(" · ") || "—"],
-    ["Services", `Deeds: ${r.deed_count} · Homesteads: ${r.homestead_count} · Notary: ${r.notary_requested ? "Yes" : "No"}`],
+    ["Services", `Deeds: ${r.deed_count} · Homesteads: ${r.homestead_count} (${Math.min(r.deed_count, r.homestead_count)} at $99 with deed) · Notary: ${r.notary_requested ? "Yes" : "No"}`],
     ["Amount paid", `$${(r.amount_cents / 100).toFixed(2)}`],
     ["SMS consent", r.sms_consent ? "Yes" : "No"],
   ];

@@ -13,6 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 import tfaLogo from "@/assets/tfa-logo.png";
 
 const PRICE = 199;
+const BUNDLE_PRICE = 99;
 const TRANSFER_TYPES = ["Transfer to/from trust", "Gift", "Family transfer", "Sale", "Other"];
 const DOC_KINDS = [
   { key: "recorded_deed", label: "Most recent recorded deed" },
@@ -69,7 +70,10 @@ export default function DeedServices() {
   const { honeypotProps, isBot } = useHoneypot();
 
   const propertyCount = Math.max(1, deeds, homesteads);
-  const total = (deeds + homesteads) * PRICE;
+  const bundled = Math.min(deeds, homesteads);
+  const fullHomes = homesteads - bundled;
+  const total = deeds * PRICE + bundled * BUNDLE_PRICE + fullHomes * PRICE;
+  const saved = bundled * (PRICE - BUNDLE_PRICE);
 
   const syncProps = (n: number) =>
     setProps((p) => (p.length >= n ? p.slice(0, n) : [...p, ...Array.from({ length: n - p.length }, emptyProperty)]));
@@ -190,7 +194,7 @@ export default function DeedServices() {
             <h2 className="font-serif text-2xl font-bold text-navy">Which services do you need?</h2>
             {[
               { Icon: FileText, title: "Deed Preparation", desc: "Quitclaim / trust transfer deed, prepared by our LDA. One per property.", price: `$${PRICE} per deed`, v: deeds, set: setDeeds },
-              { Icon: Home, title: "Homestead Declaration", desc: "Protects equity in the owner's primary residence.", price: `$${PRICE} per homestead`, v: homesteads, set: (n: number) => setHomesteads(Math.min(n, 1)), max: 1 },
+              { Icon: Home, title: "Homestead Declaration", desc: "Protects equity in the owner's primary residence. One per property.", price: `$${PRICE} per homestead — $${BUNDLE_PRICE} with a deed`, v: homesteads, set: setHomesteads, max: undefined as number | undefined },
             ].map(({ Icon, title, desc, price, v, set, max }) => (
               <div key={title} className={`${card} flex flex-col sm:flex-row sm:items-center gap-4 ${v ? "border-accent ring-1 ring-accent" : ""}`}>
                 <Icon className="h-8 w-8 text-accent shrink-0" />
@@ -382,7 +386,9 @@ export default function DeedServices() {
             <div className={`${card} space-y-2`}>
               <h3 className="font-semibold text-navy">Summary</h3>
               {deeds > 0 && <div className="flex justify-between text-sm"><span>Deed preparation × {deeds}</span><span>${deeds * PRICE}</span></div>}
-              {homesteads > 0 && <div className="flex justify-between text-sm"><span>Homestead declaration × {homesteads}</span><span>${homesteads * PRICE}</span></div>}
+              {bundled > 0 && <div className="flex justify-between text-sm"><span>Homestead (with deed) × {bundled} — ${BUNDLE_PRICE} each</span><span>${bundled * BUNDLE_PRICE}</span></div>}
+              {fullHomes > 0 && <div className="flex justify-between text-sm"><span>Homestead declaration × {fullHomes}</span><span>${fullHomes * PRICE}</span></div>}
+              {saved > 0 && <div className="flex justify-between text-sm text-accent font-medium"><span>You saved</span><span>${saved}</span></div>}
               {notary && <div className="flex justify-between text-sm"><span>Mobile notary</span><span className="text-muted-foreground">Quoted separately</span></div>}
               <div className="flex justify-between border-t pt-2 font-bold text-navy"><span>Due today</span><span>${total}</span></div>
               <p className="text-xs text-muted-foreground">Client: {c.clientName} · {props.length} propert{props.length > 1 ? "ies" : "y"}</p>

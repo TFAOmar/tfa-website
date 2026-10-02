@@ -9,7 +9,9 @@ const cors = {
 };
 const DEED_PRICE = "price_1UMDanI5s9xwrb3e5p8sHuB9";
 const HOMESTEAD_PRICE = "price_1UMDarI5s9xwrb3eTo0SUUnE";
+const HOMESTEAD_BUNDLE_PRICE = "price_1UMDsbI5s9xwrb3eiQkUdRPq";
 const UNIT = 19900;
+const BUNDLE_UNIT = 9900;
 const ALLOWED = ["https://tfawealthplanning.com", "https://www.tfawealthplanning.com", "https://tfawealthplanning.lovable.app", "https://tfainsuranceadvisors.com", "https://www.tfainsuranceadvisors.com"];
 const hits = new Map<string, number[]>();
 
@@ -58,7 +60,9 @@ Deno.serve(async (req) => {
     if (b.documents.some((d) => !d.path.startsWith(`${b.requestId}/`))) return json({ error: "Invalid documents" }, 400);
 
     const services = [b.deedCount && "deed", b.homesteadCount && "homestead", b.notary && "notary"].filter(Boolean) as string[];
-    const amount = (b.deedCount + b.homesteadCount) * UNIT;
+    const bundled = Math.min(b.deedCount, b.homesteadCount);
+    const fullHomes = b.homesteadCount - bundled;
+    const amount = b.deedCount * UNIT + bundled * BUNDLE_UNIT + fullHomes * UNIT;
     const sb = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
 
     const { error: insErr } = await sb.from("deed_service_requests").insert({
@@ -82,7 +86,8 @@ Deno.serve(async (req) => {
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY")!, { apiVersion: "2025-08-27.basil" });
     const line_items = [] as { price: string; quantity: number }[];
     if (b.deedCount) line_items.push({ price: DEED_PRICE, quantity: b.deedCount });
-    if (b.homesteadCount) line_items.push({ price: HOMESTEAD_PRICE, quantity: b.homesteadCount });
+    if (bundled) line_items.push({ price: HOMESTEAD_BUNDLE_PRICE, quantity: bundled });
+    if (fullHomes) line_items.push({ price: HOMESTEAD_PRICE, quantity: fullHomes });
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       line_items,
