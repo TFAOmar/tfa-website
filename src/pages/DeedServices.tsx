@@ -11,6 +11,7 @@ import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
 import { generateUUID } from "@/lib/uuid";
 import { supabase } from "@/integrations/supabase/client";
 import tfaLogo from "@/assets/tfa-logo.png";
+import DeedChecklistAssistant from "@/components/deed/DeedChecklistAssistant";
 
 const PRICE = 199;
 const BUNDLE_PRICE = 99;
@@ -252,6 +253,7 @@ export default function DeedServices() {
           <div className="space-y-6">
             <h2 className="font-serif text-2xl font-bold text-navy">Property & owner details</h2>
             <p className="text-sm text-muted-foreground -mt-4">Copy names exactly as they appear on the current recorded deed.</p>
+            <DeedChecklistAssistant />
             {props.map((p, i) => {
               const u = (k: string) => (v: string) => setProp(i, k, v);
               const isDeed = deeds > i, isHome = homesteads > i;
