@@ -4,7 +4,7 @@ import jsPDF from "https://esm.sh/jspdf@2.5.1?bundle";
 type Sb = any;
 
 // LDA inbox that receives every paid / notary-only request.
-export const LDA_EMAIL = "leads@tfainsuranceadvisors.com";
+export const LDA_EMAILS = ["livingtrusts@tfainsuranceadvisors.com", "mrojas@tfainsuranceadvisors.com"];
 
 const esc = (v: unknown) =>
   String(v ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]!));
@@ -100,13 +100,13 @@ export async function notifyLda(sb: Sb, id: string) {
   y += 3; line(`Signed by: ${fd.signature ?? ""}`);
   const pdfB64 = pdf.output("datauristring").split(",")[1];
 
-  const cc = r.agent_email && r.agent_email !== LDA_EMAIL ? [r.agent_email] : undefined;
+  const cc = r.agent_email && !LDA_EMAILS.includes(r.agent_email) ? [r.agent_email] : undefined;
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND}` },
     body: JSON.stringify({
       from: "TFA Deed Services <noreply@tfainsuranceadvisors.com>",
-      to: [LDA_EMAIL],
+      to: LDA_EMAILS,
       cc,
       subject: `Deed Services Request #${ref} – ${r.client_name ?? "Client"}`,
       html,
