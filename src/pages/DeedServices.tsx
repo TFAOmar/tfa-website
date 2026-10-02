@@ -399,6 +399,7 @@ export default function DeedServices() {
               <SmsConsentCheckbox checked={sms} onChange={setSms} />
               <input type="text" name="deed_hp_ref" className={honeypotClassName} {...honeypotProps} />
               <p className="text-xs text-muted-foreground">This form collects information for document preparation by a Legal Document Assistant. It is not legal advice. Recording requirements, transfer-tax issues, ownership changes, notarization and county-specific requirements are verified before filing.</p>
+              <p className="text-xs text-muted-foreground"><strong>Refund policy:</strong> If we're unable to process your request, the fee for that deed or homestead will be refunded in full.</p>
             </div>
           </div>
         )}
