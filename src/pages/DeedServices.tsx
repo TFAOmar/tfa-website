@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { createContext, useContext, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { FileText, Home, Stamp, Check, Minus, Plus, Upload, X, Loader2, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -28,6 +28,23 @@ const emptyProperty = (): Property => ({
   granteeMailing: "", returnAddress: "", otherOwners: "", entityHeld: "No", entityDetails: "", primaryResidence: "",
 });
 type Doc = { file: File; kind: string };
+
+const ErrCtx = createContext<Record<string, string>>({});
+const FieldError = ({ id }: { id: string }) => {
+  const e = useContext(ErrCtx)[id];
+  return e ? <p className="mt-1 text-sm text-destructive">{e}</p> : null;
+};
+const F = ({ id, label, value, onChange, type = "text", optional, placeholder }: {
+  id: string; label: string; value: string; onChange: (v: string) => void; type?: string; optional?: boolean; placeholder?: string;
+}) => (
+  <div>
+    <Label htmlFor={id} className="text-sm font-medium text-navy">{label}{optional && <span className="text-muted-foreground font-normal"> (optional)</span>}</Label>
+    <Input id={id} type={type} value={value} placeholder={placeholder} onChange={(e) => onChange(e.target.value)}
+      aria-invalid={!!useContext(ErrCtx)[id]} className="mt-1 h-11" />
+    <FieldError id={id} />
+  </div>
+);
+
 
 const STEPS = ["Services", "Contact", "Property", "Documents & pay"];
 
@@ -123,17 +140,6 @@ export default function DeedServices() {
     }
   };
 
-  const F = ({ id, label, value, onChange, type = "text", optional, placeholder }: {
-    id: string; label: string; value: string; onChange: (v: string) => void; type?: string; optional?: boolean; placeholder?: string;
-  }) => (
-    <div>
-      <Label htmlFor={id} className="text-sm font-medium text-navy">{label}{optional && <span className="text-muted-foreground font-normal"> (optional)</span>}</Label>
-      <Input id={id} type={type} value={value} placeholder={placeholder} onChange={(e) => onChange(e.target.value)}
-        aria-invalid={!!errors[id]} className="mt-1 h-11" />
-      {errors[id] && <p className="mt-1 text-sm text-destructive">{errors[id]}</p>}
-    </div>
-  );
-
   const Counter = ({ value, set, max = 10 }: { value: number; set: (n: number) => void; max?: number }) => (
     <div className="flex items-center gap-3">
       <Button type="button" variant="outline" size="icon" aria-label="Decrease" onClick={() => set(Math.max(0, value - 1))} disabled={value === 0}><Minus className="h-4 w-4" /></Button>
@@ -145,6 +151,7 @@ export default function DeedServices() {
   const card = "rounded-2xl border bg-card p-5 md:p-6";
 
   return (
+    <ErrCtx.Provider value={errors}>
     <div className="min-h-screen bg-muted/40">
       <SEOHead title="Deed, Homestead & Notary Services | The Financial Architects" description="Request deed preparation, homestead declarations and mobile notary for your living trust." noIndex />
       <header className="bg-card border-b">
@@ -410,5 +417,6 @@ export default function DeedServices() {
         </div>
       </footer>
     </div>
+    </ErrCtx.Provider>
   );
 }
