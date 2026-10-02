@@ -77,6 +77,9 @@ export async function notifyLda(sb: Sb, id: string) {
   properties.forEach((p, i) => (html += table(`Property ${i + 1}`, rows(p))));
   if (notary) html += table("Notary scheduling", rows(notary as Record<string, unknown>));
   if (fd.notes) html += table("Notes", [["Notes", String(fd.notes)]]);
+  const cl = fd.checklist as { description?: string; items?: { group: string; label: string; ready: boolean; note?: string }[] } | undefined;
+  const clRows: [string, string][] = (cl?.items ?? []).map((it) => [`${it.group}: ${it.label}`, `${it.ready ? "Ready" : "Still needed"}${it.note ? ` — ${it.note}` : ""}`]);
+  if (cl?.items?.length) html += table("Client checklist", [["Client's description", cl.description || "—"], ...clRows]);
   html += `<h3 style="color:#1E3A5F">Documents (links valid 7 days)</h3><ul>${
     links.map((l) => `<li>${esc(l.kind)}: <a href="${esc(l.url)}">${esc(l.name)}</a></li>`).join("") || "<li>None uploaded</li>"
   }</ul><p style="font-size:12px;color:#666">Signed by: ${esc(fd.signature)} · Request ID ${esc(id)}</p></div>`;
@@ -96,6 +99,7 @@ export async function notifyLda(sb: Sb, id: string) {
   properties.forEach((p, i) => { y += 3; line(`Property ${i + 1}`, true); rows(p).forEach(([k, v]) => line(`${k}: ${v}`)); });
   if (notary) { y += 3; line("Notary scheduling", true); rows(notary as Record<string, unknown>).forEach(([k, v]) => line(`${k}: ${v}`)); }
   if (fd.notes) { y += 3; line("Notes", true); line(String(fd.notes)); }
+  if (cl?.items?.length) { y += 3; line("Client checklist", true); line(`Description: ${cl.description || "—"}`); clRows.forEach(([k, v]) => line(`${k}: ${v}`)); }
   y += 3; line("Documents", true); docs.forEach((d) => line(`${d.kind}: ${d.name}`));
   y += 3; line(`Signed by: ${fd.signature ?? ""}`);
   const pdfB64 = pdf.output("datauristring").split(",")[1];

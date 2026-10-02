@@ -11,7 +11,7 @@ import { useHoneypot, honeypotClassName } from "@/hooks/useHoneypot";
 import { generateUUID } from "@/lib/uuid";
 import { supabase } from "@/integrations/supabase/client";
 import tfaLogo from "@/assets/tfa-logo.png";
-import DeedChecklistAssistant from "@/components/deed/DeedChecklistAssistant";
+import DeedChecklistAssistant, { ChecklistReview, emptyChecklist, type ChecklistState } from "@/components/deed/DeedChecklistAssistant";
 
 const PRICE = 199;
 const BUNDLE_PRICE = 99;
@@ -63,6 +63,7 @@ export default function DeedServices() {
   const [notaryInfo, setNotaryInfo] = useState({ signers: "", location: "", times: "", notes: "" });
   const [docs, setDocs] = useState<Doc[]>([]);
   const [notes, setNotes] = useState("");
+  const [checklist, setChecklist] = useState<ChecklistState>(emptyChecklist);
   const [signature, setSignature] = useState("");
   const [sms, setSms] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -135,6 +136,7 @@ export default function DeedServices() {
         body: {
           requestId, deedCount: deeds, homesteadCount: homesteads, notary, role, ...c,
           properties: props, notaryInfo: notary ? notaryInfo : undefined, notes, signature, smsConsent: sms, documents: uploaded,
+          checklist: checklist.items.length ? { description: checklist.description.trim(), items: checklist.items.slice(0, 30).map((i) => ({ group: i.group.slice(0, 80), label: i.label.slice(0, 200), reason: i.reason.slice(0, 300), ready: i.ready, note: i.note.trim().slice(0, 200) })) } : undefined,
         },
       });
       if (error || !data?.url) throw new Error("checkout");
@@ -253,7 +255,7 @@ export default function DeedServices() {
           <div className="space-y-6">
             <h2 className="font-serif text-2xl font-bold text-navy">Property & owner details</h2>
             <p className="text-sm text-muted-foreground -mt-4">Copy names exactly as they appear on the current recorded deed.</p>
-            <DeedChecklistAssistant />
+            <DeedChecklistAssistant value={checklist} onChange={setChecklist} />
             {props.map((p, i) => {
               const u = (k: string) => (v: string) => setProp(i, k, v);
               const isDeed = deeds > i, isHome = homesteads > i;
@@ -378,6 +380,10 @@ export default function DeedServices() {
               ))}
               <p className="text-xs text-muted-foreground">PDF, photo or Word, up to 20MB each. Phone photos of the deed are fine if every page is readable.</p>
               {errors.docs && <p className="text-sm text-destructive">{errors.docs}</p>}
+            </div>
+
+            <div className={card}>
+              <ChecklistReview value={checklist} onChange={setChecklist} onBack={() => setStep(2)} />
             </div>
 
             <div className={card}>

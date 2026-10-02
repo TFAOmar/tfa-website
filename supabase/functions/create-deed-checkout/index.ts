@@ -40,6 +40,10 @@ const Body = z.object({
   notes: s(2000),
   signature: z.string().trim().min(2).max(120),
   smsConsent: z.boolean(),
+  checklist: z.object({
+    description: s(1500),
+    items: z.array(z.object({ group: s(80), label: z.string().trim().min(1).max(200), reason: s(300), ready: z.boolean(), note: s(200) })).max(30),
+  }).optional(),
   documents: z.array(z.object({ path: z.string().max(400), name: z.string().max(200), kind: z.string().max(30) })).max(30),
 });
 
@@ -69,7 +73,7 @@ Deno.serve(async (req) => {
       id: b.requestId, services, deed_count: b.deedCount, homestead_count: b.homesteadCount, notary_requested: b.notary,
       submitter_role: b.role, agent_name: b.agentName || null, agent_email: b.agentEmail || null, agent_phone: b.agentPhone || null,
       client_name: b.clientName, client_email: b.clientEmail, client_phone: b.clientPhone,
-      form_data: { properties: b.properties, notary: b.notary ? b.notaryInfo : null, notes: b.notes, signature: b.signature },
+      form_data: { properties: b.properties, notary: b.notary ? b.notaryInfo : null, notes: b.notes, signature: b.signature, checklist: b.checklist?.items.length ? b.checklist : null },
       documents: b.documents, amount_cents: amount, sms_consent: b.smsConsent,
       status: amount === 0 ? "submitted" : "pending",
     });
