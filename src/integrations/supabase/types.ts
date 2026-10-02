@@ -119,6 +119,78 @@ export type Database = {
         }
         Relationships: []
       }
+      deed_service_requests: {
+        Row: {
+          agent_email: string | null
+          agent_name: string | null
+          agent_phone: string | null
+          amount_cents: number
+          client_email: string | null
+          client_name: string | null
+          client_phone: string | null
+          created_at: string
+          deed_count: number
+          documents: Json
+          form_data: Json
+          homestead_count: number
+          id: string
+          notary_requested: boolean
+          notified_at: string | null
+          services: string[]
+          sms_consent: boolean
+          status: string
+          stripe_session_id: string | null
+          submitter_role: string
+          updated_at: string
+        }
+        Insert: {
+          agent_email?: string | null
+          agent_name?: string | null
+          agent_phone?: string | null
+          amount_cents?: number
+          client_email?: string | null
+          client_name?: string | null
+          client_phone?: string | null
+          created_at?: string
+          deed_count?: number
+          documents?: Json
+          form_data?: Json
+          homestead_count?: number
+          id?: string
+          notary_requested?: boolean
+          notified_at?: string | null
+          services?: string[]
+          sms_consent?: boolean
+          status?: string
+          stripe_session_id?: string | null
+          submitter_role: string
+          updated_at?: string
+        }
+        Update: {
+          agent_email?: string | null
+          agent_name?: string | null
+          agent_phone?: string | null
+          amount_cents?: number
+          client_email?: string | null
+          client_name?: string | null
+          client_phone?: string | null
+          created_at?: string
+          deed_count?: number
+          documents?: Json
+          form_data?: Json
+          homestead_count?: number
+          id?: string
+          notary_requested?: boolean
+          notified_at?: string | null
+          services?: string[]
+          sms_consent?: boolean
+          status?: string
+          stripe_session_id?: string | null
+          submitter_role?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       dynamic_advisors: {
         Row: {
           bio: string
