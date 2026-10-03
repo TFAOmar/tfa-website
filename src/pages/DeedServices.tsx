@@ -136,13 +136,20 @@ export default function DeedServices() {
         body: {
           requestId, deedCount: deeds, homesteadCount: homesteads, notary, role, ...c,
           properties: props, notaryInfo: notary ? notaryInfo : undefined, notes, signature, smsConsent: sms, documents: uploaded,
-          checklist: checklist.items.length ? { description: checklist.description.trim(), items: checklist.items.slice(0, 30).map((i) => ({ group: i.group.slice(0, 80), label: i.label.slice(0, 200), reason: i.reason.slice(0, 300), ready: i.ready, note: i.note.trim().slice(0, 200) })) } : undefined,
+          checklist: checklist.items.length ? { description: (checklist.description ?? "").trim().slice(0, 1500), items: checklist.items.slice(0, 30).filter((i) => (i.label ?? "").trim()).map((i) => ({ group: (i.group ?? "").slice(0, 80), label: (i.label ?? "").trim().slice(0, 200), reason: (i.reason ?? "").slice(0, 300), ready: !!i.ready, note: (i.note ?? "").trim().slice(0, 200) })) } : undefined,
         },
       });
-      if (error || !data?.url) throw new Error("checkout");
+      if (error) {
+        let detail = "";
+        try { const b = await (error as { context?: Response }).context?.json(); detail = b?.issues?.join("; ") || b?.error || ""; } catch { /* ignore */ }
+        console.error("[deed-services] checkout failed:", detail || error.message);
+        throw new Error(detail || "checkout");
+      }
+      if (!data?.url) throw new Error("checkout");
       window.location.href = data.url; // same-tab (Safari-safe)
-    } catch {
-      setSubmitError("We couldn't send your request. Please check your connection and try again, or call (888) 350-5396.");
+    } catch (err) {
+      const msg = err instanceof Error && !["upload", "checkout"].includes(err.message) ? ` (Details: ${err.message})` : "";
+      setSubmitError(`We couldn't send your request. Please check your connection and try again, or call (888) 350-5396.${msg}`);
       setBusy(false);
     }
   };

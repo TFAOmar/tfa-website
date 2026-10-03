@@ -58,7 +58,11 @@ Deno.serve(async (req) => {
     hits.set(ip, [...list, now]);
 
     const p = Body.safeParse(await req.json());
-    if (!p.success) return json({ error: "Please check the form", details: p.error.flatten().fieldErrors }, 400);
+    if (!p.success) {
+      const issues = p.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`);
+      console.warn("[create-deed-checkout] validation failed", issues);
+      return json({ error: "Please check the form", issues }, 400);
+    }
     const b = p.data;
     if (b.deedCount + b.homesteadCount === 0 && !b.notary) return json({ error: "Choose at least one service" }, 400);
     if (b.documents.some((d) => !d.path.startsWith(`${b.requestId}/`))) return json({ error: "Invalid documents" }, 400);
