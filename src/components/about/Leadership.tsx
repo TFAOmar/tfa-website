@@ -132,10 +132,10 @@ const leaders: Leader[] = [
   },
   {
     name: "Miguelina Alvarez",
-    title: "Operations Administrator",
+    title: "Director of Operations",
     subtitle: "Insurance Operations • Agent Support • Licensing & Contracting",
     image: miguelinaAlvarezAsset.url,
-    intro: `Miguelina Alvarez is an Operations Administrator at The Financial Architects, where she supports the organization's advisors, leadership, and day-to-day operations across licensing, contracting, onboarding, carrier coordination, and agent support. She is also actively involved with Insurance Latino as a licensed life insurance professional, supporting the full insurance process from client intake and quoting through application submission, underwriting, approval, and policy servicing.`,
+    intro: `Miguelina Alvarez is the Director of Operations at The Financial Architects, where she supports the organization's advisors, leadership, and day-to-day operations across licensing, contracting, onboarding, carrier coordination, and agent support. She is also actively involved with Insurance Latino as a licensed life insurance professional, supporting the full insurance process from client intake and quoting through application submission, underwriting, approval, and policy servicing.`,
     highlights: [
       "Supports agent licensing, contracting, appointments, and onboarding across multiple states",
       "Coordinates with insurance carriers and contracting partners to resolve requirements and move business forward",
