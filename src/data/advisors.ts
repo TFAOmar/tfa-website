@@ -497,7 +497,7 @@ export const advisors: Advisor[] = [
     licenses: ["Life & Health"],
     image: fabianSerranoImg,
     email: "fserrano@tfainsuranceadvisors.com",
-    phone: "(909) 323-7601",
+    phone: "(909) 762-3407",
     yearsOfExperience: 20,
     landingPage: "/advisors/fabian-serrano"
   },
