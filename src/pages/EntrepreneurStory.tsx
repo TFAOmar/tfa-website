@@ -85,7 +85,7 @@ const EntrepreneurStory = () => {
         canonical={`${siteConfig.url}/entrepreneur-story`}
       />
       <div className="min-h-screen bg-background">
-        <header onClickCapture={(e) => { const a = (e.target as HTMLElement).closest("a[href='#request']"); if (a) { e.preventDefault(); scrollToForm(); } }}>
+        <header onClickCapture={(e) => { const a = (e.target as HTMLElement).closest("a[href$='#request']"); if (a) { e.preventDefault(); e.stopPropagation(); scrollToForm(); } }}>
           <LandingHeader ctaLabel="Book time with Manny" ctaHref="#request" ctaExternal={false} />
         </header>
 

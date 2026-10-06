@@ -134,6 +134,7 @@ export default function AdminPartners() {
     }
     const slug = form.slug.trim() || slugify(form.display_name);
     setSaving(true);
+    const existing = form.id ? partners.find((x) => x.id === form.id) : undefined;
     const { data: newId, error } = await supabase.rpc("admin_upsert_referrer", {
       p_id: form.id,
       p_slug: slug,
@@ -143,6 +144,13 @@ export default function AdminPartners() {
       p_active: form.active,
       p_sms_notify_optin: form.sms_notify_optin,
       p_parent_referrer_id: form.parent_referrer_id || null,
+      // Re-pass branding so editing basic details never wipes it.
+      p_brand_logo_url: existing?.brand_logo_url ?? "",
+      p_brand_primary_hex: existing?.brand_primary_hex ?? "",
+      p_brand_accent_hex: existing?.brand_accent_hex ?? "",
+      p_brand_welcome_headline: existing?.brand_welcome_headline ?? "",
+      p_brand_welcome_body: existing?.brand_welcome_body ?? "",
+      p_brand_support_email: existing?.brand_support_email ?? "",
     });
     if (error) {
       toast.error(error.message);
