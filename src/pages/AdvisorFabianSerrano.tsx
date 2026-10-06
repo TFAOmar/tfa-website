@@ -118,7 +118,7 @@ const AdvisorFabianSerrano = () => {
       state: "CA",
       zip: "91730"
     },
-    "(909) 323-7601"
+    "(909) 762-3407"
   );
 
   return (
@@ -172,9 +172,9 @@ const AdvisorFabianSerrano = () => {
                 </Button>
               </div>
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start text-white/80">
-                <a href="tel:+19093237601" className="flex items-center hover:text-accent transition-colors">
+                <a href="tel:+19097623407" className="flex items-center hover:text-accent transition-colors">
                   <Phone className="h-5 w-5 mr-2" />
-                  (909) 323-7601
+                  (909) 762-3407
                 </a>
                 <a href="mailto:fserrano@tfainsuranceadvisors.com" className="flex items-center hover:text-accent transition-colors">
                   <Mail className="h-5 w-5 mr-2" />
@@ -335,11 +335,11 @@ const AdvisorFabianSerrano = () => {
                   <NonMedicalLifeCTA advisorSlug="fabian-serrano" />
           </div>
           <a 
-            href="tel:+19093237601" 
+            href="tel:+19097623407" 
             className="inline-flex items-center text-white/80 hover:text-accent transition-colors"
           >
             <Phone className="h-5 w-5 mr-2" />
-            (909) 323-7601
+            (909) 762-3407
           </a>
         </div>
       </section>
