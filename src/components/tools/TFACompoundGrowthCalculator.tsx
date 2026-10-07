@@ -543,8 +543,8 @@ const TFACompoundGrowthCalculator = () => {
       <EmailResultsModal
         open={emailModalOpen}
         onOpenChange={setEmailModalOpen}
-        onSubmit={handleEmailResults}
-        loading={emailLoading}
+        onSendEmail={handleEmailResults}
+        isLoading={emailLoading}
         calculatorName="Compound Growth Calculator"
       />
     </div>
