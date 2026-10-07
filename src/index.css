@@ -43,6 +43,11 @@ All colors MUST be HSL.
     --gold: 35 55% 60%;
     --navy-light: 215 35% 35%;
     --gold-light: 35 65% 75%;
+    --calc-surface: 215 45% 15%;
+    --calc-raised: 215 40% 21%;
+    --calc-ink: 0 0% 100%;
+    --calc-muted: 215 25% 82%;
+    --calc-line: 215 30% 32%;
     
     /* Success colors */
     --success: 142 71% 45%;

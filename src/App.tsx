@@ -385,7 +385,7 @@ const AppLayout = () => {
         </Routes>
       </main>
       {!isStandalonePage && <Footer />}
-      {!isStandalonePage && <FloatingCTA hideOnPages={["/contact", "/book-consultation", "/schedule", "/thank-you", "/auth"]} />}
+      {!isStandalonePage && <FloatingCTA hideOnPages={["/contact", "/book-consultation", "/schedule", "/thank-you", "/auth", "/tools/compound-growth-calculator"]} />}
     </div>
   );
 };
