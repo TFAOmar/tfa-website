@@ -34,24 +34,21 @@ const CompoundGrowthCalculator = () => {
       ]} />
       <div className="min-h-screen bg-gradient-to-b from-navy via-navy to-primary">
         {/* Hero Section */}
-        <section className="relative pt-8 pb-2 md:pt-12 md:pb-4">
+        <section className="relative pt-4 pb-0 md:pt-5">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <Link
               to="/tools"
-              className="inline-flex items-center gap-2 text-white/70 hover:text-white transition-colors mb-5 min-h-11"
+              className="inline-flex items-center gap-2 text-white/70 hover:text-white transition-colors mb-1 min-h-11"
             >
               <ArrowLeft className="h-4 w-4" />
               <span className="text-sm">Back to Tools</span>
             </Link>
 
             <div className="max-w-3xl animate-fade-in">
-              <p className="text-sm font-semibold text-accent uppercase tracking-wide mb-3">
-                Financial Planning Tool
-              </p>
-              <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">
+                            <h1 className="text-2xl md:text-3xl font-bold text-white mb-1">
                 Compound Growth Calculator
               </h1>
-              <p className="text-base md:text-lg text-white/85 leading-relaxed">
+              <p className="text-sm md:text-base text-white/85 leading-relaxed">
                 Change the numbers below and watch how steady saving can grow over time.
               </p>
             </div>
@@ -59,7 +56,7 @@ const CompoundGrowthCalculator = () => {
         </section>
 
         {/* Calculator Section */}
-        <section className="py-6 md:py-10">
+        <section className="py-4 md:py-5">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <TFACompoundGrowthCalculator />
           </div>
