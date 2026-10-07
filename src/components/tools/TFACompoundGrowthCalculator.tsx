@@ -87,7 +87,7 @@ const fmtShort = (v: number) =>
   v >= 1_000_000 ? `$${(v / 1_000_000).toFixed(1)}M` : v >= 1000 ? `$${Math.round(v / 1000)}k` : `$${Math.round(v)}`;
 
 const inputClass =
-  "w-full h-12 rounded-xl bg-calc-raised border border-calc-line text-calc-ink text-base px-4 focus:outline-none focus:ring-2 focus:ring-gold focus:border-gold";
+  "w-full h-10 rounded-lg bg-calc-raised border border-calc-line text-calc-ink text-base px-4 focus:outline-none focus:ring-2 focus:ring-gold focus:border-gold";
 
 function Field({
   id,
@@ -103,8 +103,8 @@ function Field({
   slider: { value: number; min: number; max: number; step: number; onChange: (v: number) => void };
 }) {
   return (
-    <div className="space-y-2">
-      <Label htmlFor={id} className="text-base font-semibold text-calc-ink">
+    <div className="space-y-1">
+      <Label htmlFor={id} title={hint} className="text-sm font-semibold text-calc-ink">
         {label}
       </Label>
       {children}
@@ -115,9 +115,9 @@ function Field({
         max={slider.max}
         step={slider.step}
         onValueChange={([v]) => slider.onChange(v)}
-        className="py-2 [&_[role=slider]]:h-5 [&_[role=slider]]:w-5 [&_[role=slider]]:border-gold [&>span:first-child]:bg-calc-line [&>span:first-child>span]:bg-gold"
+        className="py-1.5 [&_[role=slider]]:h-5 [&_[role=slider]]:w-5 [&_[role=slider]]:border-gold [&>span:first-child]:bg-calc-line [&>span:first-child>span]:bg-gold"
       />
-      <p className="text-sm text-calc-muted">{hint}</p>
+      <span className="sr-only">{hint}</span>
     </div>
   );
 }
@@ -133,7 +133,7 @@ function ScenarioInputs({
 }) {
   const set = (patch: Partial<CalculatorInputs>) => onChange({ ...value, ...patch });
   return (
-    <div className="space-y-6">
+    <div className="grid sm:grid-cols-2 gap-x-4 gap-y-3">
       <Field
         id={`${idPrefix}-initial`}
         label="Starting amount"
@@ -279,20 +279,20 @@ const TFACompoundGrowthCalculator = () => {
     resultsRef.current?.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
   };
 
-  const card = "rounded-2xl bg-calc-surface border border-calc-line p-5 sm:p-7 text-calc-ink";
+  const card = "rounded-2xl bg-calc-surface border border-calc-line p-4 sm:p-5 text-calc-ink";
 
   return (
     <div className="w-full pb-24 lg:pb-0">
-      <div className="grid lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] gap-6 lg:gap-10 items-start">
+      <div className="grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-4 lg:gap-6 items-start">
         {/* Inputs */}
-        <div className="space-y-6">
+        <div className="space-y-4">
           <section className={card} aria-labelledby="inputs-heading">
-            <div className="flex items-center justify-between gap-3 mb-6">
+            <div className="flex items-center justify-between gap-3 mb-3">
               <div>
-                <h2 id="inputs-heading" className="text-xl font-bold">
+                <h2 id="inputs-heading" className="text-lg font-bold">
                   {compareMode ? "Plan A — your plan" : "Your numbers"}
                 </h2>
-                <p className="text-sm text-calc-muted mt-1">Results update as you type.</p>
+                <p className="text-xs text-calc-muted">Results update as you type.</p>
               </div>
               <Button
                 type="button"
@@ -310,7 +310,7 @@ const TFACompoundGrowthCalculator = () => {
               type="button"
               onClick={() => setShowMore((v) => !v)}
               aria-expanded={showMore}
-              className="mt-6 w-full flex items-center justify-between min-h-11 rounded-xl px-4 bg-calc-raised border border-calc-line text-calc-ink font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+              className="mt-4 w-full flex items-center justify-between min-h-11 rounded-xl px-4 bg-calc-raised border border-calc-line text-calc-ink font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
             >
               More options
               <ChevronDown className={cn("h-5 w-5 transition-transform motion-reduce:transition-none", showMore && "rotate-180")} />
@@ -393,30 +393,30 @@ const TFACompoundGrowthCalculator = () => {
         </div>
 
         {/* Results */}
-        <div ref={resultsRef} className="space-y-6 lg:sticky lg:top-24 scroll-mt-24" aria-live="polite">
+        <div ref={resultsRef} className="space-y-4 lg:sticky lg:top-24 scroll-mt-24" aria-live="polite">
           <section className={card} aria-labelledby="results-heading">
             <p id="results-heading" className="text-sm font-semibold uppercase tracking-wide text-gold">
               Projected balance in {inputs.years} {inputs.years === 1 ? "year" : "years"}
             </p>
-            <p className="text-4xl sm:text-5xl font-bold mt-2 tabular-nums">{fmt(results.finalBalance)}</p>
+            <p className="text-3xl sm:text-4xl font-bold mt-1 tabular-nums">{fmt(results.finalBalance)}</p>
 
-            <div className="grid grid-cols-2 gap-3 mt-6">
-              <div className="rounded-xl bg-calc-raised p-4">
+            <div className="grid grid-cols-2 gap-3 mt-3">
+              <div className="rounded-xl bg-calc-raised px-3 py-2">
                 <p className="text-sm text-calc-muted flex items-center gap-2">
                   <span className="h-2.5 w-2.5 rounded-full bg-calc-muted" aria-hidden /> You put in
                 </p>
-                <p className="text-xl sm:text-2xl font-semibold mt-1 tabular-nums">{fmt(results.totalContributions)}</p>
+                <p className="text-lg sm:text-xl font-semibold tabular-nums">{fmt(results.totalContributions)}</p>
               </div>
-              <div className="rounded-xl bg-calc-raised p-4">
+              <div className="rounded-xl bg-calc-raised px-3 py-2">
                 <p className="text-sm text-calc-muted flex items-center gap-2">
                   <span className="h-2.5 w-2.5 rounded-full bg-gold" aria-hidden /> Growth earned
                 </p>
-                <p className="text-xl sm:text-2xl font-semibold mt-1 tabular-nums text-gold">{fmt(results.totalGrowth)}</p>
+                <p className="text-lg sm:text-xl font-semibold tabular-nums text-gold">{fmt(results.totalGrowth)}</p>
               </div>
             </div>
 
             <div
-              className="mt-4 h-3 w-full rounded-full bg-calc-muted overflow-hidden"
+              className="mt-3 h-2.5 w-full rounded-full bg-calc-muted overflow-hidden"
               role="img"
               aria-label={`Growth makes up ${Math.round(growthShare)}% of your balance`}
             >
@@ -438,8 +438,8 @@ const TFACompoundGrowthCalculator = () => {
           </section>
 
           <section className={card} aria-labelledby="chart-heading">
-            <h3 id="chart-heading" className="text-lg font-semibold mb-4">Growth over time</h3>
-            <div className="h-64 sm:h-72 -ml-2">
+            <h3 id="chart-heading" className="text-base font-semibold mb-2">Growth over time</h3>
+            <div className="h-48 lg:h-52 -ml-2">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={chartData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--calc-line))" />
@@ -479,18 +479,18 @@ const TFACompoundGrowthCalculator = () => {
           </section>
 
           <div className="grid sm:grid-cols-3 gap-3">
-            <Button onClick={() => setEmailModalOpen(true)} className="h-12 bg-gold text-navy hover:bg-gold-light font-semibold">
+            <Button onClick={() => setEmailModalOpen(true)} className="h-11 bg-gold text-navy hover:bg-gold-light font-semibold">
               <Mail className="h-4 w-4 mr-2" /> Email my results
             </Button>
             <Button
               variant="outline"
               onClick={() => setShowTable((v) => !v)}
               aria-expanded={showTable}
-              className="h-12 bg-calc-surface border-calc-line text-calc-ink hover:bg-calc-raised hover:text-calc-ink"
+              className="h-11 bg-calc-surface border-calc-line text-calc-ink hover:bg-calc-raised hover:text-calc-ink"
             >
               <Table2 className="h-4 w-4 mr-2" /> {showTable ? "Hide" : "Year-by-year"}
             </Button>
-            <Button asChild variant="outline" className="h-12 bg-calc-surface border-calc-line text-calc-ink hover:bg-calc-raised hover:text-calc-ink">
+            <Button asChild variant="outline" className="h-11 bg-calc-surface border-calc-line text-calc-ink hover:bg-calc-raised hover:text-calc-ink">
               <Link to="/book-consultation">
                 <CalendarCheck className="h-4 w-4 mr-2" /> Talk to an advisor
               </Link>
