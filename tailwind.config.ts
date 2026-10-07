@@ -61,6 +61,13 @@ export default {
         gold: "hsl(var(--gold))",
         "navy-light": "hsl(var(--navy-light))",
         "gold-light": "hsl(var(--gold-light))",
+        calc: {
+          surface: "hsl(var(--calc-surface))",
+          raised: "hsl(var(--calc-raised))",
+          ink: "hsl(var(--calc-ink))",
+          muted: "hsl(var(--calc-muted))",
+          line: "hsl(var(--calc-line))",
+        },
         success: {
           DEFAULT: "hsl(var(--success))",
           foreground: "hsl(var(--success-foreground))",
