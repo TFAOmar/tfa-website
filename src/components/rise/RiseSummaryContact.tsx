@@ -296,7 +296,25 @@ const RiseSummaryContact = ({ answers, summary, onRestart }: Props) => {
               style={{ accentColor: "var(--rise-btn)" }}
             />
             <span className="text-xs leading-relaxed text-muted-foreground">
-              {riseConfig.disclosures.contactConsent}
+              {riseConfig.disclosures.contactConsent} See our{" "}
+              <a
+                href="/sms-terms"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-navy underline underline-offset-2"
+              >
+                Terms &amp; Conditions
+              </a>{" "}
+              and{" "}
+              <a
+                href="/privacy-policy"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-navy underline underline-offset-2"
+              >
+                Privacy Policy
+              </a>
+              .
             </span>
           </label>
 
