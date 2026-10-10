@@ -298,7 +298,7 @@ const RiseSummaryContact = ({ answers, summary, onRestart }: Props) => {
             <span className="text-xs leading-relaxed text-muted-foreground">
               {riseConfig.disclosures.contactConsent} See our{" "}
               <a
-                href="/sms-terms"
+                href="/rise-sms-terms"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-navy underline underline-offset-2"
@@ -307,7 +307,7 @@ const RiseSummaryContact = ({ answers, summary, onRestart }: Props) => {
               </a>{" "}
               and{" "}
               <a
-                href="/privacy-policy"
+                href="/rise-privacy"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-navy underline underline-offset-2"
